@@ -66,19 +66,16 @@ function TexturedSphere(latitude_bands, longitude_bands, color){
 
         // Buffer de indices de los triangulos
         this.index_buffer = [];
-      
-        for (latNumber=0; latNumber < this.latitudeBands; latNumber++) {
-            for (longNumber=0; longNumber < this.longitudeBands; longNumber++) {
-                var first = (latNumber * (this.longitudeBands + 1)) + longNumber;
-                var second = first + this.longitudeBands + 1;
-                this.index_buffer.push(first);
-                this.index_buffer.push(second);
-                this.index_buffer.push(first + 1);
-
-                this.index_buffer.push(second);
-                this.index_buffer.push(second + 1);
-                this.index_buffer.push(first + 1);
+    
+        for (var i = 0; i < this.latitudeBands; i++) {
+            var index;
+            for (var j = 0; j <= this.longitudeBands; j++) {
+                index = j + i * (this.longitudeBands + 1);
+                if (i != 0 && j == 0) this.index_buffer.push(index); //Repito el primero de cada fila, salvo la primera
+                this.index_buffer.push(index);
+                this.index_buffer.push(index + this.longitudeBands + 1);
             }
+            if (i != this.latitudeBands-1) this.index_buffer.push(index + this.longitudeBands + 1); //Repito el ultimo de cada fila, salvo la ultima
         }
 
         // Creación e Inicialización de los buffers a nivel de OpenGL
@@ -138,7 +135,7 @@ function TexturedSphere(latitude_bands, longitude_bands, color){
         
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
         //gl.drawElements(gl.LINE_LOOP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
-        gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+        gl.drawElements(gl.TRIANGLE_STRIP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
         /////////////////////////////////
     }
 
