@@ -4,7 +4,7 @@ function TexturedSphere(latitude_bands, longitude_bands, color){
     this.longitudeBands = longitude_bands;
     this.color = color;
 
-    this.tangent = [0,0,0];
+    this.tangent = [0,0,0]; // No interesa la tangente en este caso
     this.vertex_buffer = null;
     this.index_buffer = null;
 
@@ -65,18 +65,7 @@ function TexturedSphere(latitude_bands, longitude_bands, color){
         }
 
         // Buffer de indices de los triangulos
-        this.index_buffer = [];
-    
-        for (var i = 0; i < this.latitudeBands; i++) {
-            var index;
-            for (var j = 0; j <= this.longitudeBands; j++) {
-                index = j + i * (this.longitudeBands + 1);
-                if (i != 0 && j == 0) this.index_buffer.push(index); //Repito el primero de cada fila, salvo la primera
-                this.index_buffer.push(index);
-                this.index_buffer.push(index + this.longitudeBands + 1);
-            }
-            if (i != this.latitudeBands-1) this.index_buffer.push(index + this.longitudeBands + 1); //Repito el ultimo de cada fila, salvo la ultima
-        }
+        this.index_buffer = grid(this.latitudeBands, this.longitudeBands);
 
         // Creación e Inicialización de los buffers a nivel de OpenGL
         var position_buffer = getPositionBuffer(this.vertex_buffer);
