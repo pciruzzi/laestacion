@@ -8,6 +8,7 @@
 <script type="text/javascript" src="gl-matrix.js"></script>
 <script type="text/javascript" src="webgl-utils.js"></script>
 <script type="text/javascript" src="esfera.js"></script>
+<script type="text/javascript" src="cilindro.js"></script>
 <script type="text/javascript" src="vertice.js"></script>
 <script type="text/javascript" src="buffer_vertices.js"></script>
 <script type="text/javascript" src="grid.js"></script>
@@ -398,7 +399,10 @@
         // Matriz de modelado del mars
         var model_matrix_mars = mat4.create();
         mat4.identity(model_matrix_mars);
-        mat4.scale(model_matrix_mars, model_matrix_mars, [7.0, 7.0, 7.0]);
+        mat4.rotate(model_matrix_mars, model_matrix_mars,Math.PI/2, [1,0,0]);
+        mat4.rotate(model_matrix_mars, model_matrix_mars,Math.PI, [0,1,0]);
+        mat4.scale(model_matrix_mars, model_matrix_mars, [3.0, 3.0, 7.0]);
+        mat4.translate(model_matrix_mars, model_matrix_mars, [0,0,-0.5]);
         mars.draw(model_matrix_mars);
         //
         ////////////////////////////////////////////////////////
@@ -424,17 +428,17 @@
         var canvas = document.getElementById("clase03-vertex shader");
         initGL(canvas);
         initShaders();
-        var color = [0,0,0];
+        var color = [0,0,255];
 
-        deimos = new TexturedSphere(64, 64, color);
+        deimos = new Esfera(64, 64, color);
         deimos.initBuffers();
-        deimos.initTexture("moon.gif");
+        deimos.initTexture("mars_1k_color.jpg");
 
-        mars = new TexturedSphere(64,64, color);
+        mars = new Cilindro(5,20, color);
         mars.initBuffers();
         mars.initTexture("mars_1k_color.jpg");
 
-        phobos = new TexturedSphere(64, 64, color);
+        phobos = new Esfera(64, 64, color);
         phobos.initBuffers();
         phobos.initTexture("moon.gif");
         

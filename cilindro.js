@@ -1,4 +1,4 @@
-function Esfera(latitude_bands, longitude_bands, color){
+function Cilindro(latitude_bands, longitude_bands, color){
 
     this.latitudeBands = latitude_bands;
     this.longitudeBands = longitude_bands;
@@ -28,10 +28,11 @@ function Esfera(latitude_bands, longitude_bands, color){
     }
 
 
-    // Se generan los vertices para la esfera, calculando los datos para una esfera de radio 1
-    // Y también la información de las normales y coordenadas de textura para cada vertice de la esfera
+    // Se generan los vertices para el cilindro, calculando los datos para un cilindro de radio 1 y altura 1.
+    // El cilindro es alrededor del eje z
+    // Y también la información de las normales y coordenadas de textura para cada vertice del cilindro
     // La esfera se renderizara utilizando triangle_strip, para ello se arma un buffer de índices 
-    // de todos los vértices de la esfera
+    // a todos los vértices del cilindro
     this.initBuffers = function(){
 
         this.vertex_buffer = [];
@@ -40,32 +41,35 @@ function Esfera(latitude_bands, longitude_bands, color){
         var longNumber;
 
         for (latNumber=0; latNumber <= this.latitudeBands; latNumber++) {
-            var theta = latNumber * Math.PI / this.latitudeBands;
-            var sinTheta = Math.sin(theta);
-            var cosTheta = Math.cos(theta);
-
+            var altura = latNumber / this.latitudeBands;
+            if (latNumber == 0) {
+                this.hacerTapa(altura)
+            }
             for (longNumber=0; longNumber <= this.longitudeBands; longNumber++) {
-                var phi = longNumber * 2 * Math.PI / this.longitudeBands;
-                var sinPhi = Math.sin(phi);
-                var cosPhi = Math.cos(phi);
+                var theta = longNumber * 2 * Math.PI / this.longitudeBands;
+                var sinTheta = Math.sin(theta);
+                var cosTheta = Math.cos(theta);
 
-                var x = cosPhi * sinTheta;
-                var y = cosTheta;
-                var z = sinPhi * sinTheta;
+                var x = cosTheta;
+                var y = sinTheta;
+                var z = altura;
                 var u = 1.0 - (longNumber / this.longitudeBands);
                 var v = 1.0 - (latNumber / this.latitudeBands);
 
                 var position = [x,y,z];
-                var normal = [x,y,z];
+                var normal = [x,y,0];
                 var texture = [u,v];
 
                 var verticeActual = new vertice(position, this.color, normal, this.tangent, texture);
                 this.vertex_buffer.push(verticeActual);
             }
+            if (latNumber == this.latitudeBands) {
+                this.hacerTapa(altura)
+            }
         }
 
         // Buffer de indices de los triangulos
-        this.index_buffer = grid(this.latitudeBands, this.longitudeBands);
+        this.index_buffer = grid(this.latitudeBands + 2, this.longitudeBands); //Agrego 2 por las tapas -> y 2 por la repetición de primer y último "gajo de altura" con normal distinta?
 
         // Creación e Inicialización de los buffers a nivel de OpenGL
         var position_buffer = getPositionBuffer(this.vertex_buffer);
@@ -98,7 +102,6 @@ function Esfera(latitude_bands, longitude_bands, color){
     }
 
     this.draw = function(modelMatrix){
-
         // Se configuran los buffers que alimentarán el pipeline
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
@@ -125,5 +128,25 @@ function Esfera(latitude_bands, longitude_bands, color){
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
         //gl.drawElements(gl.LINE_LOOP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
         gl.drawElements(gl.TRIANGLE_STRIP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+    }
+
+    this.hacerTapa = function(altura) {
+        for (longNumber=0; longNumber <= this.longitudeBands; longNumber++) {
+            var x = 0;
+            var y = 0;
+            var z = altura;
+            var u = 1.0 - (longNumber / this.longitudeBands);
+            var v = 1.0 - (altura);
+
+            var position = [x,y,z];
+            var zNormal;
+            if (altura == 0) zNormal = -1;
+            else zNormal = 1;
+            var normal = [x,y,zNormal];
+            var texture = [u,v];
+
+            var verticeActual = new vertice(position, this.color, normal, this.tangent, texture);
+            this.vertex_buffer.push(verticeActual);
+        }
     }
 }
