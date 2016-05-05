@@ -401,7 +401,7 @@
         mat4.identity(model_matrix_mars);
         mat4.rotate(model_matrix_mars, model_matrix_mars,Math.PI/2, [1,0,0]);
         mat4.rotate(model_matrix_mars, model_matrix_mars,Math.PI, [0,1,0]);
-        mat4.scale(model_matrix_mars, model_matrix_mars, [3.0, 3.0, 7.0]);
+        mat4.scale(model_matrix_mars, model_matrix_mars, [7.0, 7.0, 7.0]);
         mat4.translate(model_matrix_mars, model_matrix_mars, [0,0,-0.5]);
         mars.draw(model_matrix_mars);
         //
@@ -432,9 +432,9 @@
 
         deimos = new Esfera(64, 64, color);
         deimos.initBuffers();
-        deimos.initTexture("mars_1k_color.jpg");
+        deimos.initTexture("moon.gif");
 
-        mars = new Cilindro(5,20, color);
+        mars = new Esfera(64,64, color);
         mars.initBuffers();
         mars.initTexture("mars_1k_color.jpg");
 
