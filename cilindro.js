@@ -11,6 +11,7 @@ function Cilindro(latitude_bands, longitude_bands, color){
     this.webgl_position_buffer = null;
     this.webgl_normal_buffer = null;
     this.webgl_texture_coord_buffer = null;
+    //this.webgl_color_buffer = null;
     this.webgl_index_buffer = null;
 
     this.texture = null;
@@ -75,6 +76,7 @@ function Cilindro(latitude_bands, longitude_bands, color){
         var position_buffer = getPositionBuffer(this.vertex_buffer);
         var normal_buffer = getNormalBuffer(this.vertex_buffer);
         var texture_coord_buffer = getTextureBuffer(this.vertex_buffer);
+        //var color_buffer = getColorBuffer(this.vertex_buffer);
 
         this.webgl_normal_buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
@@ -88,6 +90,12 @@ function Cilindro(latitude_bands, longitude_bands, color){
         this.webgl_texture_coord_buffer.itemSize = 2;
         this.webgl_texture_coord_buffer.numItems = texture_coord_buffer.length / 2;
 
+/*        this.webgl_color_buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(color_buffer), gl.STATIC_DRAW);
+        this.webgl_color_buffer.itemSize = 3;
+        this.webgl_color_buffer.numItems = color_buffer.length / 3;
+*/
         this.webgl_position_buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(position_buffer), gl.STATIC_DRAW);
