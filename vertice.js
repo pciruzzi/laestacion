@@ -2,7 +2,9 @@ function vertice(posicion, color, normal, tangente, coordTextura) {
     this.posicion = posicion;
     this.color = color;
     this.normal = normal;
+    vec3.normalize(this.normal,this.normal);
     this.tangente = tangente;
+    vec3.normalize(this.tangente,this.tangente);
     this.coordTextura = coordTextura;
     
     var tx = this.tangente[0];
@@ -16,4 +18,5 @@ function vertice(posicion, color, normal, tangente, coordTextura) {
     this.binormal[0] = ((ty * nz) - (ny * tz));
     this.binormal[1] = ((tx * nz) - (nx * tz));
     this.binormal[2] = ((tx * ny) - (nx * ty));
+    vec3.normalize(this.binormal,this.binormal);
 }

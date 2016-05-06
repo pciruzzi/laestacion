@@ -2,7 +2,7 @@
 <html>
 
 <head>
-<title>Actividad Clase 03 - Vertex Shaders</title>
+<title>TP Gráficos - 1c2016</title>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 
 <script type="text/javascript" src="gl-matrix.js"></script>
@@ -62,12 +62,9 @@
         // Calculos de la iluminación
         vec3 light_dir =  uLightPosition - vec3( pos_camera_view );
         normalize(light_dir);
-        if (!uUseLighting) 
-        {
+        if (!uUseLighting) {
             vLightWeighting = vec3(1.0, 1.0, 1.0);
-        }
-        else 
-        {
+        } else {
             vec3 transformedNormal = normalize(uNMatrix * aVertexNormal);
             float directionalLightWeighting = max(dot(transformedNormal, light_dir), 0.0);
             vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
@@ -129,11 +126,9 @@
         return shader;
     }
 
-
     var shaderProgram;
 
-
-       function initShaders() {
+    function initShaders() {
         var fragmentShader = getShader(gl, "shader-fs");
         var vertexShader = getShader(gl, "shader-vs");
 
@@ -167,7 +162,6 @@
         shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightPosition");
         shaderProgram.directionalColorUniform = gl.getUniformLocation(shaderProgram, "uDirectionalColor");
     }
-
 
     function handleLoadedTexture() {
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
@@ -235,14 +229,12 @@
         gl.uniformMatrix4fv(shaderProgram.ViewMatrixUniform, false, CameraMatrix);        
     }
 
-
     function degToRad(degrees) {
         return degrees * Math.PI / 180;
     }
 
     function drawScene() {
-    
-        // Se configura el vierport dentro de área ¨canvas¨. en este caso se utiliza toda 
+        // Se configura el viewport dentro de área ¨canvas¨. en este caso se utiliza toda 
         // el área disponible
         gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
         
@@ -385,7 +377,6 @@
 
         mat4.multiply(model_matrix_phobos, model_matrix_phobos, scale_phobos_matrix);
 
-
         phobos.draw(model_matrix_phobos);
 
         ////////////////////////////////////////////////////////
@@ -406,9 +397,7 @@
         mars.draw(model_matrix_mars);
         //
         ////////////////////////////////////////////////////////
-       
     }
-
 
     function tick() {
         requestAnimFrame(tick);
@@ -421,8 +410,6 @@
         phobosRotationAngledeimos += 0.0005;
         drawScene();
     }
-
-
 
     function webGLStart() {
         var canvas = document.getElementById("clase03-vertex shader");
@@ -467,7 +454,6 @@
     Las texturas son cortesía de <a href="http://maps.jpl.nasa.gov/">Jet Propulsion Laboratory</a>.
     <br/>
     <br/>
-
- </body>
+</body>
 
 </html>
