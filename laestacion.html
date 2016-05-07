@@ -18,21 +18,21 @@
 <script id="shader-fs" type="x-shader/x-fragment">
     precision mediump float;
 
-    varying vec2 vTextureCoord;
+    varying vec4 vTextureCoord;
     varying vec3 vLightWeighting;
 
-    uniform sampler2D uSampler;
+    //uniform sampler2D uSampler;
 
     void main(void) {
-        vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-        gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
+        //vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+        gl_FragColor = vec4(vTextureCoord.rgb * vLightWeighting, 1.0);
     }
 </script>
 
 <script id="shader-vs" type="x-shader/x-vertex">
     attribute vec3 aVertexPosition;
     attribute vec3 aVertexNormal;
-    attribute vec2 aTextureCoord;
+    attribute vec4 aTextureCoord;
 
     uniform mat4 uViewMatrix;
     uniform mat4 uModelMatrix;
@@ -46,7 +46,7 @@
 
     uniform bool uUseLighting;
 
-    varying vec2 vTextureCoord;
+    varying vec4 vTextureCoord;
     varying vec3 vLightWeighting;
 
     void main(void) {
@@ -417,19 +417,22 @@
         var canvas = document.getElementById("clase03-vertex shader");
         initGL(canvas);
         initShaders();
-        var color = [0,0,255];
+        var colorRed = [1.0,0.0,0.0];
+        var colorGreen = [0.0,1.0,0.0];
+        var colorBlue = [0.0,0.0,1.0];
+        var esTexturada = false;
 
-        deimos = new Esfera(64, 64, color);
+        deimos = new Cilindro(64, 64, colorRed, esTexturada);
         deimos.initBuffers();
-        deimos.initTexture("moon.gif");
+        //deimos.initTexture("moon.gif");
 
-        mars = new Esfera(64,64, color);
+        mars = new Esfera(64,64, colorGreen, esTexturada);
         mars.initBuffers();
-        mars.initTexture("mars_1k_color.jpg");
+        //mars.initTexture("mars_1k_color.jpg");
 
-        phobos = new Esfera(64, 64, color);
+        phobos = new Esfera(64, 64, colorBlue, esTexturada);
         phobos.initBuffers();
-        phobos.initTexture("moon.gif");
+        //phobos.initTexture("moon.gif");
         
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);
