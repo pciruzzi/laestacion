@@ -5,7 +5,6 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
     this.color = color;
     this.esTexturada = esTexturada;
 
-    this.tangent = [0,0,0]; // No interesa la tangente en este caso
     this.vertex_buffer = null;
     this.index_buffer = null;
 
@@ -58,6 +57,7 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
 
                 var position = [x,y,z];
                 var normal = [x,y,0];
+                var tangent = [-y,x,0];
                 var texture = [0,0];
 
                 if (this.esTexturada) {
@@ -66,7 +66,7 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
                     texture = [u,v];
                 }
 
-                var verticeActual = new vertice(position, this.color, normal, this.tangent, texture);
+                var verticeActual = new vertice(position, this.color, normal, tangent, texture);
                 this.vertex_buffer.push(verticeActual);
             }
             if (latNumber == this.latitudeBands) {
@@ -161,7 +161,8 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
             var zNormal;
             if (altura == 0) zNormal = -1;
             else zNormal = 1;
-            var normal = [x,y,zNormal];
+            var normal = [0,0,zNormal];
+            var tangent = [x,y,0];
             var texture = [0,0];
 
             if (this.esTexturada) {
@@ -170,7 +171,7 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
                 texture = [u,v];
             }
 
-            var verticeActual = new vertice(position, this.color, normal, this.tangent, texture);
+            var verticeActual = new vertice(position, this.color, normal, tangent, texture);
             this.vertex_buffer.push(verticeActual);
         }
     }

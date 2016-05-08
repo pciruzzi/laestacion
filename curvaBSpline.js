@@ -34,14 +34,12 @@ function curvaBSpline(P0, P1, P2, P3, cantPasos) {
         var dz = B0der(u)*P0[2] + B1der(u)*P1[2] + B2der(u)*P2[2] + B3der(u)*P3[2];
 
         var tangente = [dx,dy,dz];
-        var normal = [-dy,dx,0.0];
+        var binormalProvisoria = productoVectorial(tangente, [0,0,1]);
+        var normal = productoVectorial(tangente, binormalProvisoria);
 
 
         var vertex = new vertice(posicion, [0,0,0], normal, tangente, [0,0,0]);
         this.vertex_buffer.push(vertex);
-
-/*        var tangente = [-dx,-dy-dz];
-        var normal = [-dy,0.0,dx];*/
     }
 
 /*    for(var i = 0; i < cantPasos; i++){
