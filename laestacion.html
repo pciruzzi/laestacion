@@ -14,6 +14,7 @@
 <script type="text/javascript" src="grid.js"></script>
 <script type="text/javascript" src="productoVectorial.js"></script>
 <script type="text/javascript" src="vertice.js"></script>
+<script type="text/javascript" src="cubo.js"></script>
 
 <script id="shader-fs" type="x-shader/x-fragment">
     precision mediump float;
@@ -426,7 +427,7 @@
         deimos.initBuffers();
         //deimos.initTexture("moon.gif");
 
-        mars = new Esfera(64,64, colorGreen, esTexturada);
+        mars = new Cubo(1.5,1,0.5, colorGreen, esTexturada);
         mars.initBuffers();
         //mars.initTexture("mars_1k_color.jpg");
 
