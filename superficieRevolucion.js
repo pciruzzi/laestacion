@@ -34,10 +34,11 @@ function SuperficieRevolucion(forma, camino, color, esTexturada) { // -> forma y
 
     this.calcularTangentes = function(){
         this.tangent_buffer = [];
-        for (var i = 0; i < this.filas; i++) {
-            var tgx = getTangentBuffer(this.camino)[i];
-            var tgy = getTangentBuffer(this.camino)[i+1];
-            var tgz = getTangentBuffer(this.camino)[i+2];
+        var caminoTangentBuffer = getTangentBuffer(this.camino);
+        for (var i = 0; i < 3*this.filas-2; i+=3) {
+            var tgx = caminoTangentBuffer[i];
+            var tgy = caminoTangentBuffer[i+1];
+            var tgz = caminoTangentBuffer[i+2];
             for (var j = 0; j < this.columnas; j++) {
                 this.tangent_buffer.push(tgx, tgy, tgz);
             }
