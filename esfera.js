@@ -40,13 +40,13 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
         var latNumber;
         var longNumber;
 
-        for (latNumber=0; latNumber <= this.latitudeBands; latNumber++) {
-            var theta = latNumber * Math.PI / this.latitudeBands;
+        for (latNumber=0; latNumber < this.latitudeBands; latNumber++) {
+            var theta = latNumber * Math.PI / (this.latitudeBands - 1);
             var sinTheta = Math.sin(theta);
             var cosTheta = Math.cos(theta);
 
-            for (longNumber=0; longNumber <= this.longitudeBands; longNumber++) {
-                var phi = longNumber * 2 * Math.PI / this.longitudeBands;
+            for (longNumber=0; longNumber < this.longitudeBands; longNumber++) {
+                var phi = longNumber * 2 * Math.PI / (this.longitudeBands - 1);
                 var sinPhi = Math.sin(phi);
                 var cosPhi = Math.cos(phi);
 
@@ -60,8 +60,8 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
                 var texture = [0,0];
 
                 if (this.esTexturada) {
-                    var u = 1.0 - (longNumber / this.longitudeBands);
-                    var v = 1.0 - (latNumber / this.latitudeBands);
+                    var u = 1.0 - (longNumber / (this.longitudeBands - 1));
+                    var v = 1.0 - (latNumber / (this.latitudeBands - 1));
                     texture = [u,v];
                 }                
 
@@ -69,6 +69,8 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
                 this.vertex_buffer.push(verticeActual);
             }
         }
+
+        console.log("Cantidad vertices: " + this.vertex_buffer.length);
 
         // Buffer de indices de los triangulos
         this.index_buffer = grid(this.latitudeBands, this.longitudeBands);

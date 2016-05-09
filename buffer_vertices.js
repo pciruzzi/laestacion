@@ -1,3 +1,7 @@
+function getCantidadVertices(vertexBuffer){
+    return vertexBuffer.length;
+}
+
 function getPositionBuffer(vertexBuffer){
     var position_buffer = [];
     var verticeActual;

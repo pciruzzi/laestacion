@@ -28,9 +28,33 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
         this.texture.image.src = texture_file;
     }
 
+    this.hacerTapa = function(altura) {
+        for (var longNumber=0; longNumber < this.longitudeBands; longNumber++) {
+            var x = 0;
+            var y = 0;
+            var z = altura;
+
+            var position = [x,y,z];
+            var zNormal;
+            if (altura == 0) zNormal = -1;
+            else zNormal = 1;
+            var normal = [0,0,zNormal];
+            var tangent = [x,y,0];
+            var texture = [0,0];
+
+            if (this.esTexturada) {
+                var u = 1.0 - (longNumber / (this.longitudeBands - 1));
+                var v = 1.0 - (altura);
+                texture = [u,v];
+            }
+
+            var verticeActual = new vertice(position, this.color, normal, tangent, texture);
+            this.vertex_buffer.push(verticeActual);
+        }
+    }
 
     // Se generan los vertices para el cilindro, calculando los datos para un cilindro de radio 1 y altura 1.
-    // El cilindro es alrededor del eje z.
+    // El cilindro es alrededor del eje z. El cilindro tiene base en el plano z = 0.
     // Y también la información de las normales y coordenadas de textura o color para cada vertice del cilindro.
     // El cilindro se renderizara utilizando triangle_strip, para ello se arma un buffer de índices 
     // a todos los vértices del cilindro.
@@ -41,13 +65,13 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
         var latNumber;
         var longNumber;
 
-        for (latNumber=0; latNumber <= this.latitudeBands; latNumber++) {
-            var altura = latNumber / this.latitudeBands;
+        for (latNumber=0; latNumber < this.latitudeBands; latNumber++) {
+            var altura = latNumber / (this.latitudeBands - 1);
             if (latNumber == 0) {
                 this.hacerTapa(altura)
             }
-            for (longNumber=0; longNumber <= this.longitudeBands; longNumber++) {
-                var theta = longNumber * 2 * Math.PI / this.longitudeBands;
+            for (longNumber=0; longNumber < this.longitudeBands; longNumber++) {
+                var theta = longNumber * 2 * Math.PI / (this.longitudeBands - 1);
                 var sinTheta = Math.sin(theta);
                 var cosTheta = Math.cos(theta);
 
@@ -61,18 +85,20 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
                 var texture = [0,0];
 
                 if (this.esTexturada) {
-                    var u = 1.0 - (longNumber / this.longitudeBands);
-                    var v = 1.0 - (latNumber / this.latitudeBands);
+                    var u = 1.0 - (longNumber / (this.longitudeBands - 1));
+                    var v = 1.0 - (latNumber / (this.latitudeBands - 1));
                     texture = [u,v];
                 }
 
                 var verticeActual = new vertice(position, this.color, normal, tangent, texture);
                 this.vertex_buffer.push(verticeActual);
             }
-            if (latNumber == this.latitudeBands) {
+            if (latNumber == this.latitudeBands - 1) {
                 this.hacerTapa(altura)
             }
         }
+
+        console.log("Cantidad vertices: " + this.vertex_buffer.length);
 
         // Buffer de indices de los triangulos
         this.index_buffer = grid(this.latitudeBands + 2, this.longitudeBands); //Agrego 2 por las tapas -> y 2 por la repetición de primer y último "gajo de altura" con normal distinta?
@@ -149,30 +175,5 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
         //gl.drawElements(gl.LINE_LOOP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
         gl.drawElements(gl.TRIANGLE_STRIP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
-    }
-
-    this.hacerTapa = function(altura) {
-        for (longNumber=0; longNumber <= this.longitudeBands; longNumber++) {
-            var x = 0;
-            var y = 0;
-            var z = altura;
-
-            var position = [x,y,z];
-            var zNormal;
-            if (altura == 0) zNormal = -1;
-            else zNormal = 1;
-            var normal = [0,0,zNormal];
-            var tangent = [x,y,0];
-            var texture = [0,0];
-
-            if (this.esTexturada) {
-                var u = 1.0 - (longNumber / this.longitudeBands);
-                var v = 1.0 - (altura);
-                texture = [u,v];
-            }
-
-            var verticeActual = new vertice(position, this.color, normal, tangent, texture);
-            this.vertex_buffer.push(verticeActual);
-        }
     }
 }

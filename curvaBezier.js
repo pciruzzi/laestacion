@@ -1,9 +1,4 @@
 function curvaBezier(P0, P1, P2, P3, cantPasos) {
-    this.P0 = P0;
-    this.P1 = P1;
-    this.P2 = P2;
-    this.P3 = P3;
-
     this.vertex_buffer = [];
     //this.index_buffer = [];
 /*
@@ -45,12 +40,16 @@ function curvaBezier(P0, P1, P2, P3, cantPasos) {
         this.index_buffer.push(i);
     }
 */
+    this.getVertexBuffer = function(){
+        return this.vertex_buffer;
+    }
+
     this.getPositionBuffer = function(){
         return getPositionBuffer(this.vertex_buffer);
     }
 
     this.getCantidadVertices = function(){
-        return this.vertex_buffer.length;
+        return getCantidadVertices(this.vertex_buffer);
     }
 
     this.getTangentBuffer = function(){
