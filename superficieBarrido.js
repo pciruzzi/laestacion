@@ -1,4 +1,4 @@
-function SuperficieRevolucion(forma, camino, color, esTexturada) { // -> forma y camino son buffers de vértices
+function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y camino son buffers de vértices
     this.columnas = null;
     this.filas = null;
     this.color = color;

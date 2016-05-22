@@ -10,11 +10,14 @@
 
 <script type="text/javascript" src="buffer_vertices.js"></script>
 <script type="text/javascript" src="cilindro.js"></script>
+<script type="text/javascript" src="cubo.js"></script>
+<script type="text/javascript" src="curvaBezier.js"></script>
+<script type="text/javascript" src="curvaBSpline.js"></script>
 <script type="text/javascript" src="esfera.js"></script>
 <script type="text/javascript" src="grid.js"></script>
 <script type="text/javascript" src="productoVectorial.js"></script>
+<script type="text/javascript" src="superficieBarrido.js"></script>
 <script type="text/javascript" src="vertice.js"></script>
-<script type="text/javascript" src="cubo.js"></script>
 
 <script id="shader-fs" type="x-shader/x-fragment">
     precision mediump float;
@@ -412,6 +415,64 @@
         deimosRotationAnglemars += 0.0045;
         phobosRotationAngledeimos += 0.0005;
         drawScene();
+    }
+
+    function pruebaBarrido() {
+        var n = 10;
+
+        var P = [];
+        //linea recta
+        P.push([0.0, 0.0, 0.0]);
+        P.push([0.0, 1.0, 0.0]);
+        P.push([0.0, 2.0, 0.0]);
+        P.push([0.0, 3.0, 0.0]);
+        //P.push([0.0, 4.0, 0.0]);
+        //P.push([0.0, 5.0, 0.0]);
+        //P.push([0.0, 6.0, 0.0]);
+
+        var tramosCamino = [];
+        var camino = [];
+        var cantPControl = P.length;
+/*        for (var i = 0; i < cantPControl - 3; i++){
+            tramosCamino.push(new curvaBSpline(P[i], P[i+1], P[i+2], P[i+3], n));
+        }*/
+        for (var i = 0; i < cantPControl - 3; i+=3){
+            tramosCamino.push(new curvaBezier(P[i], P[i+1], P[i+2], P[i+3], n));
+        }
+        var cant = 0;
+        for (var i in tramosCamino){
+            camino = camino.concat(tramosCamino[i].getVertexBuffer());
+            cant++;
+        }
+/*        var positionBuffer = getPositionBuffer(camino);
+        for (var i = 0; i < positionBuffer.length; i+=3) {
+            console.log(positionBuffer[i] + " , " + positionBuffer[i+1] + " , " + positionBuffer[i+2]);
+        }*/
+        console.log("Cantidad de tramos camino: " + cant);
+
+        var Q = [];
+        //pseudo circunferencia
+        Q.push([2.0, 0.0, 0.0]);
+        Q.push([1.0, 1.0, 0.0]);
+        Q.push([-1.0, 1.0, 0.0]);
+        Q.push([-2.0, 0.0, 0.0]);
+        Q.push([-1.0, -1.0, 0.0]);
+        Q.push([1.0, -1.0, 0.0]);
+        Q.push([2.0, 0.0, 0.0]);
+        var tramosForma = [];
+        var forma = [];
+        var cantQControl = Q.length;
+        for (var i = 0; i < cantQControl - 3; i+=3){
+            tramosForma.push(new curvaBezier(Q[i], Q[i+1], Q[i+2], Q[i+3], n));    
+        }
+        cant = 0;
+        for (var i in tramosForma){
+            forma = forma.concat(tramosForma[i].getVertexBuffer());
+            cant++;
+        }
+        console.log("Cantidad de tramos forma: " + cant);
+
+        return new SuperficieRevolucion(forma, camino, [0.0,1.0,0.0], false);
     }
 
     function webGLStart() {

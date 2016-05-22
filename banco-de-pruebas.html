@@ -16,7 +16,7 @@
 <script type="text/javascript" src="esfera.js"></script>
 <script type="text/javascript" src="grid.js"></script>
 <script type="text/javascript" src="productoVectorial.js"></script>
-<script type="text/javascript" src="superficieRevolucion.js"></script>
+<script type="text/javascript" src="superficieBarrido.js"></script>
 <script type="text/javascript" src="vertice.js"></script>
 
 <script id="shader-fs" type="x-shader/x-fragment">
@@ -327,7 +327,7 @@
 
         mat4.multiply(model_matrix_deimos, model_matrix_deimos, scale_deimos_matrix);
 */
-        mat4.scale(model_matrix_deimos, model_matrix_deimos, [4,4,4]);
+        //mat4.scale(model_matrix_deimos, model_matrix_deimos, [4,4,4]);
         deimos.draw(model_matrix_deimos);
         //
         ////////////////////////////////////////////////////////
@@ -469,7 +469,7 @@
         }
         console.log("Cantidad de tramos forma: " + cant);
 
-        return new SuperficieRevolucion(forma, camino, [0.0,1.0,0.0], false);
+        return new SuperficieBarrido(forma, camino, [0.0,1.0,0.0], false);
     }
 
     function webGLStart() {
@@ -481,10 +481,10 @@
         var colorBlue = [0.0,0.0,1.0];
         var esTexturada = false;
 
-        deimos = new Cubo(2.0, 2.0, 2.0, colorBlue, esTexturada);
+        //deimos = new Cubo(2.0, 2.0, 2.0, colorBlue, esTexturada);
         //deimos = new Cilindro(64, 64, colorGreen, esTexturada);
         //deimos = new Esfera(64, 64, colorRed, esTexturada);
-        //deimos = pruebaBarrido();
+        deimos = pruebaBarrido();
 
         deimos.initBuffers();
         //deimos.initTexture("moon.gif");
@@ -503,7 +503,7 @@
 
 <body onload="webGLStart();">
     <center>
-            <h1>Sistemas Gráficos - 66.71</h1>
+            <h1>Sistemas Gr&aacute;ficos - 66.71</h1>
             <h2>Banco de pruebas - Trabajo Pr&aacute;ctico 2016</h2>
             <canvas id="clase03-vertex shader" style="border: none;" width="1280" height="720">
             Your browser does not support the HTML5 canvas element.
