@@ -418,7 +418,7 @@
     }
 
     function pruebaBarrido() {
-        var n = 10;
+        var n = 9;
 
         var P = [];
         //linea recta
@@ -453,11 +453,11 @@
         var Q = [];
         //pseudo circunferencia
         Q.push([2.0, 0.0, 0.0]);
-        Q.push([1.0, 1.0, 0.0]);
-        Q.push([-1.0, 1.0, 0.0]);
+        Q.push([1.0, 0.0, 1.0]);
+        Q.push([-1.0, 0.0, 1.0]);
         Q.push([-2.0, 0.0, 0.0]);
-        Q.push([-1.0, -1.0, 0.0]);
-        Q.push([1.0, -1.0, 0.0]);
+        Q.push([-1.0, 0.0, -1.0]);
+        Q.push([1.0, 0.0, -1.0]);
         Q.push([2.0, 0.0, 0.0]);
         var tramosForma = [];
         var forma = [];
@@ -472,7 +472,7 @@
         }
         console.log("Cantidad de tramos forma: " + cant);
 
-        return new SuperficieRevolucion(forma, camino, [0.0,1.0,0.0], false);
+        return new SuperficieBarrido(forma, camino, [0.0,1.0,0.0], false);
     }
 
     function webGLStart() {
@@ -488,7 +488,7 @@
         deimos.initBuffers();
         //deimos.initTexture("moon.gif");
 
-        mars = new Cubo(1.5,1,0.5, colorGreen, esTexturada);
+        mars = pruebaBarrido();//new Cubo(1.5,1,0.5, colorGreen, esTexturada);
         mars.initBuffers();
         //mars.initTexture("mars_1k_color.jpg");
 
