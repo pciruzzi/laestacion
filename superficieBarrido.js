@@ -45,20 +45,6 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
         }
     }
 
-/*    this.posicion = function(i,j){
-        if (i < 0)
-            return this.posicion(0,j);
-        if (i >= this.filas)
-            return this.posicion(this.filas-1, j);
-
-        var posicion = vec3.create();
-        posicion[0] = this.position_buffer[3*this.columnas*i + j];
-        posicion[1] = this.position_buffer[3*this.columnas*i + j + 1];
-        posicion[2] = this.position_buffer[3*this.columnas*i + j + 2];
-        return posicion;
-    }
-*/
-
     this.posicion = function(i,j){
         if (j < 0)
             return this.posicion(i,0);
@@ -83,7 +69,6 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
                 vec3.subtract(resta, siguiente, anterior);
 
                 var tangentePunto = [this.tangent_buffer[3*(this.columnas*i + j)], this.tangent_buffer[3*(this.columnas*i + j)+1], this.tangent_buffer[3*(this.columnas*i + j)+2]];
-                //var normal = productoVectorial(tangentePunto, resta);
                 var normal = vec3.create();
                 vec3.cross(normal, tangentePunto, resta);
                 vec3.normalize(normal, normal);
@@ -91,6 +76,12 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
                 this.normal_buffer.push(normal[0], normal[1], normal[2]);
             }
         }
+    }
+
+    this.calcularAngulo = function(vector1, vector2){
+        var dotProduct = vec3.dot(vector1, vector2);
+        var acos = dotProduct/(vec3.length(vector1)*vec3.length(vector2));
+        return Math.acos(acos);
     }
 
     this.initBuffers = function(){
@@ -102,25 +93,33 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
         this.filas = getCantidadVertices(this.camino);
         console.log("Filas: " + this.filas);
         var positionBufferCamino = getPositionBuffer(this.camino);
+        var tangentBufferCamino = getTangentBuffer(this.camino);
         var positionBufferForma = getPositionBuffer(this.forma);
+        var normalBufferForma = getNormalBuffer(this.forma);
 
         for (var i = 0; i < this.filas; i++) {
             var xCamino = positionBufferCamino[3*i];
             var yCamino = positionBufferCamino[3*i+1];
             var zCamino = positionBufferCamino[3*i+2];
-
+/*
             var traslacion = mat4.create();
             mat4.identity(traslacion);
             var rotacion = mat4.create();
-            mat4.identity(rotacion);
+            mat4.identity(rotacion);*/
             var modelado = mat4.create();
-            mat4.identity(modelado);
 
-            mat4.translate(traslacion, traslacion, [xCamino,yCamino,zCamino]);
             //Hago que la tangente del camino coincida con la normal de la forma -> HACER!
-            mat4.rotate(rotacion, rotacion, 1, [0,0,0]);
-            mat4.multiply(modelado, traslacion, rotacion);
+            var tg = vec3.fromValues(tangentBufferCamino[3*i], tangentBufferCamino[3*i+1], tangentBufferCamino[3*i+2]);
+            //console.log("Tangent= (" + tangentBufferCamino[3*i] + "," + tangentBufferCamino[3*i+1] + "," + tangentBufferCamino[3*i+2] + ")");
             for (var j = 0; j < 3*this.columnas-2; j+=3) {
+                var normal = vec3.fromValues(normalBufferForma[j], normalBufferForma[j+1], normalBufferForma[j+2]);
+                //console.log("Normal= (" + normalBufferForma[j] + "," + normalBufferForma[j+1] + "," + normalBufferForma[j+2] + ")");
+                var angle = this.calcularAngulo(tg, normal);
+                //console.log("angle= " + angle);
+                mat4.identity(modelado);
+                mat4.translate(modelado, modelado, [xCamino,yCamino,zCamino]);
+                mat4.rotate(modelado, modelado, Math.PI-angle, [0,0,1]);
+
                 var punto = vec3.fromValues(positionBufferForma[j], positionBufferForma[j+1], positionBufferForma[j+2]);
                 var vertice = vec3.create();
                 vec3.transformMat4(vertice, punto, modelado);
