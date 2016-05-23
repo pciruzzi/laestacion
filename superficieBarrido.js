@@ -66,9 +66,9 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
             return this.posicion(i, this.columnas-1);
 
         var posicion = vec3.create();
-        posicion[0] = this.position_buffer[3*(this.filas*i + j)];
-        posicion[1] = this.position_buffer[3*(this.filas*i + j) + 1];
-        posicion[2] = this.position_buffer[3*(this.filas*i + j) + 2];
+        posicion[0] = this.position_buffer[3*(this.columnas*i + j)];
+        posicion[1] = this.position_buffer[3*(this.columnas*i + j) + 1];
+        posicion[2] = this.position_buffer[3*(this.columnas*i + j) + 2];
         return posicion;
     }
 
@@ -78,21 +78,14 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
             for (var j = 0; j < this.columnas; j++) {
                 var anterior = this.posicion(i,j-1);
                 var siguiente = this.posicion(i,j+1);
-                var actual = this.posicion(i,j);
-                if (i==0) console.log("actual: (" + actual[0] + "," + actual[1] + "," + actual[2] + ")");
-                if (i==0) console.log("anterior: (" + anterior[0] + "," + anterior[1] + "," + anterior[2] + ")");
-                if (i==0) console.log("siguiente: (" + siguiente[0] + "," + siguiente[1] + "," + siguiente[2] + ")");
 
                 var resta = vec3.create();
                 vec3.subtract(resta, siguiente, anterior);
-                if (i==0) console.log("resta: (" + resta[0] + "," + resta[1] + "," + resta[2] + ")");
 
-                var tangentePunto = [this.tangent_buffer[3*(this.filas*i + j)], this.tangent_buffer[3*(this.filas*i + j)+1], this.tangent_buffer[3*(this.filas*i + j)+2]];
-                if (i==0) console.log("tangente: " + tangentePunto);
+                var tangentePunto = [this.tangent_buffer[3*(this.columnas*i + j)], this.tangent_buffer[3*(this.columnas*i + j)+1], this.tangent_buffer[3*(this.columnas*i + j)+2]];
                 //var normal = productoVectorial(tangentePunto, resta);
                 var normal = vec3.create();
                 vec3.cross(normal, tangentePunto, resta);
-                if (i==0) console.log("normal: (" + normal[0] + "," + normal[1] + "," + normal[2] + ")");
                 vec3.normalize(normal, normal);
 
                 this.normal_buffer.push(normal[0], normal[1], normal[2]);
@@ -139,8 +132,6 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
         this.calcularTangentes();
         this.calcularNormales();
         console.log("Cantidad vertices: " + this.position_buffer.length/3);
-        console.log("tangentes: " + this.tangent_buffer.length/3);
-        console.log("normales: " + this.normal_buffer.length/3);
 
         this.index_buffer = grid(this.filas, this.columnas);
 
