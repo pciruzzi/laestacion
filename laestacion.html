@@ -1,4 +1,3 @@
-
 <html>
 
 <head>
@@ -18,6 +17,8 @@
 <script type="text/javascript" src="productoVectorial.js"></script>
 <script type="text/javascript" src="superficieBarrido.js"></script>
 <script type="text/javascript" src="vertice.js"></script>
+<script type="text/javascript" src="mousehandle.js"></script>
+<script type="text/javascript" src="keyboardhandle.js"></script>
 
 <script id="shader-fs" type="x-shader/x-fragment">
     precision mediump float;
@@ -86,7 +87,7 @@
 
     function initGL(canvas) {
         try {
-            gl = canvas.getContext("experimental-webgl");
+            gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
             gl.viewportWidth = canvas.width;
             gl.viewportHeight = canvas.height;
         } catch (e) {
@@ -198,17 +199,30 @@
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
 
-    var CameraMatrix = mat4.create();
-    var mvMatrix = mat4.create();
-    var mvMatrixStack = [];
-    var pMatrix = mat4.create();
+    var cameraMatrix    = mat4.create();
+    var mvMatrix        = mat4.create();
+    var mvMatrixStack   = [];
+    var pMatrix         = mat4.create();
+    var camaraAux       = mat4.create();
 
-    var mouseDown = false;
-    var lastMouseX = null;
-    var lastMouseY = null;
+    var mouseDown           = false;
+    var camaraCabina        = false;
+    var camaraPersecucion   = false;
+    var camaraPersona       = false;
+    var camaraGlobal        = true;
+    var mouseX              = 0.0;
+    var mouseY              = 0.0;
+    var rotarCamaraX        = 0.0;
+    var rotarCamaraY        = 0.0;
+    var aumento             = 0.0;
+    var traslacionPersonaX  = 0.0;
+    var traslacionPersonaZ  = 0.0;
+
+    var traslacionCamaraGlobalX = 0.0;
+    var traslacionCamaraGlobalZ = 0.0;
 
     var deimos = null;
-    var mars = null;
+    var mars   = null;
     var phobos = null;
 
     var deimosRotationMatrix = mat4.create();
@@ -216,24 +230,6 @@
 
     var deimosRotationAnglemars = 0.0;
     var phobosRotationAngledeimos = 0.0;
-
-    function mvPushMatrix() {
-        var copy = mat4.create();
-        mat4.set(mvMatrix, copy);
-        mvMatrixStack.push(copy);
-    }
-
-    function mvPopMatrix() {
-        if (mvMatrixStack.length == 0) {
-            throw "Invalid popMatrix!";
-        }
-        mvMatrix = mvMatrixStack.pop();
-    }
-
-    function setViewProjectionMatrix() {
-        gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
-        gl.uniformMatrix4fv(shaderProgram.ViewMatrixUniform, false, CameraMatrix);        
-    }
 
     function degToRad(degrees) {
         return degrees * Math.PI / 180;
@@ -247,9 +243,6 @@
         // Se habilita el color de borrado para la pantalla (Color Buffer) y otros buffers
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        // Se configura la matriz de proyección
-        mat4.perspective(pMatrix, 3.14/12.0, gl.viewportWidth / gl.viewportHeight, 0.1, 1000.0);
-
         /////////////////////////////////////////////////////
         // Configuración de la luz
         // Se inicializan las variables asociadas con la Iluminación
@@ -257,27 +250,83 @@
         lighting = true;
         gl.uniform1i(shaderProgram.useLightingUniform, lighting);       
         var lightPosition = vec3.fromValues(-100.0, 0.0, -60.0); 
-        //vec3.transformMat4(lightPosition, lightPosition, CameraMatrix);
-        gl.uniform3fv(shaderProgram.lightingDirectionUniform, lightPosition);           
-        
-        /////////////////////////////////////////////////////
+        //vec3.transformMat4(lightPosition, lightPosition, cameraMatrix);
+        gl.uniform3fv(shaderProgram.lightingDirectionUniform, lightPosition);
+
+        // Se configura la matriz de proyección
+        //mat4.perspective(pMatrix, 3.14/12.0, gl.viewportWidth / gl.viewportHeight, 0.1, 1000.0);
+        mat4.perspective(pMatrix, degToRad(50), gl.viewportWidth / gl.viewportHeight, 0.01, 2000.0);
+        gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);           
         // Definimos la ubicación de la camara
-        // Pensamos por el momento marsamente la posición de la cámara, la cual siempre mira al mars.
-        var matriz_camara = mat4.create();
-        mat4.identity(matriz_camara);
-        //mat4.identity(CameraMatrix);
-        //mat4.translate(CameraMatrix, CameraMatrix, [0, 0, -60]);
+        mat4.identity(cameraMatrix);
+        mat4.identity(camaraAux);
+
+        var up_point = vec3.create();
+        vec3.set(up_point, 0, 1, 0);
+
+        if(camaraGlobal) {
+            var eye_point = vec3.create();
+            vec3.set(eye_point, 30, 65, -90 + aumento);
+            var at_point = vec3.create();
+            vec3.set(at_point, 0, 0, 0);
+
+            mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
+            mat4.rotateX(cameraMatrix, cameraMatrix, degToRad(rotarCamaraX));
+            mat4.rotateY(cameraMatrix, cameraMatrix, degToRad(rotarCamaraY));
+
+            gl.uniformMatrix4fv(shaderProgram.viewMatrixUniform, false, cameraMatrix);
+        }
+        if(camaraCabina) {
+            var eye_point = vec3.create();
+            vec3.set(eye_point, 30, 65, -90 + aumento);
+            var at_point = vec3.create();
+            vec3.set(at_point, 0, 0, 0);
+
+            mat4.lookAt(cameraMatrix, eye_point, at_point, up_point); 
+            mat4.rotateX(camaraAux, camaraAux, degToRad(rotarCamaraX));
+            mat4.rotateY(camaraAux, camaraAux, degToRad(rotarCamaraY));
+            mat4.multiply(cameraMatrix, camaraAux, cameraMatrix);
+
+            gl.uniformMatrix4fv(shaderProgram.viewMatrixUniform, false, cameraMatrix);
+        }
+        if(camaraPersecucion) {
+            var eye_point = vec3.create();
+            vec3.set(eye_point, 30, 65, -90 + aumento);
+            var at_point = vec3.create();
+            vec3.set(at_point, 0, 0, 0);
+
+            mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
+            mat4.rotateX(camaraAux, camaraAux, degToRad(rotarCamaraX));
+            mat4.rotateY(camaraAux, camaraAux, degToRad(rotarCamaraY));
+            mat4.multiply(cameraMatrix, camaraAux, cameraMatrix);
+
+            gl.uniformMatrix4fv(shaderProgram.viewMatrixUniform, false, cameraMatrix);
+        }
+        if(camaraPersona) {
+            var eye_point = vec3.create();
+            vec3.set(eye_point, 30, 65, -90 + aumento);
+            var at_point = vec3.create();
+            vec3.set(at_point, 0, 0, 0);
+
+            mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
+            mat4.rotateX(camaraAux, camaraAux, degToRad(rotarCamaraX));
+            mat4.rotateY(camaraAux, camaraAux, degToRad(rotarCamaraY));
+            mat4.multiply(cameraMatrix, camaraAux, cameraMatrix);
+
+            gl.uniformMatrix4fv(shaderProgram.viewMatrixUniform, false, cameraMatrix);
+        }
+
         var eye_point = vec3.create();
-        vec3.set(eye_point, 30, 65, -90);
+        vec3.set(eye_point, 30, 65, -90 + aumento);
         var at_point = vec3.create();
         vec3.set(at_point, 0, 0, 0);
         var up_point = vec3.create();
         vec3.set(up_point, 0, 1, 0);
+        mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
+        mat4.rotateX(cameraMatrix, cameraMatrix, degToRad(rotarCamaraX));
+        mat4.rotateY(cameraMatrix, cameraMatrix, degToRad(rotarCamaraY));
 
-        mat4.lookAt(CameraMatrix, eye_point, at_point, up_point);
-        mat4.multiply(CameraMatrix, CameraMatrix, matriz_camara);
-        
-        setViewProjectionMatrix();
+        gl.uniformMatrix4fv(shaderProgram.ViewMatrixUniform, false, cameraMatrix );
 
         ///////////////////////////////////////////////////////
         //
@@ -476,7 +525,7 @@
     }
 
     function webGLStart() {
-        var canvas = document.getElementById("clase03-vertex shader");
+        var canvas = document.getElementById("glcanvas");
         initGL(canvas);
         initShaders();
         var colorRed = [1.0,0.0,0.0];
@@ -512,7 +561,7 @@
     <center>
             <h1>Sistemas Gráficos - 66.71</h1>
             <h2>Framework Trabajo Pr&aacute;ctico 2016</h2>
-            <canvas id="clase03-vertex shader" style="border: none;" width="1280" height="720">
+            <canvas id="glcanvas" style="border: none;" width="1280" height="720">
             Your browser does not support the HTML5 canvas element.
             </scanvas>
             
