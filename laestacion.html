@@ -109,13 +109,13 @@
     }
 
     //Variables de la estacion
-    var cameraMatrix    = mat4.create();
-    var mvMatrix        = mat4.create();
-    var pMatrix         = mat4.create();
-    var camaraAux       = mat4.create();
-	var eye_point 		= vec3.create();
-    var up_point 		= vec3.create();
-    var at_point 		= vec3.create();
+    var cameraMatrix	= mat4.create();
+    var mvMatrix		= mat4.create();
+    var pMatrix			= mat4.create();
+    var camaraAux		= mat4.create();
+	var eye_point		= vec3.create();
+    var up_point		= vec3.create();
+    var at_point		= vec3.create();
     vec3.set(up_point, 0, 1, 0);
 
     var mouseDown           = false;
@@ -131,7 +131,15 @@
     var traslacionPersonaX  = 0.0;
     var traslacionPersonaZ  = 0.0;
 
-    var estacion = null;
+    //Antena
+    var antenaDesplegada 		= true;
+    var antenaPlegada 			= false;
+    var plegarODesplegarAntena 	= false;
+
+    var estacion	= null;
+	var antena		= null;
+	var nave		= null;
+	var modeloNave	= null;
 
     function drawScene() {
         // Se configura el viewport dentro de área ¨canvas¨. en este caso se utiliza toda el área disponible
@@ -211,6 +219,33 @@
         mat4.scale(model_matrix_estacion, model_matrix_estacion, [7.0, 7.0, 7.0]);
         mat4.translate(model_matrix_estacion, model_matrix_estacion, [0,0,-0.5]);
         estacion.draw(model_matrix_estacion);
+
+        if (plegarODesplegarAntena) {
+        	if (antenaPlegada) {
+        		antenaPlegada = false;
+        		antenaDesplegada = true;
+        	}
+        	else if (antenaDesplegada) {
+        		antenaDesplegada = false;
+        		antenaPlegada = true;
+        	}
+        	plegarODesplegarAntena = false;
+        }
+
+        // Matriz de modelado de la antena
+        var model_matrix_antena = mat4.create();
+        mat4.identity(model_matrix_antena);
+        mat4.rotate(model_matrix_antena, model_matrix_antena,Math.PI/2, [1,0,0]);
+        mat4.rotate(model_matrix_antena, model_matrix_antena,Math.PI, [0,1,0]);
+        mat4.scale(model_matrix_antena, model_matrix_antena, [3.0, 3.0, 3.0]);
+        antena.draw(model_matrix_antena);
+
+        // Matriz de modelado de la nave
+        nave.step(); 
+		var position_matrix_nave = nave.getMatriz();
+		mat4.translate(position_matrix_nave,position_matrix_nave,[0,10,-30]);
+		//TODO: falta armar el objeto BIEN que modele la nave en la simulacion.
+		modeloNave.draw(position_matrix_nave);
     }
 
     function tick() {
@@ -226,6 +261,14 @@
         estacion = new Estacion();
         estacion.create();
 
+        antena = new Antena(2,2,2);
+        antena.initBuffers();
+
+        nave = new Nave();
+        //Falta hacer esto BIEN.
+        modeloNave = new Cubo(2,2,2,getColor("red"),false);//new ModeloNave();
+        modeloNave.initBuffers();
+        
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);
 

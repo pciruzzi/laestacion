@@ -51,6 +51,10 @@ onkeydown = function(evento){
        aumento = aumento - 4;
     }
 
+    //Teclas para el pliegue y despligue de la antena
+    if (tecla == "p" || tecla == "P") {
+      plegarODesplegarAntena = true;
+    }
 
     //Estas solo sirven para mover la persona en la bahia de carga.
     //Se puede apreciar mejor cuando la camara esta en la bahia de carga.
@@ -74,5 +78,78 @@ onkeydown = function(evento){
     if((tecla == "a") || (tecla == "A")){
       traslacionPersonaZ = traslacionPersonaZ - Math.sin(degToRad(rotarCamaraY)); 
       traslacionPersonaX = traslacionPersonaX - Math.cos(degToRad(rotarCamaraY));
+    }
+
+    //Estas teclas van a servir para el manejo de la nave
+    //Muevo la nave para arriba
+    if((tecla == "i") || (tecla == "I")){
+      nave.onTeclaDown(nave.TECLA_ARRIBA);
+    }
+    //Muevo la nave para abajo
+    if((tecla == "k") || (tecla == "K")){
+      nave.onTeclaDown(nave.TECLA_ABAJO);
+    }
+    //Muevo la nave para la izquierda
+    if((tecla == "j") || (tecla == "J")){
+      nave.onTeclaDown(nave.TECLA_IZQUIERDA);
+    }
+    //Muevo la nave para la derecha
+    if((tecla == "l") || (tecla == "L")){
+      nave.onTeclaDown(nave.TECLA_DERECHA);
+    }
+    //Acelero la nave
+    if((tecla == "m") || (tecla == "M")){
+      nave.onTeclaDown(nave.TECLA_MAS);
+    }
+    //Desacelero la nave
+    if((tecla == "n") || (tecla == "N")){
+      nave.onTeclaDown(nave.TECLA_MENOS);
+    }
+    //Muevo la nave para en sentido horario
+    if((tecla == "o") || (tecla == "O")){
+      nave.onTeclaDown(nave.TECLA_GIRO_HORARIO);
+    }
+    //Muevo la nave para en sentido antihorario
+    if((tecla == "u") || (tecla == "U")){
+      nave.onTeclaDown(nave.TECLA_GIRO_ANTIHORARIO);
+    }
+}
+
+onkeyup = function(evento){
+    evento = evento || window.event;
+    var tecla = evento.key;
+
+    //Estas teclas van a servir para el manejo de la nave
+    //Dejo de mover la nave para arriba
+    if((tecla == "i") || (tecla == "I")){
+      nave.onTeclaUp(nave.TECLA_ARRIBA);
+    }
+    //Dejo de mover la nave para abajo
+    if((tecla == "k") || (tecla == "K")){
+      nave.onTeclaUp(nave.TECLA_ABAJO);
+    }
+    //Dejo de mover la nave para la izquierda
+    if((tecla == "j") || (tecla == "J")){
+      nave.onTeclaUp(nave.TECLA_IZQUIERDA);
+    }
+    //Dejo de mover la nave para la derecha
+    if((tecla == "l") || (tecla == "L")){
+      nave.onTeclaUp(nave.TECLA_DERECHA);
+    }
+    //Dejo de acelerar la nave
+    if((tecla == "m") || (tecla == "M")){
+      nave.onTeclaUp(nave.TECLA_MAS);
+    }
+    //Dejo de desacelerar la nave
+    if((tecla == "n") || (tecla == "N")){
+      nave.onTeclaUp(nave.TECLA_MENOS);
+    }
+    //Dejo de mover la nave para en sentido horario
+    if((tecla == "o") || (tecla == "O")){
+      nave.onTeclaUp(nave.TECLA_GIRO_HORARIO);
+    }
+    //Dejo de mover la nave para en sentido antihorario
+    if((tecla == "u") || (tecla == "U")){
+      nave.onTeclaUp(nave.TECLA_GIRO_ANTIHORARIO);
     }
 }

@@ -12,8 +12,6 @@ function Nave() {
 	this.TECLA_GIRO_ANTIHORARIO = 7;
 
 	var estadoTeclas = [false, false, false, false, false, false];
-
-	//var orientacion = vec3.fromValues(0,-1,0);
 	var rotacion = mat4.create();
 	mat4.identity(rotacion);
 
@@ -32,8 +30,6 @@ function Nave() {
 	var angVirada = 0;
 
 	var momento = vec3.fromValues(0,0,0);
-
-	this.init=function(){}
 
 	this.step=function(){
 
@@ -83,13 +79,11 @@ function Nave() {
 	};
 
 	this.onTeclaDown = function(tecla) {
-		//console.log("onTeclaDown "+tecla);
 		var n = parseInt(tecla);
 		if (!isNaN(n)) estadoTeclas[n] = true;
 	}
 
 	this.onTeclaUp = function(tecla) {
-		//console.log("onTeclaUp "+tecla);
 		var n = parseInt(tecla);
 		if (!isNaN(n)) estadoTeclas[n] = false;
 			
