@@ -1,5 +1,4 @@
 <html>
-
 <head>
 <title>TP Gráficos - 1c2016</title>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
@@ -128,9 +127,7 @@
     var traslacionPersonaX  = 0.0;
     var traslacionPersonaZ  = 0.0;
 
-    var deimos = null;
-    var mars   = null;
-    var phobos = null;
+    var mars	= null;
 
     var deimosRotationMatrix = mat4.create();
     mat4.identity(deimosRotationMatrix);
@@ -145,6 +142,7 @@
         // Se habilita el color de borrado para la pantalla (Color Buffer) y otros buffers
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
         // Configuración de la luz
         // Se inicializan las variables asociadas con la Iluminación
         var lighting = true;
@@ -153,6 +151,7 @@
         //vec3.transformMat4(lightPosition, lightPosition, cameraMatrix);
         gl.uniform3fv(shaderProgram.lightingDirectionUniform, lightPosition);
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
         // Se configura la matriz de perspectiva
         mat4.perspective(pMatrix, degToRad(50), gl.viewportWidth / gl.viewportHeight, 0.01, 2000.0);           
         
@@ -203,114 +202,11 @@
         gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
         gl.uniformMatrix4fv(shaderProgram.ViewMatrixUniform, false, cameraMatrix);
 
-        // Dibujamos la Tierra
-        // Configuramos la iluminación para la Tierra
-        gl.uniform3f(shaderProgram.ambientColorUniform, 0.2, 0.2, 0.2 );
-        gl.uniform3f(shaderProgram.directionalColorUniform, 0.05, 0.05, 0.05);
-        
-        // Matriz de modelado de la Tierra
-        var model_matrix_deimos = mat4.create();
-        mat4.identity(model_matrix_deimos);
-        var translate_deimos = mat4.create();
-        mat4.identity(translate_deimos);
-        mat4.translate(translate_deimos, translate_deimos, [10, 0, 0 ]);
-
-        // Matriz de rotación del eje sobre el plano de la eclíptica a 23 grados
-        var axis_inclination_matrix = mat4.create();
-        mat4.identity(axis_inclination_matrix);
-        mat4.rotate(axis_inclination_matrix, axis_inclination_matrix, -0.4014, [0, 0, 1]);
-
-        var translation_movement = mat4.create();
-        var inverse_translation_movement = mat4.create();
-
-        mat4.identity(translation_movement);
-        mat4.identity(inverse_translation_movement);
-
-        mat4.rotate(translation_movement, translation_movement, deimosRotationAnglemars, [0, 1, 0]);
-        mat4.rotate(inverse_translation_movement, inverse_translation_movement, -deimosRotationAnglemars, [0, 1, 0]);
-
-        // Las transformaciones aplicadas a la Tierra son:
-        // (el órden es el inverso al de las llamadas a la función multiply)
-        //
-        // 1. Se aplica el movimiento de rotación de la Tierra
-        // 2. Se inclina el eje de rotación 23 grados
-        // 3. Se aplica la inversa del ángulo de rotación del movimiento alrededor del Sol
-        //    con el fin de luego compensar dicha rotación y mantener el Eje de la Tierra siempre 
-        //    en la misma orientación
-        // 4. A partir de acá se aplican las dos transformaciones que son comunes con la Tierra
-        //          4.1 La traslación para poner al sistema Tierra-Luna en orbita alrededor del Sol
-        //          4.2 La rotación para poner al sistema Tierra-Luna a girar en torno al Sol.
-        //mat4.multiply(model_matrix_deimos, model_matrix_deimos, translation_movement);
-        //mat4.multiply(model_matrix_deimos, model_matrix_deimos, translate_deimos);
-        //mat4.multiply(model_matrix_deimos, model_matrix_deimos, inverse_translation_movement);
-        //mat4.multiply(model_matrix_deimos, model_matrix_deimos, axis_inclination_matrix);
-        //mat4.multiply(model_matrix_deimos, model_matrix_deimos, deimosRotationMatrix);
-
-        var scale_deimos_matrix = mat4.create();
-        mat4.identity(scale_deimos_matrix);
-        mat4.scale(scale_deimos_matrix, scale_deimos_matrix, [5, 5, 5]);
-
-        mat4.multiply(model_matrix_deimos, model_matrix_deimos, scale_deimos_matrix);
-
-        deimos.draw(model_matrix_deimos);
-        //
-        ////////////////////////////////////////////////////////
-
-        ///////////////////////////////////////////////////////
-        //
-        // Dibujamos la Luna
-
-        // Configuramos la iluminación para la Luna
-        gl.uniform3f(shaderProgram.ambientColorUniform, 0.3, 0.3, 0.3 );
-        gl.uniform3f(shaderProgram.directionalColorUniform, 0.1, 0.1, 0.1);
-        
-        // Matriz de modelado de la Luna, respecto de la Tierra
-        var model_matrix_phobos = mat4.create();
-        mat4.identity(model_matrix_phobos);
-
-        // Traslación de la Luna respecto de la Tierra
-        // Es la traslación que la pone en órbita
-        var phobos_transalte_from_deimos_matrix = mat4.create();
-        mat4.identity(phobos_transalte_from_deimos_matrix);
-        mat4.translate(phobos_transalte_from_deimos_matrix, phobos_transalte_from_deimos_matrix, [25, 0,0]);
-
-        // Matríz de rotación de la Luna respecto de la tierra.
-        // Como la luna tiene un periodo de rotación sobre su eje que coincide
-        // con el de rotación alrededor de la Tierra, usamos la misma matríz
-        // para ambos movimientos.
-        var phobos_rotation_matrix = mat4.create();
-        mat4.identity(phobos_rotation_matrix);
-        mat4.rotate(phobos_rotation_matrix, phobos_rotation_matrix, phobosRotationAngledeimos, [0, 1 , 0]);
-
-        // Secuencia de transformaciones
-        // A la luna se le aplican las siguientes transformaciones:
-        // (el órden es el inverso al de las llamadas a la función multiply)
-        // 
-        // 1. Se aplica una rotación sobre el propio eje de la Luna
-        // 2. Se aplica una traslación que representa la distancia entre la Tierra y la Luna
-        // 3. Se aplica una rotación para hacer rotar la Luna alrededor de la Tierra
-        // 4. A partir de acá se aplican las dos transformaciones que son comunes con la Tierra
-        //          4.1 La traslación para poner al sistema Tierra-Luna en orbita alrededor del Sol
-        //          4.2 La rotación para poner al sistema Tierra-Luna a girar en torno al Sol.
-        //mat4.multiply(model_matrix_phobos, model_matrix_phobos, translation_movement);
-        //mat4.multiply(model_matrix_phobos, model_matrix_phobos, translate_deimos);
-        mat4.multiply(model_matrix_phobos, model_matrix_phobos, phobos_rotation_matrix);
-        mat4.multiply(model_matrix_phobos, model_matrix_phobos, phobos_transalte_from_deimos_matrix);
-        mat4.multiply(model_matrix_phobos, model_matrix_phobos, phobos_rotation_matrix);
-
-        var scale_phobos_matrix = mat4.create();
-        mat4.identity(scale_phobos_matrix);
-        mat4.scale(scale_phobos_matrix, scale_phobos_matrix, [1.0, 0.84, 0.7]);
-
-        mat4.multiply(model_matrix_phobos, model_matrix_phobos, scale_phobos_matrix);
-
-//        phobos.draw(model_matrix_phobos);
-
-        ////////////////////////////////////////////////////////
-        //     
-        // Dibujamos al mars
-        
-        // Configuramos la iluminación para el Sol
+        ////////////////////////////////////////////////////////////////////////////////
+        //Empiezo a dibujar la escena
+ 
+        // Dibujamos al mars        
+        // Configuramos la iluminación
         gl.uniform3f(shaderProgram.ambientColorUniform, 0.3, 0.3, 0.3 );
         gl.uniform3f(shaderProgram.directionalColorUniform, 0.05, 0.05, 0.05);
 
@@ -321,9 +217,7 @@
         mat4.rotate(model_matrix_mars, model_matrix_mars,Math.PI, [0,1,0]);
         mat4.scale(model_matrix_mars, model_matrix_mars, [7.0, 7.0, 7.0]);
         mat4.translate(model_matrix_mars, model_matrix_mars, [0,0,-0.5]);
-        //mars.draw(model_matrix_mars);
-        //
-        ////////////////////////////////////////////////////////
+        mars.draw(model_matrix_mars);
     }
 
     function tick() {
@@ -409,17 +303,9 @@
         var colorBlue = [0.0,0.0,1.0];
         var esTexturada = false;
 
-        deimos = pruebaBarrido();
-        deimos.initBuffers();
-        //deimos.initTexture("moon.gif");
-
-        //mars = new Cubo(1.0,3.0,0.05, colorGreen, esTexturada);
-//        mars.initBuffers();
-        //mars.initTexture("mars_1k_color.jpg");
-
-//        phobos = new Esfera(64, 64, colorBlue, esTexturada);
-//        phobos.initBuffers();
-        //phobos.initTexture("moon.gif");
+        //mars = new seccionAntena(2,2,2);
+        mars = pruebaBarrido();
+        mars.initBuffers();
         
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);
