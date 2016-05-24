@@ -33,58 +33,6 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
         this.texture.image.src = texture_file;
     }
 
-    this.calcularTangentes = function(){
-        this.tangent_buffer = [];
-        var caminoTangentBuffer = getTangentBuffer(this.camino);
-        for (var i = 0; i < 3*this.filas-2; i+=3) {
-            var tgx = caminoTangentBuffer[i];
-            var tgy = caminoTangentBuffer[i+1];
-            var tgz = caminoTangentBuffer[i+2];
-            for (var j = 0; j < this.columnas; j++) {
-                this.tangent_buffer.push(tgx, tgy, tgz);
-            }
-        }
-    }
-
-    this.posicion = function(i,j){
-        if (j < 0)
-            return this.posicion(i,0);
-        if (j >= this.columnas)
-            return this.posicion(i, this.columnas-1);
-
-        var posicion = vec3.create();
-        posicion[0] = this.position_buffer[3*(this.columnas*i + j)];
-        posicion[1] = this.position_buffer[3*(this.columnas*i + j) + 1];
-        posicion[2] = this.position_buffer[3*(this.columnas*i + j) + 2];
-        return posicion;
-    }
-
-    this.calcularNormales = function(){
-        this.normal_buffer = [];
-        for (var i = 0; i < this.filas; i++) {
-            for (var j = 0; j < this.columnas; j++) {
-                var anterior = this.posicion(i,j-1);
-                var siguiente = this.posicion(i,j+1);
-
-                var resta = vec3.create();
-                vec3.subtract(resta, siguiente, anterior);
-
-                var tangentePunto = [this.tangent_buffer[3*(this.columnas*i + j)], this.tangent_buffer[3*(this.columnas*i + j)+1], this.tangent_buffer[3*(this.columnas*i + j)+2]];
-                var normal = vec3.create();
-                vec3.cross(normal, tangentePunto, resta);
-                vec3.normalize(normal, normal);
-
-                this.normal_buffer.push(normal[0], normal[1], normal[2]);
-            }
-        }
-    }
-
-    this.calcularAngulo = function(vector1, vector2){
-        var dotProduct = vec3.dot(vector1, vector2);
-        var acos = dotProduct/(vec3.length(vector1)*vec3.length(vector2));
-        return Math.acos(acos);
-    }
-
     this.initBuffers = function(){
         this.vertex_buffer = [];
         this.position_buffer = [];
@@ -98,30 +46,22 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
         var normalBufferPerfil = getNormalBuffer(this.perfil)
         var positionBufferPerfil = getPositionBuffer(this.perfil);
 
-        for (var i = 0; i < this.columnas; i++) {
-            var angle = 2*Math.PI*i/n;
-            
-            var modelado = mat4.create();
-            for (var j = 0; j < 3*this.filas-2; j+=3) {
-                var punto = vec3.fromValues(positionBufferPerfil[j], positionBufferPerfil[j+1], positionBufferPerfil[j+2]);
-                var tgPunto = vec3.fromValues(tangentBufferPerfil[j], tangentBufferPerfil[j+1], tangentBufferPerfil[j+2]);
-                var normalPunto = vec3.fromValues(normalBufferPerfil[j], normalBufferPerfil[j+1], normalBufferPerfil[j+2]);
-
+        for (var i = 0; i < 3*this.filas-2; i+=3) {
+            var punto = vec3.fromValues(positionBufferPerfil[i], positionBufferPerfil[i+1], positionBufferPerfil[i+2]);
+            var tgPunto = vec3.fromValues(tangentBufferPerfil[i], tangentBufferPerfil[i+1], tangentBufferPerfil[i+2]);
+            var normalPunto = vec3.fromValues(normalBufferPerfil[i], normalBufferPerfil[i+1], normalBufferPerfil[i+2]);
+            for (var j = 0; j < this.columnas; j++) {
+                var angle = 2*Math.PI*j/(this.n-1);
+                var modelado = mat4.create();
                 mat4.identity(modelado);
                 mat4.rotate(modelado, modelado, angle, this.eje);
 
                 var position = vec3.create();
                 vec3.transformMat4(position, punto, modelado);
-                //this.position_buffer.push(position[0], position[1], position[2]);
-
                 var tangent = vec3.create();
                 vec3.transformMat4(tangent, tgPunto, modelado);
-                //this.tangent_buffer.push(tangent[0], tangent[1], tangent[2]);
-
                 var normal = vec3.create();
                 vec3.transformMat4(normal, normalPunto, modelado);
-                //this.normal_buffer.push(normal[0], normal[1], normal[2]);
-
                 var color = [this.color[0], this.color[1], this.color[2]];
 
                 var vertex = new vertice(position, color, normal, tangent, [0,0]);
@@ -132,12 +72,7 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
         this.normal_buffer = getNormalBuffer(this.vertex_buffer);
         this.tangent_buffer = getTangentBuffer(this.vertex_buffer);
         this.color_buffer = getColorBuffer(this.vertex_buffer);
-        //this.calcularTangentes();
-        //this.calcularNormales();
         console.log("Cantidad vertices: " + this.vertex_buffer.length);
-        console.log("Cantidad vertices: " + this.position_buffer.length/3);
-        console.log("Cantidad vertices: " + this.normal_buffer.length/3);
-        console.log("Cantidad vertices: " + this.tangent_buffer.length/3);
 
         this.index_buffer = grid(this.filas, this.columnas);
 
