@@ -10,14 +10,18 @@
 <script type="text/javascript" src="buffer_vertices.js"></script>
 <script type="text/javascript" src="cilindro.js"></script>
 <script type="text/javascript" src="circunferencia.js"></script>
+<script type="text/javascript" src="color.js"></script>
 <script type="text/javascript" src="cubo.js"></script>
 <script type="text/javascript" src="curvaBezier.js"></script>
 <script type="text/javascript" src="curvaBSpline.js"></script>
 <script type="text/javascript" src="esfera.js"></script>
+<script type="text/javascript" src="estacion.js"></script>
 <script type="text/javascript" src="grid.js"></script>
 <script type="text/javascript" src="keyboardhandle.js"></script>
 <script type="text/javascript" src="mousehandle.js"></script>
 <script type="text/javascript" src="nave.js"></script>
+<script type="text/javascript" src="parteCentral.js"></script>
+<script type="text/javascript" src="parteExterior.js"></script>
 <script type="text/javascript" src="productoVectorial.js"></script>
 <script type="text/javascript" src="seccionAntena.js"></script>
 <script type="text/javascript" src="shaderProgram.js"></script>
@@ -61,7 +65,6 @@
     varying vec3 vLightWeighting;
 
     void main(void) {
-    
         // Transformamos al vértice al espacio de la cámara
         vec4 pos_camera_view = uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
         
@@ -99,8 +102,8 @@
             gl.viewportWidth = canvas.width;
             gl.viewportHeight = canvas.height;
         } catch (e) {
-        }
-        if (!gl) {
+
+        } if (!gl) {
             alert("Could not initialise WebGL, sorry :-(");
         }
     }
@@ -128,13 +131,7 @@
     var traslacionPersonaX  = 0.0;
     var traslacionPersonaZ  = 0.0;
 
-    var mars	= null;
-
-    var deimosRotationMatrix = mat4.create();
-    mat4.identity(deimosRotationMatrix);
-
-    var deimosRotationAnglemars = 0.0;
-    var phobosRotationAngledeimos = 0.0;
+    var estacion = null;
 
     function drawScene() {
         // Se configura el viewport dentro de área ¨canvas¨. en este caso se utiliza toda el área disponible
@@ -143,7 +140,6 @@
         // Se habilita el color de borrado para la pantalla (Color Buffer) y otros buffers
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
         // Configuración de la luz
         // Se inicializan las variables asociadas con la Iluminación
         var lighting = true;
@@ -152,7 +148,6 @@
         //vec3.transformMat4(lightPosition, lightPosition, cameraMatrix);
         gl.uniform3fv(shaderProgram.lightingDirectionUniform, lightPosition);
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
         // Se configura la matriz de perspectiva
         mat4.perspective(pMatrix, degToRad(50), gl.viewportWidth / gl.viewportHeight, 0.01, 2000.0);           
         
@@ -203,108 +198,34 @@
         gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
         gl.uniformMatrix4fv(shaderProgram.ViewMatrixUniform, false, cameraMatrix);
 
-        ////////////////////////////////////////////////////////////////////////////////
-        //Empiezo a dibujar la escena
- 
-        // Dibujamos al mars        
+        // Dibujamos la estacion        
         // Configuramos la iluminación
         gl.uniform3f(shaderProgram.ambientColorUniform, 0.3, 0.3, 0.3 );
         gl.uniform3f(shaderProgram.directionalColorUniform, 0.05, 0.05, 0.05);
 
-        // Matriz de modelado del mars
-        var model_matrix_mars = mat4.create();
-        mat4.identity(model_matrix_mars);
-        mat4.rotate(model_matrix_mars, model_matrix_mars,Math.PI/2, [1,0,0]);
-        mat4.rotate(model_matrix_mars, model_matrix_mars,Math.PI, [0,1,0]);
-        mat4.scale(model_matrix_mars, model_matrix_mars, [3.0, 3.0, 3.0]);
-        mars.draw(model_matrix_mars);
+        // Matriz de modelado de la estacion
+        var model_matrix_estacion = mat4.create();
+        mat4.identity(model_matrix_estacion);
+        mat4.rotate(model_matrix_estacion, model_matrix_estacion,Math.PI/2, [1,0,0]);
+        mat4.rotate(model_matrix_estacion, model_matrix_estacion,Math.PI, [0,1,0]);
+        mat4.scale(model_matrix_estacion, model_matrix_estacion, [7.0, 7.0, 7.0]);
+        mat4.translate(model_matrix_estacion, model_matrix_estacion, [0,0,-0.5]);
+        estacion.draw(model_matrix_estacion);
     }
 
     function tick() {
         requestAnimFrame(tick);
-        var newRotationMatrix = mat4.create();
-        mat4.identity(newRotationMatrix);
-        mat4.rotate(newRotationMatrix, newRotationMatrix, 0.025, [0, 1, 0]);
-        mat4.multiply(newRotationMatrix, deimosRotationMatrix, deimosRotationMatrix);
-
-        deimosRotationAnglemars += 0.0045;
-        phobosRotationAngledeimos += 0.0005;
         drawScene();
-    }
-
-    function pruebaRevolucion() {
-        var n = 9;
-        var P = [];
-
-        //Perfil a revolucionar
-        P.push([0.0, 0.0, 0.0]);
-        P.push([1.0, 0.0, 0.0]);
-        P.push([1.0, 0.0, 0.0]);
-        P.push([2.0, 0.0, 0.0]);
-        P.push([2.0, 0.0, 1.0]);
-        P.push([2.0, 0.0, 1.0]);
-        P.push([2.0, 0.0, 2.0]);
-        P.push([4.0, 0.0, 3.0]);
-        P.push([4.0, 0.0, 4.0]);
-        P.push([2.0, 0.0, 5.0]);
-        P.push([2.0, 0.0, 6.0]);
-        P.push([2.0, 0.0, 6.0]);
-        P.push([2.0, 0.0, 7.0]);
-        P.push([1.0, 0.0, 7.0]);
-        P.push([1.0, 0.0, 7.0]);
-        P.push([0.0, 0.0, 7.0]);
-        var tramosPerfil = [];
-        var perfil = [];
-        var cantPControl = P.length;
-        for (var i = 0; i < cantPControl - 3; i+=3){
-            tramosPerfil.push(new curvaBezier(P[i], P[i+1], P[i+2], P[i+3], n));    
-        }
-        for (var i in tramosPerfil){
-            perfil = perfil.concat(tramosPerfil[i].getVertexBuffer());
-        }
-
-        return new SuperficieRevolucion(perfil, [0,0,1], 37, [0.0,1.0,0.0], false);
-    }
-
-    function pruebaBarrido() {
-        var circ = new circunferencia(Math.PI*0, Math.PI*1.5, 4, 40);
-
-        var n = 9;
-        var P = [];
-        //Superficie a barrer -> pseudo circunferencia
-        P.push([2.0, 0.0, 0.0]);
-        P.push([1.0, 0.0, 1.0]);
-        P.push([-1.0, 0.0, 1.0]);
-        P.push([-2.0, 0.0, 0.0]);
-        P.push([-1.0, 0.0, -1.0]);
-        P.push([1.0, 0.0, -1.0]);
-        P.push([2.0, 0.0, 0.0]);
-        var tramosForma = [];
-        var forma = [];
-        var cantPControl = P.length;
-        for (var i = 0; i < cantPControl - 3; i+=3){
-            tramosForma.push(new curvaBezier(P[i], P[i+1], P[i+2], P[i+3], n));    
-        }
-        for (var i in tramosForma){
-            forma = forma.concat(tramosForma[i].getVertexBuffer());
-        }
-
-        return new SuperficieBarrido(forma, circ.getVertexBuffer(), [0.0,1.0,0.0], false);
     }
 
     function start() {
         var canvas = document.getElementById("glcanvas");
         initGL(canvas);
         var shaderProgram = initShaders(gl);
-        var colorRed = [1.0,0.0,0.0];
-        var colorGreen = [0.0,1.0,0.0];
-        var colorBlue = [0.0,0.0,1.0];
-        var esTexturada = false;
 
-        //mars = new Antena(2,2,2);
-        mars = pruebaRevolucion();
-        mars.initBuffers();
-        
+        estacion = new Estacion();
+        estacion.create();
+
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);
 
@@ -315,13 +236,11 @@
 <body onload="start();">
     <center>
             <h1>Sistemas Gráficos - 66.71</h1>
-            <h2>Framework Trabajo Pr&aacute;ctico 2016</h2>
+            <h2>Trabajo Pr&aacute;ctico 2016</h2>
             <canvas id="glcanvas" style="border: none;" width="1280" height="720">
             Your browser does not support the HTML5 canvas element.
             </scanvas>
         </center>
-    <br/>
-    Las texturas son cortesía de <a href="http://maps.jpl.nasa.gov/">Jet Propulsion Laboratory</a>.
     <br/>
     <br/>
 </body>
