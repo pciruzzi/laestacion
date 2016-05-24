@@ -23,6 +23,7 @@
 <script type="text/javascript" src="antena.js"></script>
 <script type="text/javascript" src="shaderProgram.js"></script>
 <script type="text/javascript" src="textureHandler.js"></script>
+<script type="text/javascript" src="nave.js"></script>
 
 <script id="shader-fs" type="x-shader/x-fragment">
     precision mediump float;
@@ -69,7 +70,6 @@
         // Coordenada de textura sin modifiaciones
         vTextureCoord = aTextureCoord;
                             
-        ////////////////////////////////////////////
         // Calculos de la iluminación
         vec3 light_dir =  uLightPosition - vec3( pos_camera_view );
         normalize(light_dir);
@@ -80,12 +80,15 @@
             float directionalLightWeighting = max(dot(transformedNormal, light_dir), 0.0);
             vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
         }
-        ////////////////////////////////////////////
     }
 </script>
 
 
 <script type="text/javascript">
+
+    function degToRad(degrees) {
+        return degrees * Math.PI / 180;
+    }
 
     var gl;
 
@@ -101,6 +104,7 @@
         }
     }
 
+    //Variables de la estacion
     var cameraMatrix    = mat4.create();
     var mvMatrix        = mat4.create();
     var mvMatrixStack   = [];
@@ -129,10 +133,6 @@
 
     var deimosRotationAnglemars = 0.0;
     var phobosRotationAngledeimos = 0.0;
-
-    function degToRad(degrees) {
-        return degrees * Math.PI / 180;
-    }
 
     function drawScene() {
         // Se configura el viewport dentro de área ¨canvas¨. en este caso se utiliza toda 
@@ -407,7 +407,7 @@
         return new SuperficieBarrido(forma, camino, [0.0,1.0,0.0], false);
     }
 
-    function webGLStart() {
+    function start() {
         var canvas = document.getElementById("glcanvas");
         initGL(canvas);
         var shaderProgram = initShaders(gl);
@@ -434,26 +434,19 @@
 
         tick();
     }
-
 </script>
-
-
 </head>
-
-
-<body onload="webGLStart();">
+<body onload="start();">
     <center>
             <h1>Sistemas Gráficos - 66.71</h1>
             <h2>Framework Trabajo Pr&aacute;ctico 2016</h2>
             <canvas id="glcanvas" style="border: none;" width="1280" height="720">
             Your browser does not support the HTML5 canvas element.
             </scanvas>
-            
         </center>
     <br/>
     Las texturas son cortesía de <a href="http://maps.jpl.nasa.gov/">Jet Propulsion Laboratory</a>.
     <br/>
     <br/>
 </body>
-
 </html>
