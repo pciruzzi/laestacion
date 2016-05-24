@@ -28,7 +28,7 @@ function curvaBezier(P0, P1, P2, P3, cantPasos) {
         var dz = B0der(u)*P0[2] + B1der(u)*P1[2] + B2der(u)*P2[2] + B3der(u)*P3[2];
 
         var tangente = [dx,dy,dz];
-        var normal = [-dy,dx,0]; // Como las curvas de Bezier solo las utilizamos en un plano, se puede definir así
+        var normal = [-dz,0,dx]; // Como las curvas de Bezier solo las utilizamos en un plano, se puede definir así
 
 
         var vertex = new vertice(posicion, [0,0,0], normal, tangente, [0,0,0]);

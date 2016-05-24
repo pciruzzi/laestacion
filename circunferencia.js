@@ -1,16 +1,16 @@
-function circunferencia(inicial, final, radio,  cantPasos) {
+function circunferencia(inicial, final, radio, cantPasos) {
     this.vertex_buffer = [];
 
     for(var phi = inicial; phi <= final; phi += (final-inicial)/cantPasos){
-    	var x = radio*Math.cos(phi); // RADIO = 1;
+    	var x = radio*Math.cos(phi);
     	var y = radio*Math.sin(phi);
     	var z = 0;
 
     	var posicion = [x, y, z];
 
 
-    	var dx = radio*Math.sin(phi);
-    	var dy = -radio*Math.cos(phi);
+    	var dx = -y;
+    	var dy = x;
     	var dz = 0;
 
     	var tangente = [dx, dy, dz];

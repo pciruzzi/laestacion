@@ -9,6 +9,7 @@
 
 <script type="text/javascript" src="buffer_vertices.js"></script>
 <script type="text/javascript" src="cilindro.js"></script>
+<script type="text/javascript" src="circunferencia.js"></script>
 <script type="text/javascript" src="cubo.js"></script>
 <script type="text/javascript" src="curvaBezier.js"></script>
 <script type="text/javascript" src="curvaBSpline.js"></script>
@@ -239,15 +240,15 @@
         // 4. A partir de acá se aplican las dos transformaciones que son comunes con la Tierra
         //          4.1 La traslación para poner al sistema Tierra-Luna en orbita alrededor del Sol
         //          4.2 La rotación para poner al sistema Tierra-Luna a girar en torno al Sol.
-        mat4.multiply(model_matrix_deimos, model_matrix_deimos, translation_movement);
-        mat4.multiply(model_matrix_deimos, model_matrix_deimos, translate_deimos);
-        mat4.multiply(model_matrix_deimos, model_matrix_deimos, inverse_translation_movement);
-        mat4.multiply(model_matrix_deimos, model_matrix_deimos, axis_inclination_matrix);
-        mat4.multiply(model_matrix_deimos, model_matrix_deimos, deimosRotationMatrix);
+        //mat4.multiply(model_matrix_deimos, model_matrix_deimos, translation_movement);
+        //mat4.multiply(model_matrix_deimos, model_matrix_deimos, translate_deimos);
+        //mat4.multiply(model_matrix_deimos, model_matrix_deimos, inverse_translation_movement);
+        //mat4.multiply(model_matrix_deimos, model_matrix_deimos, axis_inclination_matrix);
+        //mat4.multiply(model_matrix_deimos, model_matrix_deimos, deimosRotationMatrix);
 
         var scale_deimos_matrix = mat4.create();
         mat4.identity(scale_deimos_matrix);
-        mat4.scale(scale_deimos_matrix, scale_deimos_matrix, [1.8, 1.8, 1.8]);
+        mat4.scale(scale_deimos_matrix, scale_deimos_matrix, [5, 5, 5]);
 
         mat4.multiply(model_matrix_deimos, model_matrix_deimos, scale_deimos_matrix);
 
@@ -303,7 +304,7 @@
 
         mat4.multiply(model_matrix_phobos, model_matrix_phobos, scale_phobos_matrix);
 
-        phobos.draw(model_matrix_phobos);
+//        phobos.draw(model_matrix_phobos);
 
         ////////////////////////////////////////////////////////
         //     
@@ -320,7 +321,9 @@
         mat4.rotate(model_matrix_mars, model_matrix_mars,Math.PI, [0,1,0]);
         mat4.scale(model_matrix_mars, model_matrix_mars, [7.0, 7.0, 7.0]);
         mat4.translate(model_matrix_mars, model_matrix_mars, [0,0,-0.5]);
-        mars.draw(model_matrix_mars);
+        //mars.draw(model_matrix_mars);
+        //
+        ////////////////////////////////////////////////////////
     }
 
     function tick() {
@@ -340,13 +343,17 @@
 
         var P = [];
         //linea recta
-        P.push([0.0, 0.0, 0.0]);
-        P.push([0.0, 1.0, 0.0]);
-        P.push([0.0, 2.0, 0.0]);
-        P.push([0.0, 3.0, 0.0]);
-        //P.push([0.0, 4.0, 0.0]);
-        //P.push([0.0, 5.0, 0.0]);
-        //P.push([0.0, 6.0, 0.0]);
+        //P.push([0.0, 0.0, 0.0]);
+        //P.push([0.0, 0.01, 0.0]);
+        //P.push([3.0, 4.0, 0.0]);
+        //P.push([7.5, 8.0, 0.0]);
+        //P.push([12.0, 4.0, 0.0]);
+        //P.push([15.0, 0.01, 0.0]);
+        //P.push([15.0, 0.0, 0.0]);
+        //P.push([0.0, 1.0, 0.0]);
+        //P.push([0.0, 2.0, 0.0]);
+        //P.push([0.0, 3.0, 0.0]);
+        var x = new circunferencia(Math.PI*0, Math.PI*1.5, 4, 40);
 
         var tramosCamino = [];
         var camino = [];
@@ -390,7 +397,7 @@
         }
         console.log("Cantidad de tramos forma: " + cant);
 
-        return new SuperficieBarrido(forma, camino, [0.0,1.0,0.0], false);
+        return new SuperficieBarrido(forma, x.getVertexBuffer(), [0.0,1.0,0.0], false);
     }
 
     function start() {
@@ -402,17 +409,16 @@
         var colorBlue = [0.0,0.0,1.0];
         var esTexturada = false;
 
-        deimos = new Cilindro(64, 64, colorRed, esTexturada);
+        deimos = pruebaBarrido();
         deimos.initBuffers();
         //deimos.initTexture("moon.gif");
 
-		mars = pruebaBarrido();
         //mars = new Cubo(1.0,3.0,0.05, colorGreen, esTexturada);
-        mars.initBuffers();
+//        mars.initBuffers();
         //mars.initTexture("mars_1k_color.jpg");
 
-        phobos = new Esfera(64, 64, colorBlue, esTexturada);
-        phobos.initBuffers();
+//        phobos = new Esfera(64, 64, colorBlue, esTexturada);
+//        phobos.initBuffers();
         //phobos.initTexture("moon.gif");
         
         gl.clearColor(0.0, 0.0, 0.0, 1.0);

@@ -101,24 +101,19 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
             var xCamino = positionBufferCamino[3*i];
             var yCamino = positionBufferCamino[3*i+1];
             var zCamino = positionBufferCamino[3*i+2];
-/*
-            var traslacion = mat4.create();
-            mat4.identity(traslacion);
-            var rotacion = mat4.create();
-            mat4.identity(rotacion);*/
+            
             var modelado = mat4.create();
-
             //Hago que la tangente del camino coincida con la normal de la forma -> HACER!
             var tg = vec3.fromValues(tangentBufferCamino[3*i], tangentBufferCamino[3*i+1], tangentBufferCamino[3*i+2]);
-            //console.log("Tangent= (" + tangentBufferCamino[3*i] + "," + tangentBufferCamino[3*i+1] + "," + tangentBufferCamino[3*i+2] + ")");
             for (var j = 0; j < 3*this.columnas-2; j+=3) {
                 var normal = vec3.fromValues(normalBufferForma[j], normalBufferForma[j+1], normalBufferForma[j+2]);
-                //console.log("Normal= (" + normalBufferForma[j] + "," + normalBufferForma[j+1] + "," + normalBufferForma[j+2] + ")");
-                var angle = this.calcularAngulo(tg, normal);
-                //console.log("angle= " + angle);
+                var angle = this.calcularAngulo(tg, [0,1,0]);
+                if (yCamino > 0) {
+                	angle = -angle;
+                }
                 mat4.identity(modelado);
                 mat4.translate(modelado, modelado, [xCamino,yCamino,zCamino]);
-                mat4.rotate(modelado, modelado, Math.PI-angle, [0,0,1]);
+                mat4.rotate(modelado, modelado, -angle, [0,0,1]);
 
                 var punto = vec3.fromValues(positionBufferForma[j], positionBufferForma[j+1], positionBufferForma[j+2]);
                 var vertice = vec3.create();

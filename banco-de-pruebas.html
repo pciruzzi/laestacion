@@ -329,7 +329,7 @@
         mat4.multiply(model_matrix_deimos, model_matrix_deimos, scale_deimos_matrix);
 */
         //mat4.scale(model_matrix_deimos, model_matrix_deimos, [4,4,4]);
-        //mat4.rotate(model_matrix_deimos, model_matrix_deimos, -Math.PI/2, [1,0,0]);
+        //mat4.rotate(model_matrix_deimos, model_matrix_deimos, Math.PI, [1,0,0]);
         deimos.draw(model_matrix_deimos);
         //
         ////////////////////////////////////////////////////////
@@ -431,7 +431,7 @@
         //P.push([0.0, 1.0, 0.0]);
         //P.push([0.0, 2.0, 0.0]);
         //P.push([0.0, 3.0, 0.0]);
-        var x = new circunferencia(0, Math.PI*3/2, 3, 30);
+        var x = new circunferencia(Math.PI*0, Math.PI*1.5, 4, 40);
 
         var tramosCamino = [];
         var camino = [];
