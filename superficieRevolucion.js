@@ -1,11 +1,12 @@
-function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y camino son buffers de vértices
+function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil es un buffer de vértices, n es cantidad de repeticiones
     this.columnas = null;
     this.filas = null;
     this.color = color;
     this.esTexturada = esTexturada;
 
-    this.camino = camino;
-    this.forma = forma;
+    this.perfil = perfil;
+    this.eje = eje;
+    this.n = n;
 	
     this.vertex_buffer = null;
     this.position_buffer = null;
@@ -32,96 +33,46 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
         this.texture.image.src = texture_file;
     }
 
-    this.calcularTangentes = function(){
-        this.tangent_buffer = [];
-        var caminoTangentBuffer = getTangentBuffer(this.camino);
-        for (var i = 0; i < 3*this.filas-2; i+=3) {
-            var tgx = caminoTangentBuffer[i];
-            var tgy = caminoTangentBuffer[i+1];
-            var tgz = caminoTangentBuffer[i+2];
-            for (var j = 0; j < this.columnas; j++) {
-                this.tangent_buffer.push(tgx, tgy, tgz);
-            }
-        }
-    }
-
-    this.posicion = function(i,j){
-        if (j < 0)
-            return this.posicion(i,0);
-        if (j >= this.columnas)
-            return this.posicion(i, this.columnas-1);
-
-        var posicion = vec3.create();
-        posicion[0] = this.position_buffer[3*(this.columnas*i + j)];
-        posicion[1] = this.position_buffer[3*(this.columnas*i + j) + 1];
-        posicion[2] = this.position_buffer[3*(this.columnas*i + j) + 2];
-        return posicion;
-    }
-
-    this.calcularNormales = function(){
-        this.normal_buffer = [];
-        for (var i = 0; i < this.filas; i++) {
-            for (var j = 0; j < this.columnas; j++) {
-                var anterior = this.posicion(i,j-1);
-                var siguiente = this.posicion(i,j+1);
-
-                var resta = vec3.create();
-                vec3.subtract(resta, siguiente, anterior);
-
-                var tangentePunto = [this.tangent_buffer[3*(this.columnas*i + j)], this.tangent_buffer[3*(this.columnas*i + j)+1], this.tangent_buffer[3*(this.columnas*i + j)+2]];
-                var normal = vec3.create();
-                vec3.cross(normal, tangentePunto, resta);
-                vec3.normalize(normal, normal);
-
-                this.normal_buffer.push(normal[0], normal[1], normal[2]);
-            }
-        }
-    }
-
-    this.calcularAngulo = function(vector1, vector2){
-        var dotProduct = vec3.dot(vector1, vector2);
-        var acos = dotProduct/(vec3.length(vector1)*vec3.length(vector2));
-        return Math.acos(acos);
-    }
-
     this.initBuffers = function(){
         this.vertex_buffer = [];
         this.position_buffer = [];
         this.color_buffer = [];
-        this.columnas = getCantidadVertices(this.forma);
-        this.filas = getCantidadVertices(this.camino);
-        var positionBufferCamino = getPositionBuffer(this.camino);
-        var tangentBufferCamino = getTangentBuffer(this.camino);
-        var positionBufferForma = getPositionBuffer(this.forma);
-        var normalBufferForma = getNormalBuffer(this.forma);
+        this.columnas = this.n;
+        console.log("Columnas: " + this.columnas);
+        this.filas = getCantidadVertices(this.perfil);
+        console.log("Filas: " + this.filas);
 
-        for (var i = 0; i < this.filas; i++) {
-            var xCamino = positionBufferCamino[3*i];
-            var yCamino = positionBufferCamino[3*i+1];
-            var zCamino = positionBufferCamino[3*i+2];
-            
-            var modelado = mat4.create();
-            var tg = vec3.fromValues(tangentBufferCamino[3*i], tangentBufferCamino[3*i+1], tangentBufferCamino[3*i+2]);
-            for (var j = 0; j < 3*this.columnas-2; j+=3) {
-                var angle = this.calcularAngulo(tg, [0,1,0]);
-                if (yCamino > 0) {
-                	angle = -angle;
-                }
+        var tangentBufferPerfil = getTangentBuffer(this.perfil);
+        var normalBufferPerfil = getNormalBuffer(this.perfil)
+        var positionBufferPerfil = getPositionBuffer(this.perfil);
+
+        for (var i = 0; i < 3*this.filas-2; i+=3) {
+            var punto = vec3.fromValues(positionBufferPerfil[i], positionBufferPerfil[i+1], positionBufferPerfil[i+2]);
+            var tgPunto = vec3.fromValues(tangentBufferPerfil[i], tangentBufferPerfil[i+1], tangentBufferPerfil[i+2]);
+            var normalPunto = vec3.fromValues(normalBufferPerfil[i], normalBufferPerfil[i+1], normalBufferPerfil[i+2]);
+            for (var j = 0; j < this.columnas; j++) {
+                var angle = 2*Math.PI*j/(this.n-1);
+                var modelado = mat4.create();
                 mat4.identity(modelado);
-                mat4.translate(modelado, modelado, [xCamino,yCamino,zCamino]);
-            	//Hago que la tangente del camino coincida con la normal de la forma
-                mat4.rotate(modelado, modelado, -angle, [0,0,1]);
+                mat4.rotate(modelado, modelado, angle, this.eje);
 
-                var punto = vec3.fromValues(positionBufferForma[j], positionBufferForma[j+1], positionBufferForma[j+2]);
-                var vertice = vec3.create();
-                vec3.transformMat4(vertice, punto, modelado);
-                this.position_buffer.push(vertice[0], vertice[1], vertice[2]);
-                this.color_buffer.push(this.color[0], this.color[1], this.color[2]);
+                var position = vec3.create();
+                vec3.transformMat4(position, punto, modelado);
+                var tangent = vec3.create();
+                vec3.transformMat4(tangent, tgPunto, modelado);
+                var normal = vec3.create();
+                vec3.transformMat4(normal, normalPunto, modelado);
+                var color = [this.color[0], this.color[1], this.color[2]];
+
+                var vertex = new vertice(position, color, normal, tangent, [0,0]);
+                this.vertex_buffer.push(vertex);
             }
         }
-
-        this.calcularTangentes();
-        this.calcularNormales();
+        this.position_buffer = getPositionBuffer(this.vertex_buffer);
+        this.normal_buffer = getNormalBuffer(this.vertex_buffer);
+        this.tangent_buffer = getTangentBuffer(this.vertex_buffer);
+        this.color_buffer = getColorBuffer(this.vertex_buffer);
+        console.log("Cantidad vertices: " + this.vertex_buffer.length);
 
         this.index_buffer = grid(this.filas, this.columnas);
 
