@@ -21,6 +21,8 @@
 <script type="text/javascript" src="keyboardhandle.js"></script>
 <script type="text/javascript" src="seccionAntena.js"></script>
 <script type="text/javascript" src="antena.js"></script>
+<script type="text/javascript" src="shaderProgram.js"></script>
+<script type="text/javascript" src="textureHandler.js"></script>
 
 <script id="shader-fs" type="x-shader/x-fragment">
     precision mediump float;
@@ -99,108 +101,6 @@
         }
     }
 
-
-    function getShader(gl, id) {
-        var shaderScript = document.getElementById(id);
-        if (!shaderScript) {
-            return null;
-        }
-
-        var str = "";
-        var k = shaderScript.firstChild;
-        while (k) {
-            if (k.nodeType == 3) {
-                str += k.textContent;
-            }
-            k = k.nextSibling;
-        }
-
-        var shader;
-        if (shaderScript.type == "x-shader/x-fragment") {
-            shader = gl.createShader(gl.FRAGMENT_SHADER);
-        } else if (shaderScript.type == "x-shader/x-vertex") {
-            shader = gl.createShader(gl.VERTEX_SHADER);
-        } else {
-            return null;
-        }
-
-        gl.shaderSource(shader, str);
-        gl.compileShader(shader);
-
-        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-            alert(gl.getShaderInfoLog(shader));
-            return null;
-        }
-
-        return shader;
-    }
-
-    var shaderProgram;
-
-    function initShaders() {
-        var fragmentShader = getShader(gl, "shader-fs");
-        var vertexShader = getShader(gl, "shader-vs");
-
-        shaderProgram = gl.createProgram();
-        gl.attachShader(shaderProgram, vertexShader);
-        gl.attachShader(shaderProgram, fragmentShader);
-        gl.linkProgram(shaderProgram);
-
-        if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-            alert("Could not initialise shaders");
-        }
-
-        gl.useProgram(shaderProgram);
-
-        shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-        gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-
-        shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
-        gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
-
-        shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
-        gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
-
-        shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
-        shaderProgram.ViewMatrixUniform = gl.getUniformLocation(shaderProgram, "uViewMatrix");
-        shaderProgram.ModelMatrixUniform = gl.getUniformLocation(shaderProgram, "uModelMatrix");
-        shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
-        shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
-        shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
-        shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
-        shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightPosition");
-        shaderProgram.directionalColorUniform = gl.getUniformLocation(shaderProgram, "uDirectionalColor");
-    }
-
-    function handleLoadedTexture() {
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-        gl.bindTexture(gl.TEXTURE_2D, mars.texture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, mars.texture.image);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-        gl.generateMipmap(gl.TEXTURE_2D);
-
-        gl.bindTexture(gl.TEXTURE_2D, null);
-
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-        gl.bindTexture(gl.TEXTURE_2D, deimos.texture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, deimos.texture.image);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-        gl.generateMipmap(gl.TEXTURE_2D);
-
-        gl.bindTexture(gl.TEXTURE_2D, null);
-
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-        gl.bindTexture(gl.TEXTURE_2D, phobos.texture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, phobos.texture.image);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-        gl.generateMipmap(gl.TEXTURE_2D);
-
-        gl.bindTexture(gl.TEXTURE_2D, null);
-    }
-
     var cameraMatrix    = mat4.create();
     var mvMatrix        = mat4.create();
     var mvMatrixStack   = [];
@@ -254,8 +154,7 @@
 
         // Se configura la matriz de proyección
         //mat4.perspective(pMatrix, 3.14/12.0, gl.viewportWidth / gl.viewportHeight, 0.1, 1000.0);
-        mat4.perspective(pMatrix, degToRad(50), gl.viewportWidth / gl.viewportHeight, 0.01, 2000.0);
-        gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);           
+        mat4.perspective(pMatrix, degToRad(50), gl.viewportWidth / gl.viewportHeight, 0.01, 2000.0);           
         // Definimos la ubicación de la camara
         mat4.identity(cameraMatrix);
         mat4.identity(camaraAux);
@@ -272,12 +171,11 @@
             mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
             mat4.rotateX(cameraMatrix, cameraMatrix, degToRad(rotarCamaraX));
             mat4.rotateY(cameraMatrix, cameraMatrix, degToRad(rotarCamaraY));
-
-            gl.uniformMatrix4fv(shaderProgram.viewMatrixUniform, false, cameraMatrix);
         }
+
         if(camaraCabina) {
             var eye_point = vec3.create();
-            vec3.set(eye_point, 30, 65, -90 + aumento);
+            vec3.set(eye_point, 0, 55, -60 + aumento);
             var at_point = vec3.create();
             vec3.set(at_point, 0, 0, 0);
 
@@ -285,9 +183,8 @@
             mat4.rotateX(camaraAux, camaraAux, degToRad(rotarCamaraX));
             mat4.rotateY(camaraAux, camaraAux, degToRad(rotarCamaraY));
             mat4.multiply(cameraMatrix, camaraAux, cameraMatrix);
-
-            gl.uniformMatrix4fv(shaderProgram.viewMatrixUniform, false, cameraMatrix);
         }
+
         if(camaraPersecucion) {
             var eye_point = vec3.create();
             vec3.set(eye_point, 30, 65, -90 + aumento);
@@ -298,9 +195,8 @@
             mat4.rotateX(camaraAux, camaraAux, degToRad(rotarCamaraX));
             mat4.rotateY(camaraAux, camaraAux, degToRad(rotarCamaraY));
             mat4.multiply(cameraMatrix, camaraAux, cameraMatrix);
-
-            gl.uniformMatrix4fv(shaderProgram.viewMatrixUniform, false, cameraMatrix);
         }
+
         if(camaraPersona) {
             var eye_point = vec3.create();
             vec3.set(eye_point, 30, 65, -90 + aumento);
@@ -311,33 +207,21 @@
             mat4.rotateX(camaraAux, camaraAux, degToRad(rotarCamaraX));
             mat4.rotateY(camaraAux, camaraAux, degToRad(rotarCamaraY));
             mat4.multiply(cameraMatrix, camaraAux, cameraMatrix);
-
-            gl.uniformMatrix4fv(shaderProgram.viewMatrixUniform, false, cameraMatrix);
         }
 
-        var eye_point = vec3.create();
-        vec3.set(eye_point, 30, 65, -90 + aumento);
-        var at_point = vec3.create();
-        vec3.set(at_point, 0, 0, 0);
-        var up_point = vec3.create();
-        vec3.set(up_point, 0, 1, 0);
-        mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
-        mat4.rotateX(cameraMatrix, cameraMatrix, degToRad(rotarCamaraX));
-        mat4.rotateY(cameraMatrix, cameraMatrix, degToRad(rotarCamaraY));
+        //Asigno las matrices para las camaras de vista y perspectiva.
+        gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
+        gl.uniformMatrix4fv(shaderProgram.ViewMatrixUniform, false, cameraMatrix);
 
-        gl.uniformMatrix4fv(shaderProgram.ViewMatrixUniform, false, cameraMatrix );
 
-        ///////////////////////////////////////////////////////
-        //
         // Dibujamos la Tierra
-
         // Configuramos la iluminación para la Tierra
         gl.uniform3f(shaderProgram.ambientColorUniform, 0.2, 0.2, 0.2 );
         gl.uniform3f(shaderProgram.directionalColorUniform, 0.05, 0.05, 0.05);
         
         // Matriz de modelado de la Tierra
         var model_matrix_deimos = mat4.create();
-        mat4.identity(model_matrix_deimos)        ;
+        mat4.identity(model_matrix_deimos);
         var translate_deimos = mat4.create();
         mat4.identity(translate_deimos);
         mat4.translate(translate_deimos, translate_deimos, [10, 0, 0 ]);
@@ -526,7 +410,7 @@
     function webGLStart() {
         var canvas = document.getElementById("glcanvas");
         initGL(canvas);
-        initShaders();
+        var shaderProgram = initShaders(gl);
         var colorRed = [1.0,0.0,0.0];
         var colorGreen = [0.0,1.0,0.0];
         var colorBlue = [0.0,0.0,1.0];

@@ -28,7 +28,12 @@ onmousemove = function(e){
 } 
  
 onwheel = function(evento){
-    aumento = aumento - (evento.deltaY * 2 );
+	// Esto es para evitar que se de vuelta la camara.
+    if (aumento < 80) {
+    	aumento = aumento - (evento.deltaY * 2);
+    } else if (evento.deltaY > 0) {
+    	aumento = aumento - (evento.deltaY * 2);
+    }
     // Esto es para evitar que scrollee la pagia cuando gira la rueda
     if (evento.preventDefault) {
     	evento.preventDefault();
