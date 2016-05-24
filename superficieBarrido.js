@@ -103,8 +103,8 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
             var modelado = mat4.create();
             var tg = vec3.fromValues(tangentBufferCamino[3*i], tangentBufferCamino[3*i+1], tangentBufferCamino[3*i+2]);
             for (var j = 0; j < 3*this.columnas-2; j+=3) {
-                var angle = this.calcularAngulo(tg, [0,1,0]);
-                if (yCamino > 0) {
+                var angle = this.calcularAngulo(tg, [0,-1,0]);
+                if (yCamino < 0) {
                 	angle = -angle;
                 }
                 mat4.identity(modelado);

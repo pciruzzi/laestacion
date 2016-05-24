@@ -4,4 +4,5 @@ function getColor(color) {
 	if (color == "blue") return [0.0, 0.0, 1.0];
 	if (color == "black") return [0.0, 0.0, 0.0];
 	if (color == "white") return [1.0, 1.0, 1.0];
+	if (color == "gray") return [205/255, 200/255, 177/255];
 }
