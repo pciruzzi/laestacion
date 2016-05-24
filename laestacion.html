@@ -160,7 +160,7 @@
         mat4.identity(camaraAux);
 
         if(camaraGlobal) {
-            vec3.set(eye_point, 30, 65, -90 + aumento);
+        	vec3.set(eye_point, 0, 0, -130 + aumento);
             vec3.set(at_point, 0, 0, 0);
 
             mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
@@ -169,7 +169,7 @@
         }
 
         if(camaraCabina) {
-            vec3.set(eye_point, 0, 55, -60 + aumento);
+            vec3.set(eye_point, 30, 65, -90 + aumento);
             vec3.set(at_point, 0, 0, 0);
 
             mat4.lookAt(cameraMatrix, eye_point, at_point, up_point); 
@@ -215,8 +215,7 @@
         mat4.identity(model_matrix_mars);
         mat4.rotate(model_matrix_mars, model_matrix_mars,Math.PI/2, [1,0,0]);
         mat4.rotate(model_matrix_mars, model_matrix_mars,Math.PI, [0,1,0]);
-        mat4.scale(model_matrix_mars, model_matrix_mars, [7.0, 7.0, 7.0]);
-        mat4.translate(model_matrix_mars, model_matrix_mars, [0,0,-0.5]);
+        mat4.scale(model_matrix_mars, model_matrix_mars, [3.0, 3.0, 3.0]);
         mars.draw(model_matrix_mars);
     }
 
@@ -303,7 +302,7 @@
         var colorBlue = [0.0,0.0,1.0];
         var esTexturada = false;
 
-        //mars = new seccionAntena(2,2,2);
+        //mars = new Antena(2,2,2);
         mars = pruebaBarrido();
         mars.initBuffers();
         
