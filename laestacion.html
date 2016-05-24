@@ -235,6 +235,7 @@
         // Matriz de modelado de la antena
         var model_matrix_antena = mat4.create();
         mat4.identity(model_matrix_antena);
+        mat4.translate(model_matrix_antena, model_matrix_antena, [0,-40,0]);
         mat4.rotate(model_matrix_antena, model_matrix_antena,Math.PI/2, [1,0,0]);
         mat4.rotate(model_matrix_antena, model_matrix_antena,Math.PI, [0,1,0]);
         mat4.scale(model_matrix_antena, model_matrix_antena, [3.0, 3.0, 3.0]);
