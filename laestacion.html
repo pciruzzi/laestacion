@@ -137,7 +137,6 @@
     var plegarODesplegarAntena 	= false;
 
     var estacion	= null;
-	var antena		= null;
 	var nave		= null;
 	var modeloNave	= null;
 
@@ -157,14 +156,14 @@
         gl.uniform3fv(shaderProgram.lightingDirectionUniform, lightPosition);
 
         // Se configura la matriz de perspectiva
-        mat4.perspective(pMatrix, degToRad(50), gl.viewportWidth / gl.viewportHeight, 0.01, 2000.0);           
+        mat4.perspective(pMatrix, degToRad(80), gl.viewportWidth / gl.viewportHeight, 0.01, 2000.0);           
         
         // Definimos la ubicación de la camara
         mat4.identity(cameraMatrix);
         mat4.identity(camaraAux);
 
         if(camaraGlobal) {
-        	vec3.set(eye_point, 0, 0, -130 + aumento);
+        	vec3.set(eye_point, 0, 0, -150 + aumento);
             vec3.set(at_point, 0, 0, 0);
 
             mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
@@ -232,15 +231,6 @@
         	plegarODesplegarAntena = false;
         }
 
-        // Matriz de modelado de la antena
-        var model_matrix_antena = mat4.create();
-        mat4.identity(model_matrix_antena);
-        mat4.translate(model_matrix_antena, model_matrix_antena, [0,-40,0]);
-        mat4.rotate(model_matrix_antena, model_matrix_antena,Math.PI/2, [1,0,0]);
-        mat4.rotate(model_matrix_antena, model_matrix_antena,Math.PI, [0,1,0]);
-        mat4.scale(model_matrix_antena, model_matrix_antena, [3.0, 3.0, 3.0]);
-        antena.draw(model_matrix_antena);
-
         // Matriz de modelado de la nave
         nave.step(); 
 		var position_matrix_nave = nave.getMatriz();
@@ -261,9 +251,6 @@
 
         estacion = new Estacion();
         estacion.create();
-
-        antena = new Antena(2,2,2);
-        antena.initBuffers();
 
         nave = new Nave();
         //Falta hacer esto BIEN.
