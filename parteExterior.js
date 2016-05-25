@@ -1,7 +1,7 @@
 function parteExterior() {
     this.formaExterna = [];
     this.formaInterna = [];
-    this.camino = null;
+    this.caminoEstacion = null;
 
     this.externa = null;
     this.colorExterna = getColor("blue");
@@ -15,8 +15,13 @@ function parteExterior() {
     this.escotilla2 = null;
     this.escotilla3 = null;
 
-    this.createCamino = function() {
-        this.camino = new circunferencia(Math.PI*0, Math.PI*1.5, 16, 40);
+    this.manguera = null;
+    this.caminoManguera = [];
+    this.formaManguera = null;
+    this.coloManguera = getColor("green");
+
+    this.createCaminoEstacion = function() {
+        this.caminoEstacion = new circunferencia(Math.PI*0, Math.PI*1.5, 16, 40);
     }
 
     this.createFormaExterna = function() {
@@ -112,12 +117,12 @@ function parteExterior() {
     }
 
     this.createExterna = function() {
-        this.externa = new SuperficieBarrido(this.formaExterna, this.camino.getVertexBuffer(), this.colorExterna, false);
+        this.externa = new SuperficieBarrido(this.formaExterna, this.caminoEstacion.getVertexBuffer(), this.colorExterna, false);
         this.externa.initBuffers();
     }
 
     this.createInterna = function() {
-        this.interna = new SuperficieBarrido(this.formaInterna, this.camino.getVertexBuffer(), this.colorInterna, false);
+        this.interna = new SuperficieBarrido(this.formaInterna, this.caminoEstacion.getVertexBuffer(), this.colorInterna, false);
         this.interna.initBuffers();
     }
 
@@ -137,14 +142,47 @@ function parteExterior() {
         this.escotilla3.initBuffers();
     }
 
+    this.createManguera = function() {
+        this.formaManguera = new circunferencia(Math.PI*0, Math.PI*2, 1, 20);
+
+        var n = 9;
+        var P = [];
+
+        //Camino de la manguera
+        P.push([0.0, 0.0, 0.0]);
+        P.push([0.0, 0.0, 0.0]);
+        P.push([0.0, 0.0, 0.0]);
+        P.push([2.0, 2.0, 0.0]);
+        P.push([4.0, 2.0, 0.0]);
+        P.push([6.0, 0.0, 0.0]);
+        P.push([8.0, -2.0, 0.0]);
+        P.push([10.0, -2.0, 0.0]);
+        P.push([12.0, 0.0, 0.0]);
+        var tramosForma = [];
+        var cantPControl = P.length;
+        for (var i = 0; i < cantPControl - 3; i++){
+            tramosForma.push(new curvaBSpline(P[i], P[i+1], P[i+2], P[i+3], n));    
+        }
+/*        tramos.push(new curvaBSpline(P[cantPControl - 2], P[cantPControl - 1], P[cantPControl], P[0], n));    
+        tramos.push(new curvaBSpline(P[cantPControl - 1], P[cantPControl], P[0], P[1], n));    
+        tramos.push(new curvaBSpline(P[cantPControl], P[0], P[1], P[2], n));  */
+        for (var i in tramosForma){
+            this.caminoManguera = this.caminoManguera.concat(tramosForma[i].getVertexBuffer());
+        }
+
+        this.manguera = new SuperficieBarrido(this.formaManguera.getVertexBuffer(), this.caminoManguera, this.coloManguera, false);
+        this.manguera.initBuffers();
+    }
+
     this.create = function() {
-        this.createCamino();
+        this.createCaminoEstacion();
         this.createFormaExterna();
         this.createFormaInterna();
         this.createExterna();
         this.createInterna();
         this.createTapas();
         this.createEscotillas();
+        this.createManguera();
     }
 
     this.draw = function(modelMatrix) {
@@ -201,5 +239,10 @@ function parteExterior() {
         mat4.scale(model_matrix_escotilla3, model_matrix_escotilla3, [1.4,1,1.4]);
         mat4.rotate(model_matrix_escotilla3, model_matrix_escotilla3, Math.PI/2, [1,0,0]);
         this.escotilla1.draw(model_matrix_escotilla3);
+
+        var model_matrix_manguera = mat4.create();
+        mat4.identity(model_matrix_manguera);
+        mat4.translate(model_matrix_manguera, model_matrix_casco, [2,2,2]);
+        //this.manguera.draw(model_matrix_manguera);
     }
 }
