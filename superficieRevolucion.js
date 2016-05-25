@@ -38,9 +38,7 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
         this.position_buffer = [];
         this.color_buffer = [];
         this.columnas = this.n;
-        console.log("Columnas: " + this.columnas);
         this.filas = getCantidadVertices(this.perfil);
-        console.log("Filas: " + this.filas);
 
         var tangentBufferPerfil = getTangentBuffer(this.perfil);
         var normalBufferPerfil = getNormalBuffer(this.perfil)
@@ -72,7 +70,6 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
         this.normal_buffer = getNormalBuffer(this.vertex_buffer);
         this.tangent_buffer = getTangentBuffer(this.vertex_buffer);
         this.color_buffer = getColorBuffer(this.vertex_buffer);
-        console.log("Cantidad vertices: " + this.vertex_buffer.length);
 
         this.index_buffer = grid(this.filas, this.columnas);
 

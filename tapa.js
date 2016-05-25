@@ -37,9 +37,8 @@ function Tapa(externo, interno, color, esTexturada) { // -> externo e interno so
         this.position_buffer = [];
         this.color_buffer = [];
         this.columnas = getCantidadVertices(this.externo);
-        console.log("Columnas tapa: " + this.columnas);
         this.filas = getCantidadVertices(this.interno);
-        console.log("Filas tapa: " + this.filas);
+        if (this.filas != this.columnas) console.log("HACIENDO TAPA CON FORMAS DE DISTINTA CANTIDAD DE PUNTOS!!");
 
         var tangentBufferExterno = getTangentBuffer(this.externo);
         var tangentBufferInterno = getTangentBuffer(this.interno);
@@ -66,7 +65,6 @@ function Tapa(externo, interno, color, esTexturada) { // -> externo e interno so
         this.normal_buffer = getNormalBuffer(this.vertex_buffer);
         this.tangent_buffer = getTangentBuffer(this.vertex_buffer);
         this.color_buffer = getColorBuffer(this.vertex_buffer);
-        console.log("Cantidad vertices: " + this.vertex_buffer.length);
 
         this.index_buffer = grid(this.filas, 2);
 

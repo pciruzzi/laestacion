@@ -129,11 +129,11 @@ function parteExterior() {
     }
 
     this.createEscotillas = function() {
-        this.escotilla1 = new Cilindro(4, 20, this.colorExterna, false);
+        this.escotilla1 = new Cilindro(4, 30, this.colorExterna, false);
         this.escotilla1.initBuffers();
-        this.escotilla2 = new Cilindro(4, 20, this.colorExterna, false);
+        this.escotilla2 = new Cilindro(4, 30, this.colorExterna, false);
         this.escotilla2.initBuffers();
-        this.escotilla3 = new Cilindro(4, 20, this.colorExterna, false);
+        this.escotilla3 = new Cilindro(4, 30, this.colorExterna, false);
         this.escotilla3.initBuffers();
     }
 
