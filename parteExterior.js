@@ -66,41 +66,41 @@ function parteExterior() {
     }
 
     this.createFormaInterna = function() {   
-                var n = 9;
+        var n = 9;
         var P = [];
 
         //Superficie a barrer
-        P.push([0.0, 0.0, 2.0]);
-        P.push([-0.75, 0.0, 2.0]);
-        P.push([-1.5, 0.0, 1.25]);
-        P.push([-1.5, 0.0, 0.5]);
-        P.push([-1.375, 0.0, 0.5]);
-        P.push([-1.375, 0.0, 0.5]);
-        P.push([-1.25, 0.0, 0.5]);
-        P.push([-1.5, 0.0, 0.25]);
-        P.push([-1.5, 0.0, -0.25]);
-        P.push([-1.25, 0.0, -0.5]);
-        P.push([-1.375, 0.0, -0.5]);
-        P.push([-1.375, 0.0, -0.5]);
-        P.push([-1.5, 0.0, -0.5]);
-        P.push([-1.5, 0.0, -1.25]);
-        P.push([-0.75, 0.0, -2.0]);
-        P.push([0.0, 0.0, -2.0]);
-        P.push([0.75, 0.0, -2.0]);
-        P.push([1.5, 0.0, -1.25]);
-        P.push([1.5, 0.0, -0.5]);
-        P.push([1.375, 0.0, -0.5]);
-        P.push([1.375, 0.0, -0.5]);
-        P.push([1.25, 0.0, -0.5]);
-        P.push([1.5, 0.0, -0.25]);
-        P.push([1.5, 0.0, 0.25]);
-        P.push([1.25, 0.0, 0.5]);
-        P.push([1.375, 0.0, 0.5]);
-        P.push([1.375, 0.0, 0.5]);
-        P.push([1.5, 0.0, 0.5]);
-        P.push([1.5, 0.0, 1.25]);
-        P.push([0.75, 0.0, 2.0]);
-        P.push([0.0, 0.0, 2.0]);
+        P.push([0.0, 0.0, 3.0]);
+        P.push([-1.0, 0.0, 3.0]);
+        P.push([-2.0, 0.0, 2.0]);
+        P.push([-2.0, 0.0, 1.0]);
+        P.push([-2.0, 0.0, 1.0]);
+        P.push([-2.0, 0.0, 1.0]);
+        P.push([-2.0, 0.0, 1.0]);
+        P.push([-2.0, 0.0, 0.0]);
+        P.push([-2.0, 0.0, 0.0]);
+        P.push([-2.0, 0.0, -1.5]);
+        P.push([-2.0, 0.0, -1.5]);
+        P.push([-2.0, 0.0, -1.5]);
+        P.push([-2.0, 0.0, -1.5]);
+        P.push([-1.0, 0.0, -1.5]);
+        P.push([-1.0, 0.0, -1.5]);
+        P.push([0.0, 0.0, -1.5]);
+        P.push([1.0, 0.0, -1.5]);
+        P.push([2.0, 0.0, -1.5]);
+        P.push([2.0, 0.0, -1.5]);
+        P.push([2.0, 0.0, -1.5]);
+        P.push([2.0, 0.0, -1.5]);
+        P.push([2.0, 0.0, -1.5]);
+        P.push([2.0, 0.0, 0.0]);
+        P.push([2.0, 0.0, 0.0]);
+        P.push([2.0, 0.0, 1.0]);
+        P.push([2.0, 0.0, 1.0]);
+        P.push([2.0, 0.0, 1.0]);
+        P.push([2.0, 0.0, 1.0]);
+        P.push([2.0, 0.0, 2.0]);
+        P.push([1.0, 0.0, 3.0]);
+        P.push([0.0, 0.0, 3.0]);
         var tramosForma = [];
         var cantPControl = P.length;
         for (var i = 0; i < cantPControl - 3; i+=3){
@@ -121,12 +121,20 @@ function parteExterior() {
         this.interna.initBuffers();
     }
 
+    this.createTapas = function() {
+        this.tapa1 = new Tapa(this.formaExterna, this.formaInterna, this.colorExterna, false);
+        this.tapa1.initBuffers();
+        this.tapa2 = new Tapa(this.formaExterna, this.formaInterna, this.colorExterna, false);
+        this.tapa2.initBuffers();
+    }
+
     this.create = function() {
         this.createCamino();
         this.createFormaExterna();
         this.createFormaInterna();
         this.createExterna();
         this.createInterna();
+        this.createTapas();
     }
 
     this.draw = function(modelMatrix) {
@@ -145,5 +153,19 @@ function parteExterior() {
         mat4.identity(model_matrix_interna);
         mat4.scale(model_matrix_interna, model_matrix_casco, [0.5, 0.5, 0.5]);
         this.interna.draw(model_matrix_interna);
+
+        var model_matrix_tapa1 = mat4.create();
+        mat4.identity(model_matrix_tapa1);
+        mat4.translate(model_matrix_tapa1, model_matrix_casco, [8, 0, 0]);
+        mat4.scale(model_matrix_tapa1, model_matrix_tapa1, [0.5, 0.5, 0.5]);
+        this.tapa1.draw(model_matrix_tapa1);
+
+        var model_matrix_tapa2 = mat4.create();
+        mat4.identity(model_matrix_tapa2);
+        mat4.rotate(model_matrix_tapa2, model_matrix_casco, Math.PI*3/2, [0,0,1]);
+        mat4.translate(model_matrix_tapa2, model_matrix_tapa2, [8, 0, 0]);
+        mat4.scale(model_matrix_tapa2, model_matrix_tapa2, [0.5, 0.5, 0.5]);
+        mat4.rotate(model_matrix_tapa2, model_matrix_tapa2, Math.PI, [0,0,1]);
+        this.tapa1.draw(model_matrix_tapa2);
     }
 }
