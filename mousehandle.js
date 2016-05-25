@@ -3,7 +3,7 @@ onmousedown = function(){
 }
 
 onmouseup = function(){
-  mouseDown = false;
+    mouseDown = false;
 }
 
 onmousemove = function(e){
