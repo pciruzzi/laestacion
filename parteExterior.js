@@ -128,6 +128,15 @@ function parteExterior() {
         this.tapa2.initBuffers();
     }
 
+    this.createEscotillas = function() {
+        this.escotilla1 = new Cilindro(4, 20, this.colorExterna, false);
+        this.escotilla1.initBuffers();
+        this.escotilla2 = new Cilindro(4, 20, this.colorExterna, false);
+        this.escotilla2.initBuffers();
+        this.escotilla3 = new Cilindro(4, 20, this.colorExterna, false);
+        this.escotilla3.initBuffers();
+    }
+
     this.create = function() {
         this.createCamino();
         this.createFormaExterna();
@@ -135,6 +144,7 @@ function parteExterior() {
         this.createExterna();
         this.createInterna();
         this.createTapas();
+        this.createEscotillas();
     }
 
     this.draw = function(modelMatrix) {
@@ -167,5 +177,29 @@ function parteExterior() {
         mat4.scale(model_matrix_tapa2, model_matrix_tapa2, [0.5, 0.5, 0.5]);
         mat4.rotate(model_matrix_tapa2, model_matrix_tapa2, Math.PI, [0,0,1]);
         this.tapa1.draw(model_matrix_tapa2);
+
+        var model_matrix_escotilla1 = mat4.create();
+        mat4.identity(model_matrix_escotilla1);
+        mat4.rotate(model_matrix_escotilla1, model_matrix_casco, -Math.PI/4, [0,0,1]);
+        mat4.translate(model_matrix_escotilla1, model_matrix_escotilla1, [0,10,0]);
+        mat4.scale(model_matrix_escotilla1, model_matrix_escotilla1, [1.4,1,1.4]);
+        mat4.rotate(model_matrix_escotilla1, model_matrix_escotilla1, Math.PI/2, [1,0,0]);
+        this.escotilla1.draw(model_matrix_escotilla1);
+
+        var model_matrix_escotilla2 = mat4.create();
+        mat4.identity(model_matrix_escotilla2);
+        mat4.rotate(model_matrix_escotilla2, model_matrix_casco, Math.PI/4, [0,0,1]);
+        mat4.translate(model_matrix_escotilla2, model_matrix_escotilla2, [0,10,0]);
+        mat4.scale(model_matrix_escotilla2, model_matrix_escotilla2, [1.4,1,1.4]);
+        mat4.rotate(model_matrix_escotilla2, model_matrix_escotilla2, Math.PI/2, [1,0,0]);
+        this.escotilla1.draw(model_matrix_escotilla2);
+
+        var model_matrix_escotilla3 = mat4.create();
+        mat4.identity(model_matrix_escotilla3);
+        mat4.rotate(model_matrix_escotilla3, model_matrix_casco, Math.PI*3/4, [0,0,1]);
+        mat4.translate(model_matrix_escotilla3, model_matrix_escotilla3, [0,10,0]);
+        mat4.scale(model_matrix_escotilla3, model_matrix_escotilla3, [1.4,1,1.4]);
+        mat4.rotate(model_matrix_escotilla3, model_matrix_escotilla3, Math.PI/2, [1,0,0]);
+        this.escotilla1.draw(model_matrix_escotilla3);
     }
 }
