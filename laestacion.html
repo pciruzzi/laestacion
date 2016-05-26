@@ -115,13 +115,13 @@
     }
 
     //Variables de la estacion
-    var cameraMatrix	= mat4.create();
-    var mvMatrix		= mat4.create();
-    var pMatrix			= mat4.create();
-    var camaraAux		= mat4.create();
-	var eye_point		= vec3.create();
-    var up_point		= vec3.create();
-    var at_point		= vec3.create();
+    var cameraMatrix    = mat4.create();
+    var mvMatrix        = mat4.create();
+    var pMatrix         = mat4.create();
+    var camaraAux       = mat4.create();
+    var eye_point       = vec3.create();
+    var up_point        = vec3.create();
+    var at_point        = vec3.create();
     vec3.set(up_point, 0, 1, 0);
 
     var mouseDown           = false;
@@ -138,12 +138,17 @@
     var traslacionPersonaZ  = 0.0;
 
     //Antena
-    var antenaDesplegada 		= true;
-    var antenaPlegada 			= false;
-    var plegarODesplegarAntena 	= false;
+    var desplegarAntena         = true;
+    var plegarAntena            = false;
+    var plegarODesplegarAntena  = false;
+    var deltaAntenaTraslacion   = 0;
+    var deltaAntenaRotacion     = 0;
+    var traslacionPlegadoAntena = 0.0;
+    var rotacionPlegadoAntena   = 0.0;
+    var finRotacionAntena       = true;
 
     //Nave
-	var nave                = null;
+    var nave                = null;
     var rotacionEjeNave     = -Math.PI/2;
     var cabezeoNave         = null;
     var modeloNave          = null;
@@ -182,7 +187,7 @@
         mat4.identity(camaraAux);
 
         if(camaraGlobal) {
-        	vec3.set(eye_point, 0, 0, -200 + aumento);
+            vec3.set(eye_point, 0, 0, -200 + aumento);
             vec3.set(at_point, 0, 0, 0);
 
             mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
@@ -257,16 +262,64 @@
         mat4.scale(model_matrix_tierra, model_matrix_tierra, [200.0, 200.0, 200.0]);
         tierra.draw(model_matrix_tierra);
 
+        //Movimiento de las antenas
         if (plegarODesplegarAntena) {
-        	if (antenaPlegada) {
-        		antenaPlegada = false;
-        		antenaDesplegada = true;
-        	}
-        	else if (antenaDesplegada) {
-        		antenaDesplegada = false;
-        		antenaPlegada = true;
-        	}
-        	plegarODesplegarAntena = false;
+            if (traslacionPlegadoAntena == 7.2) {
+                console.log("Tengo que desplegar las antenas");
+                desplegarAntena = true;
+                finRotacionAntena = false;
+                plegarAntena = false;
+                deltaAntenaTraslacion = -0.1; //desplegar
+                deltaAntenaRotacion = 0.05;
+            } else if (traslacionPlegadoAntena == 0) {
+                console.log("Tengo que plegar las antenas");
+                plegarAntena = true;
+                desplegarAntena = false;
+                finRotacionAntena = false;
+                deltaAntenaTraslacion = 0.1; //plegar
+                deltaAntenaRotacion = -0.05;
+            }
+        }
+
+        if (plegarAntena && traslacionPlegadoAntena < 7.2) {
+            if (! finRotacionAntena) {
+                rotacionPlegadoAntena += deltaAntenaRotacion;
+                plegarODesplegarAntena = false;
+                if (rotacionPlegadoAntena < -Math.PI/2 + 0.05) {
+                    console.log("Termine de rotar para plegar");
+                    finRotacionAntena = true;
+                    rotacionPlegadoAntena = -Math.PI/2;
+                }
+            } else {
+                console.log("Comienzo con la traslacion");
+                traslacionPlegadoAntena += deltaAntenaTraslacion;
+                if (traslacionPlegadoAntena > 7.1) traslacionPlegadoAntena = 7.2;
+            }
+        } else if (traslacionPlegadoAntena == 7.2) {
+            console.log("Fin de la traslacion de plegado");
+            plegarAntena = false;
+        }
+
+        if (desplegarAntena && traslacionPlegadoAntena < 9) {
+            traslacionPlegadoAntena += deltaAntenaTraslacion;
+            plegarODesplegarAntena = false;
+            if (traslacionPlegadoAntena > 8.9) traslacionPlegadoAntena = 9;
+
+/*            if (! finRotacionAntena) {
+                rotacionPlegadoAntena += deltaAntenaRotacion;
+                plegarODesplegarAntena = false;
+                if (rotacionPlegadoAntena > 0.05) {
+                    console.log("Termine de rotar para desplegar");
+                    finRotacionAntena = true;
+                    rotacionPlegadoAntena = 0;
+                }
+            } else {
+                console.log("Comienzo con la traslacion");
+                traslacionPlegadoAntena += deltaAntenaTraslacion;
+                if (traslacionPlegadoAntena < 0.1) traslacionPlegadoAntena = 0;
+            }*/
+        } else if (traslacionPlegadoAntena == 10) {
+            desplegarAntena = false;
         }
 
         // Matriz de modelado de la nave
@@ -332,8 +385,8 @@
             desplegarPatas = false;
         }
 
-		//TODO: falta armar el objeto BIEN que modele la nave en la simulacion.
-		modeloNave.draw(position_matrix_nave);
+        //TODO: falta armar el objeto BIEN que modele la nave en la simulacion.
+        modeloNave.draw(position_matrix_nave);
     }
 
     function tick() {

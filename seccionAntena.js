@@ -47,49 +47,48 @@ function seccionAntena() {
 		var matrix_panelUno = mat4.create();
 	    mat4.identity(matrix_panelUno);
 	    mat4.multiply(matrix_panelUno, matrix_panelUno, modelMatrix);
-	    mat4.translate(matrix_panelUno, matrix_panelUno, [-2, -2, 0.6]);
+	    mat4.translate(matrix_panelUno, matrix_panelUno, [-0.02, 0, 0.6]);
 	    mat4.rotate(matrix_panelUno,matrix_panelUno,rotationAngle,[1,0,0]);
 	    this.panelUno.draw(matrix_panelUno);
 
 		var matrix_panelDos = mat4.create();
 	    mat4.identity(matrix_panelDos);
 	    mat4.multiply(matrix_panelDos, matrix_panelDos, modelMatrix);
-	    mat4.translate(matrix_panelDos, matrix_panelDos, [2, -2, 0.6]);
+	    mat4.translate(matrix_panelDos, matrix_panelDos, [3.98, 0, 0.6]);
 	    mat4.rotate(matrix_panelDos,matrix_panelDos,rotationAngle,[1,0,0]);
 	    this.panelDos.draw(matrix_panelDos);
 
 		var matrix_panelTres = mat4.create();
 	    mat4.identity(matrix_panelTres);
 	    mat4.multiply(matrix_panelTres, matrix_panelTres, modelMatrix);
-	    mat4.translate(matrix_panelTres, matrix_panelTres, [-2, -2, -0.6]);
+	    mat4.translate(matrix_panelTres, matrix_panelTres, [-0.02, 0, -0.6]);
 	    mat4.rotate(matrix_panelTres,matrix_panelTres,rotationAngle,[1,0,0]);
 	    this.panelTres.draw(matrix_panelTres);
 
 		var matrix_panelCuatro = mat4.create();
 	    mat4.identity(matrix_panelCuatro);
 	    mat4.multiply(matrix_panelCuatro, matrix_panelCuatro, modelMatrix);
-	    mat4.translate(matrix_panelCuatro, matrix_panelCuatro, [2, -2, -0.6]);
+	    mat4.translate(matrix_panelCuatro, matrix_panelCuatro, [3.98, 0, -0.6]);
 	    mat4.rotate(matrix_panelCuatro,matrix_panelCuatro,rotationAngle,[1,0,0]);
 	    this.panelCuatro.draw(matrix_panelCuatro);
 
 		var matrix_cilindroVerticalUno = mat4.create();
 	    mat4.identity(matrix_cilindroVerticalUno);
 	    mat4.multiply(matrix_cilindroVerticalUno, matrix_cilindroVerticalUno, modelMatrix);
-	    mat4.translate(matrix_cilindroVerticalUno, matrix_cilindroVerticalUno, [2, -2, -0.30]);
+	    mat4.translate(matrix_cilindroVerticalUno, matrix_cilindroVerticalUno, [3.98, 0, -0.30]);
 	    mat4.scale(matrix_cilindroVerticalUno,matrix_cilindroVerticalUno,[0.05,0.05,0.60]);
 	    this.cilindroVerticalUno.draw(matrix_cilindroVerticalUno);
 
 		var matrix_cilindroVerticalDos = mat4.create();
 	    mat4.identity(matrix_cilindroVerticalDos);
 	    mat4.multiply(matrix_cilindroVerticalDos, matrix_cilindroVerticalDos, modelMatrix);
-	   	mat4.translate(matrix_cilindroVerticalDos, matrix_cilindroVerticalDos, [-2, -2, -0.30]);
+	   	mat4.translate(matrix_cilindroVerticalDos, matrix_cilindroVerticalDos, [-0.02, 0, -0.30]);
 	    mat4.scale(matrix_cilindroVerticalDos,matrix_cilindroVerticalDos,[0.05,0.05,0.60]);
 	    this.cilindroVerticalDos.draw(matrix_cilindroVerticalDos);
 
 		var matrix_cilindroHorizontal = mat4.create();
 	    mat4.identity(matrix_cilindroHorizontal);
 	    mat4.multiply(matrix_cilindroHorizontal, matrix_cilindroHorizontal, modelMatrix);
-	    mat4.translate(matrix_cilindroHorizontal, matrix_cilindroHorizontal, [-1.98, -2, 0]);
 	    mat4.rotate(matrix_cilindroHorizontal,matrix_cilindroHorizontal,rotationAngle,[0,1,0]);
 	    mat4.scale(matrix_cilindroHorizontal,matrix_cilindroHorizontal,[0.05,0.05,4.0]);
 	    this.cilindroHorizontal.draw(matrix_cilindroHorizontal);    	    	    

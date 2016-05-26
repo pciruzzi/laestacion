@@ -91,14 +91,14 @@ function parteCentral() {
         var model_matrix_antenaInf = mat4.create();
         mat4.identity(model_matrix_antenaInf);
         mat4.rotate(model_matrix_antenaInf, model_matrix_centro, Math.PI, [0,1,0]);
-        mat4.translate(model_matrix_antenaInf, model_matrix_antenaInf, [0,1.5,5.8]);
+        mat4.translate(model_matrix_antenaInf, model_matrix_antenaInf, [0,1.5,4.0]);
         mat4.scale(model_matrix_antenaInf, model_matrix_antenaInf, [0.75, 0.75, 0.75]);
         this.antenaInf.draw(model_matrix_antenaInf);
 
         // Matriz de modelado de la antena sup
         var model_matrix_antenaSup = mat4.create();
         mat4.identity(model_matrix_antenaSup);
-        mat4.translate(model_matrix_antenaSup, model_matrix_centro, [0,1.5,7.4]);
+        mat4.translate(model_matrix_antenaSup, model_matrix_centro, [0,1.5,5.4]);
         mat4.scale(model_matrix_antenaSup, model_matrix_antenaSup, [0.75,0.75,0.75]);
         this.antenaSup.draw(model_matrix_antenaSup);
     }
