@@ -142,12 +142,19 @@
     var antenaPlegada 			= false;
     var plegarODesplegarAntena 	= false;
 
-    var estacion	= null;
-	var nave		= null;
-    var rotacionEjeNave = -Math.PI/2;
-    var naveVertical = false;
-    var cabezeoNave = null;
-    var modeloNave  = null;
+    //Nave
+	var nave                = null;
+    var rotacionEjeNave     = -Math.PI/2;
+    var cabezeoNave         = null;
+    var modeloNave          = null;
+    var naveVertical        = false;
+    var plegarODesplegarPatas = false;
+    var plegarPatas         = false;
+    var desplegarPatas      = false;
+    var traslacionPatasNave = -5.0;
+    var deltaPatas          = 0;
+    
+    var estacion    = null;
     var sol         = null;
     var rotacionSol = 0.0;
     var tierra      = null;
@@ -273,6 +280,7 @@
         var movement_matrix_nave = nave.getMatriz();
 
         mat4.multiply(position_matrix_nave, position_matrix_nave, movement_matrix_nave);
+        //Movimientos del eje de las turbinas y demas
         rotacionEjeNave += (nave.getTeclaUp() && rotacionEjeNave < Math.PI/2) ? 0.005 : 0;
         rotacionEjeNave += (nave.getTeclaDown() && rotacionEjeNave > -Math.PI/2) ? -0.005 : 0;
         cabezeoNave = nave.getAnguloCabezeo();
@@ -293,6 +301,35 @@
             } else if (rotacionEjeNave < 0) {
                 rotacionEjeNave += 0.005;
             }
+        }
+
+        //Movimiento de las patas
+        if (plegarODesplegarPatas) {
+            if (traslacionPatasNave == 0) {
+                desplegarPatas = true;
+                plegarPatas = false;
+                deltaPatas = -0.05; //desplegar
+            } else if (traslacionPatasNave == -5) {
+                plegarPatas = true;
+                desplegarPatas = false;
+                deltaPatas = 0.05; //plegar
+            }
+        }
+
+        if (plegarPatas && traslacionPatasNave < 0) {
+            traslacionPatasNave += deltaPatas;
+            plegarODesplegarPatas = false;
+            if (traslacionPatasNave > -0.05) traslacionPatasNave = 0;
+        } else if (traslacionPatasNave == 0) {
+            plegarPatas = false;
+        }
+
+        if (desplegarPatas && traslacionPatasNave > -5) {
+            traslacionPatasNave += deltaPatas;
+            plegarODesplegarPatas = false;
+            if (traslacionPatasNave < -4.95) traslacionPatasNave = -5;
+        } else if (traslacionPatasNave == -5) {
+            desplegarPatas = false;
         }
 
 		//TODO: falta armar el objeto BIEN que modele la nave en la simulacion.
