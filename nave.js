@@ -26,6 +26,7 @@ function Nave() {
 
 	var velocidad = 0;
 	var angCabezeo = 0; // Z
+	var anguloCabezeoTotal = 0;
 	var angRolido = 0; // respecto del X de la Nave
 	var angVirada = 0;
 
@@ -35,7 +36,10 @@ function Nave() {
 
 		angCabezeo = 0;
 		angCabezeo = (estadoTeclas[this.TECLA_ARRIBA]) ? -0.005 : angCabezeo;
-		angCabezeo = (estadoTeclas[this.TECLA_ABAJO])  ?  0.005 : angCabezeo;		
+		angCabezeo = (estadoTeclas[this.TECLA_ABAJO])  ?  0.005 : angCabezeo;
+
+		anguloCabezeoTotal += (estadoTeclas[this.TECLA_ARRIBA]) ? -0.005 : 0;
+		anguloCabezeoTotal += (estadoTeclas[this.TECLA_ABAJO])  ?  0.005 : 0;
 
 		
 		angRolido = 0;
@@ -100,5 +104,17 @@ function Nave() {
 
 	this.getVelocidad = function() {
 		return velocidad;
+	}
+
+	this.getTeclaUp = function() {
+		return estadoTeclas[this.TECLA_ARRIBA];
+	}
+
+	this.getTeclaDown = function() {
+		return estadoTeclas[this.TECLA_ABAJO];
+	}
+
+	this.getAnguloCabezeo = function() {
+		return anguloCabezeoTotal;
 	}
 }
