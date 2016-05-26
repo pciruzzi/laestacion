@@ -167,7 +167,7 @@
         mat4.identity(camaraAux);
 
         if(camaraGlobal) {
-        	vec3.set(eye_point, 0, 0, -150 + aumento);
+        	vec3.set(eye_point, 0, 0, -200 + aumento);
             vec3.set(at_point, 0, 0, 0);
 
             mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
