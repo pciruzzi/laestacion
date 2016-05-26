@@ -12,9 +12,9 @@ function seccionAntena() {
 		var alto = 0.75;
 		var ancho = 2.5;
 		var profundo = 0.05;
-		var colorAntenas = [0.4,  0.4,  0.4];
+		var colorAntenas = getColor("opaque blue");
 		//Cambiar el color entre antenas y cilindros.
-		var colorCilindros = [0.2,  0.2,  0.2];
+		var colorCilindros = [0.2, 0.2, 0.2];//getColor("dark gray");
 		var esTexturada = false;
 		var latitude_bands = 64;
 		var longitude_bands = 64;

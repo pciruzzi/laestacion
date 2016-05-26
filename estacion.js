@@ -7,7 +7,7 @@ function Estacion() {
     this.cilindro3 = null;
     this.cilindro4 = null;
 
-    this.colorCilindros = getColor("green");
+    this.colorCilindros = getColor("green");//getColor("light yellow");
 
     this.create = function() {
         this.parteCentral = new parteCentral();

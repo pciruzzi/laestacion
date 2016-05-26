@@ -55,7 +55,7 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
                 var z = sinPhi * sinTheta;
                 
                 var position = [x,y,z];
-                var normal = [x,y,z];
+                var normal = [-x,-y,-z];
                 var tangent = [-y,x,0];
                 var texture = [0,0];
 

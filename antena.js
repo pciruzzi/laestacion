@@ -12,12 +12,12 @@ function Antena() {
 	this.cilindroLargoDos = null;
 
 	this.initBuffers = function() { 
-		var colorCilindros = [0.2,  0.2,  0.2];
+		var colorCilindros = [0.2, 0.2, 0.2];//getColor("dark gray");
 		//TODO: Arreglar el color de los cilindros union.
-		var colorCilindrosUnion = [0.2,  0.2,  0.2];
+		var colorCilindrosUnion = [0.2, 0.2, 0.2];//getColor("gray");
 		var esTexturada = false;
-		var latitude_bands = 64;
-		var longitude_bands = 64;
+		var latitude_bands = 4;
+		var longitude_bands = 20;
 
 		this.seccionAntenaUno = new seccionAntena();
 		this.seccionAntenaUno.initBuffers();

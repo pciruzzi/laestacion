@@ -4,9 +4,9 @@ function parteExterior() {
     this.caminoEstacion = null;
 
     this.externa = null;
-    this.colorExterna = getColor("blue");
+    this.colorExterna = getColor("blue");//getColor("light gray");
     this.interna = null;
-    this.colorInterna = getColor("red");
+    this.colorInterna = getColor("violet");
 
     this.tapa1 = null;
     this.tapa2 = null;
