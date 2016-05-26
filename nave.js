@@ -56,6 +56,8 @@ function Nave() {
 		impulso = (estadoTeclas[this.TECLA_MENOS]) ? -0.1 : impulso;
 
 		velocidad += impulso;
+		// Para que no sea dificil volver a arrancar...
+		if (velocidad < 0) velocidad = 0;
 
 		var ejeX = vec3.fromValues(1,0,0);
 		mat4.rotate(rotacion, rotacion, angRolido, ejeX);

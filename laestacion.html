@@ -12,14 +12,18 @@
 <script type="text/javascript" src="circunferencia.js"></script>
 <script type="text/javascript" src="color.js"></script>
 <script type="text/javascript" src="cubo.js"></script>
+<script type="text/javascript" src="cuerpoNave.js"></script>
 <script type="text/javascript" src="curvaBezier.js"></script>
 <script type="text/javascript" src="curvaBSpline.js"></script>
+<script type="text/javascript" src="ejeTurbinas.js"></script>
 <script type="text/javascript" src="esfera.js"></script>
 <script type="text/javascript" src="estacion.js"></script>
 <script type="text/javascript" src="grid.js"></script>
 <script type="text/javascript" src="keyboardhandle.js"></script>
+<script type="text/javascript" src="modeloNave.js"></script>
 <script type="text/javascript" src="mousehandle.js"></script>
 <script type="text/javascript" src="nave.js"></script>
+<script type="text/javascript" src="paralelepipedo.js"></script>
 <script type="text/javascript" src="parteCentral.js"></script>
 <script type="text/javascript" src="parteExterior.js"></script>
 <script type="text/javascript" src="productoVectorial.js"></script>
@@ -29,6 +33,7 @@
 <script type="text/javascript" src="superficieRevolucion.js"></script>
 <script type="text/javascript" src="tapa.js"></script>
 <script type="text/javascript" src="textureHandler.js"></script>
+<script type="text/javascript" src="turbina.js"></script>
 <script type="text/javascript" src="vertice.js"></script>
 
 <script id="shader-fs" type="x-shader/x-fragment">
@@ -255,16 +260,24 @@
         }
 
         // Matriz de modelado de la nave
+        var position_matrix_nave = mat4.create();
+        mat4.identity(position_matrix_nave);
+        mat4.translate(position_matrix_nave, position_matrix_nave, [-30, 10, -30]);
+        mat4.rotate(position_matrix_nave, position_matrix_nave, -Math.PI*3/4, [0,1,0]);
+        //mat4.rotate(position_matrix_nave, position_matrix_nave, Math.PI/2, [0,1,0]);
+        mat4.scale(position_matrix_nave, position_matrix_nave, [0.3, 0.3, 0.3]);
+        
         nave.step(); 
-		var position_matrix_nave = nave.getMatriz();
-		mat4.translate(position_matrix_nave,position_matrix_nave,[0,10,-30]);
+        var movement_matrix_nave = nave.getMatriz();
+
+        mat4.multiply(position_matrix_nave, position_matrix_nave, movement_matrix_nave);
 		//TODO: falta armar el objeto BIEN que modele la nave en la simulacion.
 		modeloNave.draw(position_matrix_nave);
     }
 
     function tick() {
         requestAnimFrame(tick);
-        rotacionSol += 0.05;
+        rotacionSol += 0.005;
         drawScene();
     }
 
@@ -284,8 +297,8 @@
 
         nave = new Nave();
         //Falta hacer esto BIEN.
-        modeloNave = new Cubo(2,2,2,getColor("red"),false);//new ModeloNave();
-        modeloNave.initBuffers();
+        modeloNave = new ModeloNave();
+        modeloNave.create();
         
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);

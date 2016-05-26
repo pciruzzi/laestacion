@@ -69,9 +69,6 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
                 this.vertex_buffer.push(verticeActual);
             }
         }
-
-        console.log("Cantidad vertices: " + this.vertex_buffer.length);
-
         // Buffer de indices de los triangulos
         this.index_buffer = grid(this.latitudeBands, this.longitudeBands);
 

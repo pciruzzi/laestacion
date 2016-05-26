@@ -13,4 +13,5 @@ function getColor(color) {
 	if (color == "light blue") return [51/255, 153/255, 1.0];
 	if (color == "opaque blue") return [74/255, 74/255, 127/255];
 	if (color == "dark gray") return [70/255, 70/255, 70/255];
+	if (color == "brown") return [102/255, 51/255, 0.0];
 }
