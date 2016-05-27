@@ -279,7 +279,7 @@
             }
         }
 
-        if (plegarAntena && traslacionPlegadoAntena < 7.2) {
+        if (plegarAntena && traslacionPlegadoAntena < 4.8) {
             if (! finRotacionAntena) {
                 rotacionPlegadoAntena += deltaAntenaRotacion;
                 plegarODesplegarAntena = false;
@@ -299,7 +299,6 @@
             if (! finRotacionAntena) { //utilizo este booleano aunque primero traslade y despues rote
                 traslacionPlegadoAntena += deltaAntenaTraslacion;
                 plegarODesplegarAntena = false;
-                //console.log("traslacion: " + traslacionPlegadoAntena);
                 if (traslacionPlegadoAntena < 0.1) {
                     finRotacionAntena = true;
                     traslacionPlegadoAntena = 0;
