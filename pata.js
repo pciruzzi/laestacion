@@ -23,7 +23,7 @@ function Pata() {
         mat4.multiply(model_matrix_base, model_matrix_base, modelMatrix);
         mat4.translate(model_matrix_base, model_matrix_base, [0,-5,0]);
         mat4.rotate(model_matrix_base, model_matrix_base, Math.PI/2, [1,0,0]);
-        mat4.scale(model_matrix_base, model_matrix_base, [3.5,3.5,0.5]);
+        mat4.scale(model_matrix_base, model_matrix_base, [3,3,0.5]);
         this.base.draw(model_matrix_base);
     }
 }
