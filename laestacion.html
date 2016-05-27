@@ -109,7 +109,7 @@
             gl.viewportHeight = canvas.height;
         } catch (e) {
 
-        } if (!gl) {
+        } if (! gl) {
             alert("Could not initialise WebGL, sorry :-(");
         }
     }
@@ -148,16 +148,16 @@
     var finRotacionAntena       = true;
 
     //Nave
-    var nave                = null;
-    var rotacionEjeNave     = -Math.PI/2;
-    var cabezeoNave         = null;
-    var modeloNave          = null;
-    var naveVertical        = false;
-    var plegarODesplegarPatas = false;
-    var plegarPatas         = false;
-    var desplegarPatas      = false;
-    var traslacionPatasNave = -5.0;
-    var deltaPatas          = 0;
+    var nave                    = null;
+    var rotacionEjeNave         = -Math.PI/2;
+    var cabezeoNave             = null;
+    var modeloNave              = null;
+    var naveVertical            = false;
+    var plegarODesplegarPatas   = false;
+    var plegarPatas             = false;
+    var desplegarPatas          = false;
+    var traslacionPatasNave     = -5.0;
+    var deltaPatas              = 0;
     
     var estacion    = null;
     var sol         = null;
@@ -229,7 +229,7 @@
         gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
         gl.uniformMatrix4fv(shaderProgram.ViewMatrixUniform, false, cameraMatrix);
 
-        // Dibujamos la estacion        
+        // Dibujamos la escena        
         // Configuramos la iluminación
         gl.uniform3f(shaderProgram.ambientColorUniform, 0.3, 0.3, 0.3 );
         gl.uniform3f(shaderProgram.directionalColorUniform, 0.05, 0.05, 0.05);
@@ -257,7 +257,6 @@
         // Matriz de modelado de la tierra
         var model_matrix_tierra = mat4.create();
         mat4.identity(model_matrix_tierra);
-        //mat4.rotate(model_matrix_tierra, model_matrix_escena, rotacionSol, [0,0,1]);
         mat4.translate(model_matrix_tierra, model_matrix_tierra, [0.0, -300.0, 0.0]);
         mat4.scale(model_matrix_tierra, model_matrix_tierra, [200.0, 200.0, 200.0]);
         tierra.draw(model_matrix_tierra);
@@ -265,14 +264,12 @@
         //Movimiento de las antenas
         if (plegarODesplegarAntena) {
             if (traslacionPlegadoAntena == 7.2) {
-                console.log("Tengo que desplegar las antenas");
                 desplegarAntena = true;
                 finRotacionAntena = false;
                 plegarAntena = false;
                 deltaAntenaTraslacion = -0.1; //desplegar
                 deltaAntenaRotacion = 0.05;
             } else if (traslacionPlegadoAntena == 0) {
-                console.log("Tengo que plegar las antenas");
                 plegarAntena = true;
                 desplegarAntena = false;
                 finRotacionAntena = false;
@@ -286,39 +283,31 @@
                 rotacionPlegadoAntena += deltaAntenaRotacion;
                 plegarODesplegarAntena = false;
                 if (rotacionPlegadoAntena < -Math.PI/2 + 0.05) {
-                    console.log("Termine de rotar para plegar");
                     finRotacionAntena = true;
                     rotacionPlegadoAntena = -Math.PI/2;
                 }
             } else {
-                console.log("Comienzo con la traslacion");
                 traslacionPlegadoAntena += deltaAntenaTraslacion;
                 if (traslacionPlegadoAntena > 7.1) traslacionPlegadoAntena = 7.2;
             }
         } else if (traslacionPlegadoAntena == 7.2) {
-            console.log("Fin de la traslacion de plegado");
             plegarAntena = false;
         }
 
-        if (desplegarAntena && traslacionPlegadoAntena < 9) {
-            traslacionPlegadoAntena += deltaAntenaTraslacion;
-            plegarODesplegarAntena = false;
-            if (traslacionPlegadoAntena > 8.9) traslacionPlegadoAntena = 9;
-
-/*            if (! finRotacionAntena) {
-                rotacionPlegadoAntena += deltaAntenaRotacion;
+        if (desplegarAntena && rotacionPlegadoAntena < 0) {
+            if (! finRotacionAntena) { //utilizo este booleano aunque primero traslade y despues rote
+                traslacionPlegadoAntena += deltaAntenaTraslacion;
                 plegarODesplegarAntena = false;
-                if (rotacionPlegadoAntena > 0.05) {
-                    console.log("Termine de rotar para desplegar");
+                //console.log("traslacion: " + traslacionPlegadoAntena);
+                if (traslacionPlegadoAntena < 0.1) {
                     finRotacionAntena = true;
-                    rotacionPlegadoAntena = 0;
+                    traslacionPlegadoAntena = 0;
                 }
             } else {
-                console.log("Comienzo con la traslacion");
-                traslacionPlegadoAntena += deltaAntenaTraslacion;
-                if (traslacionPlegadoAntena < 0.1) traslacionPlegadoAntena = 0;
-            }*/
-        } else if (traslacionPlegadoAntena == 10) {
+                rotacionPlegadoAntena += deltaAntenaRotacion;
+                if (rotacionPlegadoAntena > -0.05) rotacionPlegadoAntena = 0;
+            }
+        } else if (rotacionPlegadoAntena == 0) {
             desplegarAntena = false;
         }
 
@@ -385,7 +374,6 @@
             desplegarPatas = false;
         }
 
-        //TODO: falta armar el objeto BIEN que modele la nave en la simulacion.
         modeloNave.draw(position_matrix_nave);
     }
 
@@ -410,7 +398,6 @@
         tierra.initBuffers();
 
         nave = new Nave();
-        //Falta hacer esto BIEN.
         modeloNave = new ModeloNave();
         modeloNave.create();
         
