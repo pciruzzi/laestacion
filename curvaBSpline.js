@@ -1,4 +1,4 @@
-function curvaBSpline(P0, P1, P2, P3, cantPasos) {
+function CurvaBSpline(P0, P1, P2, P3, cantPasos) {
     this.vertex_buffer = [];
     //this.index_buffer = [];
 /*
@@ -33,7 +33,7 @@ function curvaBSpline(P0, P1, P2, P3, cantPasos) {
         var normal = productoVectorial(tangente, binormalProvisoria);
 
 
-        var vertex = new vertice(posicion, [0,0,0], normal, tangente, [0,0,0]);
+        var vertex = new Vertice(posicion, [0,0,0], normal, tangente, [0,0,0]);
         this.vertex_buffer.push(vertex);
     }
 

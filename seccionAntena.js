@@ -1,4 +1,4 @@
-function seccionAntena() {
+function SeccionAntena() {
 
 	this.panelUno = null;
 	this.panelDos = null;

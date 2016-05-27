@@ -19,16 +19,16 @@ function Antena() {
         var latitude_bands = 4;
         var longitude_bands = 20;
 
-        this.seccionAntenaUno = new seccionAntena();
+        this.seccionAntenaUno = new SeccionAntena();
         this.seccionAntenaUno.initBuffers();
 
-        this.seccionAntenaDos = new seccionAntena();
+        this.seccionAntenaDos = new SeccionAntena();
         this.seccionAntenaDos.initBuffers();
 
-        this.seccionAntenaTres = new seccionAntena();
+        this.seccionAntenaTres = new SeccionAntena();
         this.seccionAntenaTres.initBuffers();
 
-        this.seccionAntenaCuatro = new seccionAntena();
+        this.seccionAntenaCuatro = new SeccionAntena();
         this.seccionAntenaCuatro.initBuffers(); 
 
         this.cilindroUnionUno = new Cilindro(latitude_bands, longitude_bands, colorCilindrosUnion, esTexturada);

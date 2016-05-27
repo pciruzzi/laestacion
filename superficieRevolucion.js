@@ -62,7 +62,7 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
                 vec3.transformMat4(normal, normalPunto, modelado);
                 var color = [this.color[i], this.color[i+1], this.color[i+2]];
 
-                var vertex = new vertice(position, color, normal, tangent, [0,0]);
+                var vertex = new Vertice(position, color, normal, tangent, [0,0]);
                 this.vertex_buffer.push(vertex);
             }
         }

@@ -44,7 +44,7 @@ function Turbina() {
         var perfil = [];
         var cantPControl = P.length;
         for (var i = 0; i < cantPControl - 3; i+=3){
-            tramosPerfil.push(new curvaBezier(P[i], P[i+1], P[i+2], P[i+3], n));    
+            tramosPerfil.push(new CurvaBezier(P[i], P[i+1], P[i+2], P[i+3], n));    
         }
         for (var i in tramosPerfil){
             this.perfil = this.perfil.concat(tramosPerfil[i].getVertexBuffer());

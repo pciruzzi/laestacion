@@ -1,4 +1,4 @@
-function parteExterior() {
+function ParteExterior() {
     this.formaExterna = [];
     this.formaInterna = [];
     this.caminoEstacion = null;
@@ -24,7 +24,7 @@ function parteExterior() {
     this.coloManguera = getColor("green");
 
     this.createCaminoEstacion = function() {
-        this.caminoEstacion = new circunferencia(Math.PI*0, Math.PI*1.5, 16, 40);
+        this.caminoEstacion = new Circunferencia(Math.PI*0, Math.PI*1.5, 16, 40);
     }
 
     this.pushColor = function(buffer, color, n, k) {
@@ -80,7 +80,7 @@ function parteExterior() {
         var tramosForma = [];
         var cantPControl = P.length;
         for (var i = 0; i < cantPControl - 3; i+=3){
-            tramosForma.push(new curvaBezier(P[i], P[i+1], P[i+2], P[i+3], n));    
+            tramosForma.push(new CurvaBezier(P[i], P[i+1], P[i+2], P[i+3], n));    
         }
         for (var i in tramosForma){
             this.formaExterna = this.formaExterna.concat(tramosForma[i].getVertexBuffer());
@@ -128,7 +128,7 @@ function parteExterior() {
         var tramosForma = [];
         var cantPControl = P.length;
         for (var i = 0; i < cantPControl - 3; i+=3){
-            tramosForma.push(new curvaBezier(P[i], P[i+1], P[i+2], P[i+3], n));    
+            tramosForma.push(new CurvaBezier(P[i], P[i+1], P[i+2], P[i+3], n));    
         }
         for (var i in tramosForma){
             this.formaInterna = this.formaInterna.concat(tramosForma[i].getVertexBuffer());
@@ -162,7 +162,7 @@ function parteExterior() {
     }
 
     this.createManguera = function() {
-        this.formaManguera = new circunferencia(Math.PI*0, Math.PI*2, 1, 20);
+        this.formaManguera = new Circunferencia(Math.PI*0, Math.PI*2, 1, 20);
 
         var n = 9;
         var P = [];
@@ -180,7 +180,7 @@ function parteExterior() {
         var tramosForma = [];
         var cantPControl = P.length;
         for (var i = 0; i < cantPControl - 3; i++){
-            tramosForma.push(new curvaBSpline(P[i], P[i+1], P[i+2], P[i+3], n));    
+            tramosForma.push(new CurvaBSpline(P[i], P[i+1], P[i+2], P[i+3], n));    
         }
 /*        tramos.push(new curvaBSpline(P[cantPControl - 2], P[cantPControl - 1], P[cantPControl], P[0], n));    
         tramos.push(new curvaBSpline(P[cantPControl - 1], P[cantPControl], P[0], P[1], n));    

@@ -55,8 +55,8 @@ function Tapa(externo, interno, color, esTexturada) { // -> externo e interno so
             var normalPunto = vec3.fromValues(0,1,0);
             var color = [this.color[0], this.color[1], this.color[2]];
 
-            var vertexExt = new vertice(puntoExt, color, normalPunto, tgPuntoExt, [0,0]);
-            var vertexInt = new vertice(puntoInt, color, normalPunto, tgPuntoInt, [0,0]);
+            var vertexExt = new Vertice(puntoExt, color, normalPunto, tgPuntoExt, [0,0]);
+            var vertexInt = new Vertice(puntoInt, color, normalPunto, tgPuntoInt, [0,0]);
 
             this.vertex_buffer.push(vertexExt);
             this.vertex_buffer.push(vertexInt);

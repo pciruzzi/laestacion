@@ -36,8 +36,8 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
 
             var position = [x,y,z];
             var zNormal;
-            if (altura == 0) zNormal = -1;
-            else zNormal = 1;
+            if (altura == 0) zNormal = 1;
+            else zNormal = -1;
             var normal = [0,0,zNormal];
             var tangent = [x,y,0];
             var texture = [0,0];
@@ -48,14 +48,14 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
                 texture = [u,v];
             }
 
-            var verticeActual = new vertice(position, this.color, normal, tangent, texture);
-            this.vertex_buffer.push(verticeActual);
+            var VerticeActual = new Vertice(position, this.color, normal, tangent, texture);
+            this.vertex_buffer.push(VerticeActual);
         }
     }
 
-    // Se generan los vertices para el cilindro, calculando los datos para un cilindro de radio 1 y altura 1.
+    // Se generan los Vertices para el cilindro, calculando los datos para un cilindro de radio 1 y altura 1.
     // El cilindro es alrededor del eje z. El cilindro tiene base en el plano z = 0.
-    // Y también la información de las normales y coordenadas de textura o color para cada vertice del cilindro.
+    // Y también la información de las normales y coordenadas de textura o color para cada Vertice del cilindro.
     // El cilindro se renderizara utilizando triangle_strip, para ello se arma un buffer de índices 
     // a todos los vértices del cilindro.
     this.initBuffers = function(){
@@ -80,7 +80,7 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
                 var z = altura;
 
                 var position = [x,y,z];
-                var normal = [x,y,0];
+                var normal = [-x,-y,0];
                 var tangent = [-y,x,0];
                 var texture = [0,0];
 
@@ -90,15 +90,13 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
                     texture = [u,v];
                 }
 
-                var verticeActual = new vertice(position, this.color, normal, tangent, texture);
-                this.vertex_buffer.push(verticeActual);
+                var VerticeActual = new Vertice(position, this.color, normal, tangent, texture);
+                this.vertex_buffer.push(VerticeActual);
             }
             if (latNumber == this.latitudeBands - 1) {
                 this.hacerTapa(altura)
             }
         }
-
-        console.log("Cantidad vertices: " + this.vertex_buffer.length);
 
         // Buffer de indices de los triangulos
         this.index_buffer = grid(this.latitudeBands + 2, this.longitudeBands); //Agrego 2 por las tapas -> y 2 por la repetición de primer y último "gajo de altura" con normal distinta?

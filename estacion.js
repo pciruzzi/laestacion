@@ -10,9 +10,9 @@ function Estacion() {
     this.colorCilindros = getColor("green");//getColor("light yellow");
 
     this.create = function() {
-        this.parteCentral = new parteCentral();
+        this.parteCentral = new ParteCentral();
         this.parteCentral.create();
-        this.parteExterior = new parteExterior();
+        this.parteExterior = new ParteExterior();
         this.parteExterior.create();
 
         this.cilindro1 = new Cilindro(4, 30, this.colorCilindros, false);

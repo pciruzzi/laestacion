@@ -65,7 +65,7 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
                     texture = [u,v];
                 }                
 
-                var verticeActual = new vertice(position, this.color, normal, tangent, texture);
+                var verticeActual = new Vertice(position, this.color, normal, tangent, texture);
                 this.vertex_buffer.push(verticeActual);
             }
         }

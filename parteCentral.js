@@ -1,4 +1,4 @@
-function parteCentral() {
+function ParteCentral() {
     this.centro = null;
     this.perfilCentro = null;
     this.colorCentro1 = getColor("gray");
@@ -68,7 +68,7 @@ function parteCentral() {
         var perfil = [];
         var cantPControl = P.length;
         for (var i = 0; i < cantPControl - 3; i+=3){
-            tramosPerfil.push(new curvaBezier(P[i], P[i+1], P[i+2], P[i+3], n));    
+            tramosPerfil.push(new CurvaBezier(P[i], P[i+1], P[i+2], P[i+3], n));    
         }
         for (var i in tramosPerfil){
             this.perfilCentro = this.perfilCentro.concat(tramosPerfil[i].getVertexBuffer());

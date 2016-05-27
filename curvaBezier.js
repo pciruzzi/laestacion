@@ -1,4 +1,4 @@
-function curvaBezier(P0, P1, P2, P3, cantPasos) {
+function CurvaBezier(P0, P1, P2, P3, cantPasos) {
     this.vertex_buffer = [];
 /*
     this.webgl_position_buffer = null;
@@ -31,7 +31,7 @@ function curvaBezier(P0, P1, P2, P3, cantPasos) {
         var normal = [-dz,0,dx]; // Como las curvas de Bezier solo las utilizamos en un plano, se puede definir así
 
 
-        var vertex = new vertice(posicion, [0,0,0], normal, tangente, [0,0,0]);
+        var vertex = new Vertice(posicion, [0,0,0], normal, tangente, [0,0,0]);
         this.vertex_buffer.push(vertex);
     }
 

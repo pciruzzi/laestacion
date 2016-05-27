@@ -1,4 +1,4 @@
-function vertice(posicion, color, normal, tangente, coordTextura) {
+function Vertice(posicion, color, normal, tangente, coordTextura) {
     this.posicion = posicion;
     this.color = color;
     
