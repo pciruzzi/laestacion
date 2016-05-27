@@ -37,17 +37,17 @@ function CuerpoNave() {
 
         var model_matrix_pata1 = mat4.create();
         mat4.identity(model_matrix_pata1);
-        mat4.translate(model_matrix_pata1, model_matrix_cuerpo, [-5,traslacionPatasNave-0.2,-10]);
+        mat4.translate(model_matrix_pata1, model_matrix_cuerpo, [-5,traslacionPatasNave-0.1,-10]);
         this.pata1.draw(model_matrix_pata1);
 
         var model_matrix_pata2 = mat4.create();
         mat4.identity(model_matrix_pata2);
-        mat4.translate(model_matrix_pata2, model_matrix_cuerpo, [5,traslacionPatasNave-0.2,-10]);
+        mat4.translate(model_matrix_pata2, model_matrix_cuerpo, [5,traslacionPatasNave-0.1,-10]);
         this.pata2.draw(model_matrix_pata2);
 
         var model_matrix_pata3 = mat4.create();
         mat4.identity(model_matrix_pata3);
-        mat4.translate(model_matrix_pata3, model_matrix_cuerpo, [0,traslacionPatasNave-0.2,10]);
+        mat4.translate(model_matrix_pata3, model_matrix_cuerpo, [0,traslacionPatasNave-0.1,10]);
         this.pata3.draw(model_matrix_pata3);
     }
 }

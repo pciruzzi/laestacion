@@ -157,7 +157,7 @@
     var plegarODesplegarPatas   = false;
     var plegarPatas             = false;
     var desplegarPatas          = false;
-    var traslacionPatasNave     = -5.0;
+    var traslacionPatasNave     = -4.9;
     var deltaPatas              = 0;
     
     var estacion    = null;
@@ -321,28 +321,28 @@
         
         nave.step(); 
         var movement_matrix_nave = nave.getMatriz();
-
         mat4.multiply(position_matrix_nave, position_matrix_nave, movement_matrix_nave);
+
         //Movimientos del eje de las turbinas y demas
-        rotacionEjeNave += (nave.getTeclaUp() && rotacionEjeNave < Math.PI/2) ? 0.005 : 0;
-        rotacionEjeNave += (nave.getTeclaDown() && rotacionEjeNave > -Math.PI/2) ? -0.005 : 0;
+        rotacionEjeNave += (nave.getTeclaUp() && rotacionEjeNave < Math.PI/2) ? 0.01 : 0;
+        rotacionEjeNave += (nave.getTeclaDown() && rotacionEjeNave > -Math.PI/2) ? -0.01 : 0;
         cabezeoNave = nave.getAnguloCabezeo();
         if (nave.getVelocidad() == 0 && rotacionEjeNave >= -Math.PI/2 + cabezeoNave) {
-            if (rotacionEjeNave < (-Math.PI/2 + cabezeoNave) + 0.05) {
+            if (rotacionEjeNave < (-Math.PI/2 + cabezeoNave) + 0.01) {
                 rotacionEjeNave = -Math.PI/2 + cabezeoNave;
                 naveVertical = true;
             } else {
-                rotacionEjeNave -= 0.05;
+                rotacionEjeNave -= 0.01;
             }
         } else if (! nave.getTeclaUp() && ! nave.getTeclaDown()) {
             naveVertical = false;
-            if (rotacionEjeNave < 0.005 && rotacionEjeNave > -0.005) {
+            if (rotacionEjeNave < 0.01 && rotacionEjeNave > -0.01) {
                 rotacionEjeNave = 0;
             }
             if (rotacionEjeNave > 0) {
-                rotacionEjeNave -= 0.005;
+                rotacionEjeNave -= 0.01;
             } else if (rotacionEjeNave < 0) {
-                rotacionEjeNave += 0.005;
+                rotacionEjeNave += 0.01;
             }
         }
 
@@ -352,7 +352,7 @@
                 desplegarPatas = true;
                 plegarPatas = false;
                 deltaPatas = -0.05; //desplegar
-            } else if (traslacionPatasNave == -5) {
+            } else if (traslacionPatasNave == -4.9) {
                 plegarPatas = true;
                 desplegarPatas = false;
                 deltaPatas = 0.05; //plegar
@@ -367,11 +367,11 @@
             plegarPatas = false;
         }
 
-        if (desplegarPatas && traslacionPatasNave > -5) {
+        if (desplegarPatas && traslacionPatasNave > -4.9) {
             traslacionPatasNave += deltaPatas;
             plegarODesplegarPatas = false;
-            if (traslacionPatasNave < -4.95) traslacionPatasNave = -5;
-        } else if (traslacionPatasNave == -5) {
+            if (traslacionPatasNave < -4.85) traslacionPatasNave = -4.9;
+        } else if (traslacionPatasNave == -4.9) {
             desplegarPatas = false;
         }
 
