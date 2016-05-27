@@ -51,14 +51,14 @@ function Antena() {
 
     }
 
-    this.draw = function(modelMatrix) {
+    this.draw = function(modelMatrix, rotacionPlegado) {
         var scaleCilindrosUnion = [0.5,0.5,0.3];
         var scaleCilindrosLargo = [0.05,0.05,11];
 
         var matrix_seccionAntenaUno = mat4.create();
         mat4.identity(matrix_seccionAntenaUno);
         mat4.translate(matrix_seccionAntenaUno, modelMatrix, [-1.98, -2, 0]);
-        mat4.rotate(matrix_seccionAntenaUno, matrix_seccionAntenaUno, rotacionPlegadoAntena, [1,0,0]);
+        mat4.rotate(matrix_seccionAntenaUno, matrix_seccionAntenaUno, rotacionPlegado, [1,0,0]);
         this.seccionAntenaUno.draw(matrix_seccionAntenaUno);
 
         var matrix_seccionAntenaDos = mat4.create();
@@ -68,7 +68,7 @@ function Antena() {
         if (4.8 <= traslacionPlegadoAntena) mat4.translate(matrix_seccionAntenaDos, matrix_seccionAntenaDos, [0,0,-4.8+3.2]);
         mat4.translate(matrix_seccionAntenaDos, matrix_seccionAntenaDos, [0, 0, 2.4]);
         mat4.translate(matrix_seccionAntenaDos, matrix_seccionAntenaDos, [-1.98, -2, 0]);
-        mat4.rotate(matrix_seccionAntenaDos, matrix_seccionAntenaDos, rotacionPlegadoAntena, [1,0,0]);
+        mat4.rotate(matrix_seccionAntenaDos, matrix_seccionAntenaDos, rotacionPlegado, [1,0,0]);
         this.seccionAntenaDos.draw(matrix_seccionAntenaDos);
 
         var matrix_seccionAntenaTres = mat4.create();
@@ -78,7 +78,7 @@ function Antena() {
         if (4.8 <= traslacionPlegadoAntena) mat4.translate(matrix_seccionAntenaTres, matrix_seccionAntenaTres, [0,0,-4.8+1.6]);
         mat4.translate(matrix_seccionAntenaTres, matrix_seccionAntenaTres, [0, 0, 4.8]);
         mat4.translate(matrix_seccionAntenaTres, matrix_seccionAntenaTres, [-1.98, -2, 0]);
-        mat4.rotate(matrix_seccionAntenaTres, matrix_seccionAntenaTres, rotacionPlegadoAntena, [1,0,0]);
+        mat4.rotate(matrix_seccionAntenaTres, matrix_seccionAntenaTres, rotacionPlegado, [1,0,0]);
         this.seccionAntenaTres.draw(matrix_seccionAntenaTres);
 
         var matrix_seccionAntenaCuatro = mat4.create();
@@ -88,7 +88,7 @@ function Antena() {
         if (4.8 <= traslacionPlegadoAntena) mat4.translate(matrix_seccionAntenaCuatro, matrix_seccionAntenaCuatro, [0,0,-4.8]);
         mat4.translate(matrix_seccionAntenaCuatro, matrix_seccionAntenaCuatro, [0,0, 7.2]);
         mat4.translate(matrix_seccionAntenaCuatro, matrix_seccionAntenaCuatro, [-1.98, -2, 0]);
-        mat4.rotate(matrix_seccionAntenaCuatro, matrix_seccionAntenaCuatro, rotacionPlegadoAntena, [1,0,0]);
+        mat4.rotate(matrix_seccionAntenaCuatro, matrix_seccionAntenaCuatro, rotacionPlegado, [1,0,0]);
         this.seccionAntenaCuatro.draw(matrix_seccionAntenaCuatro);
 
         var matrix_cilindroUnionUno = mat4.create();
