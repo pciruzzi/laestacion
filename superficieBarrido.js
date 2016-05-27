@@ -116,7 +116,7 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
                 var vertice = vec3.create();
                 vec3.transformMat4(vertice, punto, modelado);
                 this.position_buffer.push(vertice[0], vertice[1], vertice[2]);
-                this.color_buffer.push(this.color[0], this.color[1], this.color[2]);
+                this.color_buffer.push(this.color[j], this.color[j+1], this.color[j+2]);
             }
         }
 

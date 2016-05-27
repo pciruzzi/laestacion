@@ -4,9 +4,12 @@ function parteExterior() {
     this.caminoEstacion = null;
 
     this.externa = null;
-    this.colorExterna = getColor("blue");//getColor("light gray");
+    this.colorExterna1 = getColor("blue");//getColor("light gray");
+    this.colorExterna2 = getColor("black");
+    this.colorExterna = [];
     this.interna = null;
-    this.colorInterna = getColor("violet");
+    this.colorInterna1 = getColor("violet");
+    this.colorInterna = [];
 
     this.tapa1 = null;
     this.tapa2 = null;
@@ -24,11 +27,25 @@ function parteExterior() {
         this.caminoEstacion = new circunferencia(Math.PI*0, Math.PI*1.5, 16, 40);
     }
 
+    this.pushColor = function(buffer, color, n, k) {
+        for (var i = 0; i < n; i++) {
+            for (var j = 0; j < k; j++) {
+                buffer.push(color[0], color[1], color[2]);
+            }
+        }
+    }
+
     this.createFormaExterna = function() {
         var n = 9;
         var P = [];
 
         //Superficie a barrer
+        this.pushColor(this.colorExterna, this.colorExterna1, n+1, 4/4);
+        this.pushColor(this.colorExterna, this.colorExterna2, n+1, 12/4);
+        this.pushColor(this.colorExterna, this.colorExterna1, n+1, 8/4);
+        this.pushColor(this.colorExterna, this.colorExterna2, n+1, 12/4);
+        this.pushColor(this.colorExterna, this.colorExterna1, n+1, 4/4);
+
         P.push([0.0, 0.0, 4.0]);
         P.push([-1.5, 0.0, 4.0]);
         P.push([-3.0, 0.0, 2.5]);
@@ -73,6 +90,8 @@ function parteExterior() {
     this.createFormaInterna = function() {   
         var n = 9;
         var P = [];
+
+        this.pushColor(this.colorInterna, this.colorInterna1, n+1, 40/4);
 
         //Superficie a barrer
         P.push([0.0, 0.0, 3.0]);
@@ -127,18 +146,18 @@ function parteExterior() {
     }
 
     this.createTapas = function() {
-        this.tapa1 = new Tapa(this.formaExterna, this.formaInterna, this.colorExterna, false);
+        this.tapa1 = new Tapa(this.formaExterna, this.formaInterna, this.colorExterna1, false);
         this.tapa1.initBuffers();
-        this.tapa2 = new Tapa(this.formaExterna, this.formaInterna, this.colorExterna, false);
+        this.tapa2 = new Tapa(this.formaExterna, this.formaInterna, this.colorExterna1, false);
         this.tapa2.initBuffers();
     }
 
     this.createEscotillas = function() {
-        this.escotilla1 = new Cilindro(4, 30, this.colorExterna, false);
+        this.escotilla1 = new Cilindro(4, 30, this.colorExterna1, false);
         this.escotilla1.initBuffers();
-        this.escotilla2 = new Cilindro(4, 30, this.colorExterna, false);
+        this.escotilla2 = new Cilindro(4, 30, this.colorExterna1, false);
         this.escotilla2.initBuffers();
-        this.escotilla3 = new Cilindro(4, 30, this.colorExterna, false);
+        this.escotilla3 = new Cilindro(4, 30, this.colorExterna1, false);
         this.escotilla3.initBuffers();
     }
 
