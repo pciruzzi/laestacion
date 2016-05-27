@@ -44,22 +44,22 @@ function EjeTurbinas() {
 
         var model_matrix_turbina1 = mat4.create();
         mat4.identity(model_matrix_turbina1);
-        mat4.translate(model_matrix_turbina1, model_matrix_eje, [-14, 15.0, -2.0]);
+        mat4.translate(model_matrix_turbina1, model_matrix_eje, [-14, 15.0, -2.1]);
         this.turbina1.draw(model_matrix_turbina1);
 
         var model_matrix_turbina2 = mat4.create();
         mat4.identity(model_matrix_turbina2);
-        mat4.translate(model_matrix_turbina2, model_matrix_eje, [-14, -15.0, -2.0]);
+        mat4.translate(model_matrix_turbina2, model_matrix_eje, [-14, -15.0, -2.1]);
         this.turbina2.draw(model_matrix_turbina2);
 
         var model_matrix_turbina3 = mat4.create();
         mat4.identity(model_matrix_turbina3);
-        mat4.translate(model_matrix_turbina3, model_matrix_eje, [14, 15.0, -2.0]);
+        mat4.translate(model_matrix_turbina3, model_matrix_eje, [14, 15.0, -2.1]);
         this.turbina3.draw(model_matrix_turbina3);
 
         var model_matrix_turbina4 = mat4.create();
         mat4.identity(model_matrix_turbina4);
-        mat4.translate(model_matrix_turbina4, model_matrix_eje, [14, -15.0, -2.0]);
+        mat4.translate(model_matrix_turbina4, model_matrix_eje, [14, -15.0, -2.1]);
         this.turbina4.draw(model_matrix_turbina4);
 
         var model_matrix_union1y2 = mat4.create();

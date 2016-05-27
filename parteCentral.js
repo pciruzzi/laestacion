@@ -1,15 +1,26 @@
 function parteCentral() {
     this.centro = null;
     this.perfilCentro = null;
-    this.colorCentro = getColor("gray");
+    this.colorCentro1 = getColor("gray");
+    this.colorCentro = [];
 
     this.antenaInf = null;
     this.antenaSup = null;
+
+    this.pushColor = function(buffer, color, n, k) {
+        for (var i = 0; i < n; i++) {
+            for (var j = 0; j < k; j++) {
+                buffer.push(color[0], color[1], color[2]);
+            }
+        }
+    }
 
     this.createPerfilCentro = function() {
         this.perfilCentro = [];
         var n = 9;
         var P = [];
+
+        this.pushColor(this.colorCentro, this.colorCentro1, n+1, 52/4);
 
         //Perfil a revolucionar
         P.push([0.0, 0.0, 0.0]);

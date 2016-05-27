@@ -1,12 +1,26 @@
 function Turbina() {
     this.perfil = null;
-    this.color = getColor("brown");
+    this.color1 = getColor("brown");
+    this.color2 = getColor("light blue");
+    this.color = [];
     this.turbina = null;
+
+    this.pushColor = function(buffer, color, n, k) {
+        for (var i = 0; i < n; i++) {
+            for (var j = 0; j < k; j++) {
+                buffer.push(color[0], color[1], color[2]);
+            }
+        }
+    }
 
     this.create = function() {
         this.perfil = [];
         var n = 9;
         var P = [];
+
+        this.pushColor(this.color, this.color2, n+1, 4/4);
+        this.pushColor(this.color, this.color1, n+1, 12/4);
+        this.pushColor(this.color, this.color2, n+1, 4/4);
 
         //Perfil a revolucionar
         P.push([0.0, 0.0, 1.0]);
