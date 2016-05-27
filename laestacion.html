@@ -267,14 +267,14 @@
                 desplegarAntena = true;
                 finRotacionAntena = false;
                 plegarAntena = false;
-                deltaAntenaTraslacion = -0.1; //desplegar
-                deltaAntenaRotacion = 0.05;
+                deltaAntenaTraslacion = -0.05; //desplegar
+                deltaAntenaRotacion = 0.02;
             } else if (traslacionPlegadoAntena == 0) {
                 plegarAntena = true;
                 desplegarAntena = false;
                 finRotacionAntena = false;
-                deltaAntenaTraslacion = 0.1; //plegar
-                deltaAntenaRotacion = -0.05;
+                deltaAntenaTraslacion = 0.05; //plegar
+                deltaAntenaRotacion = -0.02;
             }
         }
 
@@ -282,13 +282,13 @@
             if (! finRotacionAntena) {
                 rotacionPlegadoAntena += deltaAntenaRotacion;
                 plegarODesplegarAntena = false;
-                if (rotacionPlegadoAntena < -Math.PI/2 + 0.05) {
+                if (rotacionPlegadoAntena < -Math.PI/2 + 0.02) {
                     finRotacionAntena = true;
                     rotacionPlegadoAntena = -Math.PI/2;
                 }
             } else {
                 traslacionPlegadoAntena += deltaAntenaTraslacion;
-                if (traslacionPlegadoAntena > 7.1) traslacionPlegadoAntena = 7.2;
+                if (traslacionPlegadoAntena > 7.15) traslacionPlegadoAntena = 7.2;
             }
         } else if (traslacionPlegadoAntena == 7.2) {
             plegarAntena = false;
@@ -305,7 +305,7 @@
                 }
             } else {
                 rotacionPlegadoAntena += deltaAntenaRotacion;
-                if (rotacionPlegadoAntena > -0.05) rotacionPlegadoAntena = 0;
+                if (rotacionPlegadoAntena > -0.02) rotacionPlegadoAntena = 0;
             }
         } else if (rotacionPlegadoAntena == 0) {
             desplegarAntena = false;
