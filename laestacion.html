@@ -135,8 +135,8 @@
     var rotarCamaraX        = 0.0;
     var rotarCamaraY        = -45.0;
     var aumento             = 0.0;
-    var traslacionPersonaX  = -57.0;
-    var traslacionPersonaZ  = 1;
+    var traslacionPersonaX  = -59.0;
+    var traslacionPersonaZ  = 3;
 
     //Antena
     var desplegarAntena         = true;
@@ -154,10 +154,10 @@
     var cabezeoNave             = null;
     var modeloNave              = null;
     var naveVertical            = false;
-    var plegarODesplegarPatas   = true;
+    var plegarODesplegarPatas   = false;
     var plegarPatas             = false;
-    var desplegarPatas          = true;
-    var traslacionPatasNave     = 0;
+    var desplegarPatas          = false;
+    var traslacionPatasNave     = -4.9;
     var deltaPatas              = 0;
     
     var estacion    = null;
@@ -217,8 +217,8 @@
         }
 
         if(camaraPersona) {
-            vec3.set(eye_point, traslacionPersonaX, 2, traslacionPersonaZ);
-            vec3.set(at_point, traslacionPersonaX, 2, traslacionPersonaZ - 1.0);
+            vec3.set(eye_point, traslacionPersonaX, 1, traslacionPersonaZ);
+            vec3.set(at_point, traslacionPersonaX, 1, traslacionPersonaZ - 1.0);
 
             mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
             mat4.rotateX(camaraAux, camaraAux, degToRad(rotarCamaraX));
@@ -264,7 +264,7 @@
 
         //Movimiento de las antenas
         if (plegarODesplegarAntena) {
-            if (traslacionPlegadoAntena == 7.2) {
+            if (traslacionPlegadoAntena == 4.8) {
                 desplegarAntena = true;
                 finRotacionAntena = false;
                 plegarAntena = false;
@@ -289,9 +289,9 @@
                 }
             } else {
                 traslacionPlegadoAntena += deltaAntenaTraslacion;
-                if (traslacionPlegadoAntena > 7.15) traslacionPlegadoAntena = 7.2;
+                if (traslacionPlegadoAntena > 4.75) traslacionPlegadoAntena = 4.8;
             }
-        } else if (traslacionPlegadoAntena == 7.2) {
+        } else if (traslacionPlegadoAntena == 4.8) {
             plegarAntena = false;
         }
 
@@ -315,7 +315,8 @@
         // Matriz de modelado de la nave
         var position_matrix_nave = mat4.create();
         mat4.identity(position_matrix_nave);
-        mat4.translate(position_matrix_nave, position_matrix_nave, [-40, 0, -40]);
+        mat4.rotate(position_matrix_nave, position_matrix_nave, -Math.PI/4-0.1, [0,1,0]);
+        mat4.translate(position_matrix_nave, position_matrix_nave, [-40, -3.1, -40]);
         mat4.rotate(position_matrix_nave, position_matrix_nave, -Math.PI*3/4, [0,1,0]);
         mat4.scale(position_matrix_nave, position_matrix_nave, [0.2, 0.2, 0.2]);
         
