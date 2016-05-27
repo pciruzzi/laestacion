@@ -115,6 +115,11 @@ function Nave() {
 	}
 
 	this.getAnguloCabezeo = function() {
+		if (anguloCabezeoTotal > Math.PI*2) {
+			anguloCabezeoTotal -= Math.PI*2
+		} else if (anguloCabezeoTotal < -Math.PI*2) {
+			anguloCabezeoTotal += Math.PI*2;
+		}
 		return anguloCabezeoTotal;
 	}
 }
