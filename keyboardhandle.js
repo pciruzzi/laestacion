@@ -10,8 +10,6 @@ onkeydown = function(evento){
         camaraCabina        = false;
         camaraPersecucion   = false;
         camaraPersona       = false;
-        rotarCamaraY        = 0.0;
-        rotarCamaraX        = 0.0;
     }
     // Numero 2, pone la camara en la cabina de la nave.
     else if ((teclaAscii == '98') || (teclaAscii == '50')) {
@@ -19,8 +17,6 @@ onkeydown = function(evento){
         camaraCabina        = true;
         camaraPersecucion   = false;
         camaraPersona       = false;
-        rotarCamaraY        = 0.0;
-        rotarCamaraX        = 0.0;
     }
     // Numero 3, pone la camara detras de la nava, a modo de perseucion.
     else if ((teclaAscii == '99') || (teclaAscii == '51')) {
@@ -28,8 +24,6 @@ onkeydown = function(evento){
         camaraCabina        = false;
         camaraPersecucion   = true;
         camaraPersona       = false;
-        rotarCamaraY        = 0.0;
-        rotarCamaraX        = 0.0;
     }
     // Numero 4, pone la camara en la persona en la bahia de carga.
     else if ((teclaAscii == '100') || (teclaAscii == '52')) {
@@ -37,8 +31,6 @@ onkeydown = function(evento){
         camaraCabina        = false;
         camaraPersecucion   = false;
         camaraPersona       = true;
-        rotarCamaraY        = 0.0;
-        rotarCamaraX        = 0.0;
     }
 
     //Manejo del Zoom
@@ -65,24 +57,24 @@ onkeydown = function(evento){
     //Se puede apreciar mejor cuando la camara esta en la bahia de carga.
     // Muevo persona para adelante
     if((tecla == "w") || (tecla == "W")){
-        traslacionPersonaZ = traslacionPersonaZ - Math.cos(-degToRad(rotarCamaraY));   
-        traslacionPersonaX = traslacionPersonaX - Math.sin(-degToRad(rotarCamaraY));
+        traslacionPersonaZ = traslacionPersonaZ - Math.cos(-degToRad(rotarCamaraYPersona));   
+        traslacionPersonaX = traslacionPersonaX - Math.sin(-degToRad(rotarCamaraYPersona));
     }
     // Muevo persona para atras
     if((tecla == "s") || (tecla == "S")){
-        traslacionPersonaZ = traslacionPersonaZ + Math.cos(-degToRad(rotarCamaraY));   
-        traslacionPersonaX = traslacionPersonaX + Math.sin(-degToRad(rotarCamaraY));
+        traslacionPersonaZ = traslacionPersonaZ + Math.cos(-degToRad(rotarCamaraYPersona));   
+        traslacionPersonaX = traslacionPersonaX + Math.sin(-degToRad(rotarCamaraYPersona));
     }
 
     // Muevo persona para el costado derecho
     if((tecla == "d") || (tecla == "D")){
-        traslacionPersonaZ = traslacionPersonaZ + Math.sin(degToRad(rotarCamaraY));   
-        traslacionPersonaX = traslacionPersonaX + Math.cos(degToRad(rotarCamaraY));
+        traslacionPersonaZ = traslacionPersonaZ + Math.sin(degToRad(rotarCamaraYPersona));   
+        traslacionPersonaX = traslacionPersonaX + Math.cos(degToRad(rotarCamaraYPersona));
     }
     // Muevo persona para el costado izquierda
     if((tecla == "a") || (tecla == "A")){
-        traslacionPersonaZ = traslacionPersonaZ - Math.sin(degToRad(rotarCamaraY)); 
-        traslacionPersonaX = traslacionPersonaX - Math.cos(degToRad(rotarCamaraY));
+        traslacionPersonaZ = traslacionPersonaZ - Math.sin(degToRad(rotarCamaraYPersona)); 
+        traslacionPersonaX = traslacionPersonaX - Math.cos(degToRad(rotarCamaraYPersona));
     }
 
     //Estas teclas van a servir para el manejo de la nave

@@ -135,7 +135,9 @@
     var mouseX              = 0.0;
     var mouseY              = 0.0;
     var rotarCamaraX        = 0.0;
+    var rotarCamaraXPersona = 0.0;
     var rotarCamaraY        = -45.0;
+    var rotarCamaraYPersona = 0.0;
     var aumento             = 0.0;
     var traslacionPersonaX  = -59.0;
     var traslacionPersonaZ  = 3.0;
@@ -156,6 +158,8 @@
     var nave                    = null;
     var rotacionEjeNave         = -Math.PI/2;
     var cabezeoNave             = null;
+    var viradaNave				= null;
+    var rolidoNave				= null;
     var modeloNave              = null;
     var naveVertical            = false;
     var plegarODesplegarPatas   = false;
@@ -163,6 +167,8 @@
     var desplegarPatas          = false;
     var traslacionPatasNave     = -4.9;
     var deltaPatas              = 0;
+
+    var angle = 0;
     
     var estacion    = null;
     var sol         = null;
@@ -180,7 +186,7 @@
         // Se inicializan las variables asociadas con la Iluminación
         var lighting = true;
         gl.uniform1i(shaderProgram.useLightingUniform, lighting);       
-        var lightPosition = vec3.fromValues(500.0*Math.cos(rotacionSol), 500.0*Math.sin(rotacionSol), -300.0); 
+        var lightPosition = vec3.fromValues(500.0*Math.cos(rotacionSol), 0.0, 500.0*Math.sin(rotacionSol)); 
         //vec3.transformMat4(lightPosition, lightPosition, cameraMatrix);
         gl.uniform3fv(shaderProgram.lightingDirectionUniform, lightPosition);
 
@@ -205,8 +211,10 @@
             vec3.set(at_point, traslacionNave[0] - 10.0, traslacionNave[1] + 1.5, traslacionNave[2] + 1.0);
 
             mat4.lookAt(cameraMatrix, eye_point, at_point, up_point); 
-            mat4.rotateX(camaraAux, camaraAux, degToRad(rotarCamaraX));
-            mat4.rotateY(camaraAux, camaraAux, degToRad(rotarCamaraY));
+            mat4.rotateX(camaraAux, camaraAux, -cabezeoNave);
+            mat4.rotateY(camaraAux, camaraAux, Math.PI/11);
+            mat4.rotateY(camaraAux, camaraAux, -viradaNave);
+            mat4.rotateZ(camaraAux, camaraAux, rolidoNave);
             mat4.multiply(cameraMatrix, camaraAux, cameraMatrix);
         }
 
@@ -215,8 +223,9 @@
             vec3.set(at_point, traslacionNave[0] - 15.0, traslacionNave[1] + 1.5, traslacionNave[2] + 1.0);
 
             mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
-            mat4.rotateX(camaraAux, camaraAux, degToRad(rotarCamaraX));
-            mat4.rotateY(camaraAux, camaraAux, degToRad(rotarCamaraY));
+            mat4.rotateX(camaraAux, camaraAux, -cabezeoNave);
+            mat4.rotateY(camaraAux, camaraAux, -viradaNave);
+            mat4.rotateZ(camaraAux, camaraAux, rolidoNave);
             mat4.multiply(cameraMatrix, camaraAux, cameraMatrix);
         }
 
@@ -225,8 +234,8 @@
             vec3.set(at_point, traslacionPersonaX, 1, traslacionPersonaZ - 1.0);
 
             mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
-            mat4.rotateX(camaraAux, camaraAux, degToRad(rotarCamaraX));
-            mat4.rotateY(camaraAux, camaraAux, degToRad(rotarCamaraY));
+            mat4.rotateX(camaraAux, camaraAux, degToRad(rotarCamaraXPersona));
+            mat4.rotateY(camaraAux, camaraAux, degToRad(rotarCamaraYPersona));
             mat4.multiply(cameraMatrix, camaraAux, cameraMatrix);
         }
 
@@ -236,7 +245,7 @@
 
         // Dibujamos la escena        
         // Configuramos la iluminación
-        gl.uniform3f(shaderProgram.ambientColorUniform, 0.3, 0.3, 0.3 );
+        gl.uniform3f(shaderProgram.ambientColorUniform, 0.3, 0.3, 0.3);
         gl.uniform3f(shaderProgram.directionalColorUniform, 0.05, 0.05, 0.05);
 
         var model_matrix_escena = mat4.create();
@@ -249,12 +258,15 @@
         var model_matrix_estacion = mat4.create();
         mat4.identity(model_matrix_estacion);
         mat4.scale(model_matrix_estacion, model_matrix_escena, [7.0, 7.0, 7.0]);
+        //mat4.rotate(model_matrix_estacion, model_matrix_estacion, angle, [0,1,0]);
+        //mat4.rotate(model_matrix_estacion, model_matrix_estacion, Math.PI/2, [1,0,0]);
+        //mat4.rotate(model_matrix_estacion, model_matrix_estacion, Math.PI, [0,1,0]);
         estacion.draw(model_matrix_estacion);
 
         // Matriz de modelado del sol
         var model_matrix_sol = mat4.create();
         mat4.identity(model_matrix_sol);
-        mat4.rotate(model_matrix_sol, model_matrix_escena, rotacionSol, [0,0,1]);
+        mat4.rotate(model_matrix_sol, model_matrix_escena, -rotacionSol, [0,0,1]);
         mat4.translate(model_matrix_sol, model_matrix_sol, [500.0, 0.0, -300.0]);
         mat4.scale(model_matrix_sol, model_matrix_sol, [20.0, 20.0, 20.0]);
         sol.draw(model_matrix_sol);
@@ -331,6 +343,8 @@
         rotacionEjeNave += (nave.getTeclaUp() && rotacionEjeNave < Math.PI/2) ? 0.01 : 0;
         rotacionEjeNave += (nave.getTeclaDown() && rotacionEjeNave > -Math.PI/2) ? -0.01 : 0;
         cabezeoNave = nave.getAnguloCabezeo();
+        rolidoNave = nave.getAnguloRolido();
+        viradaNave = nave.getAnguloVirada();
         if (nave.getVelocidad() == 0 && rotacionEjeNave >= -Math.PI/2 + cabezeoNave) {
             if (rotacionEjeNave < (-Math.PI/2 + cabezeoNave) + 0.01) {
                 rotacionEjeNave = -Math.PI/2 + cabezeoNave;

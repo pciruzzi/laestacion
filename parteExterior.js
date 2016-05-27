@@ -1,6 +1,7 @@
 function ParteExterior() {
     this.formaExterna = [];
     this.formaInterna = [];
+    this.formaInternaParaTapa = [];
     this.caminoEstacion = null;
 
     this.externa = null;
@@ -95,6 +96,52 @@ function ParteExterior() {
 
         //Superficie a barrer
         P.push([0.0, 0.0, 3.0]);
+        P.push([1.0, 0.0, 3.0]);
+        P.push([2.0, 0.0, 2.0]);
+        P.push([2.0, 0.0, 1.0]);
+        P.push([2.0, 0.0, 1.0]);
+        P.push([2.0, 0.0, 1.0]);
+        P.push([2.0, 0.0, 1.0]);
+        P.push([2.0, 0.0, 0.0]);
+        P.push([2.0, 0.0, 0.0]);
+        P.push([2.0, 0.0, -1.5]);
+        P.push([2.0, 0.0, -1.5]);
+        P.push([2.0, 0.0, -1.5]);
+        P.push([2.0, 0.0, -1.5]);
+        P.push([2.0, 0.0, -1.5]);
+        P.push([1.0, 0.0, -1.5]);
+        P.push([0.0, 0.0, -1.5]);
+        P.push([-1.0, 0.0, -1.5]);
+        P.push([-1.0, 0.0, -1.5]);
+        P.push([-2.0, 0.0, -1.5]);
+        P.push([-2.0, 0.0, -1.5]);
+        P.push([-2.0, 0.0, -1.5]);
+        P.push([-2.0, 0.0, -1.5]);
+        P.push([-2.0, 0.0, 0.0]);
+        P.push([-2.0, 0.0, 0.0]);
+        P.push([-2.0, 0.0, 1.0]);
+        P.push([-2.0, 0.0, 1.0]);
+        P.push([-2.0, 0.0, 1.0]);
+        P.push([-2.0, 0.0, 1.0]);
+        P.push([-2.0, 0.0, 2.0]);
+        P.push([-1.0, 0.0, 3.0]);
+        P.push([0.0, 0.0, 3.0]);
+        var tramosForma = [];
+        var cantPControl = P.length;
+        for (var i = 0; i < cantPControl - 3; i+=3){
+            tramosForma.push(new CurvaBezier(P[i], P[i+1], P[i+2], P[i+3], n));    
+        }
+        for (var i in tramosForma){
+            this.formaInterna = this.formaInterna.concat(tramosForma[i].getVertexBuffer());
+        }
+    }
+
+    this.createFormaInternaParaTapa = function() {   
+        var n = 9;
+        var P = [];
+
+        //Superficie a barrer
+        P.push([0.0, 0.0, 3.0]);
         P.push([-1.0, 0.0, 3.0]);
         P.push([-2.0, 0.0, 2.0]);
         P.push([-2.0, 0.0, 1.0]);
@@ -131,7 +178,7 @@ function ParteExterior() {
             tramosForma.push(new CurvaBezier(P[i], P[i+1], P[i+2], P[i+3], n));    
         }
         for (var i in tramosForma){
-            this.formaInterna = this.formaInterna.concat(tramosForma[i].getVertexBuffer());
+            this.formaInternaParaTapa = this.formaInternaParaTapa.concat(tramosForma[i].getVertexBuffer());
         }
     }
 
@@ -146,9 +193,9 @@ function ParteExterior() {
     }
 
     this.createTapas = function() {
-        this.tapa1 = new Tapa(this.formaExterna, this.formaInterna, this.colorExterna1, false);
+        this.tapa1 = new Tapa(this.formaExterna, this.formaInternaParaTapa, this.colorExterna1, false);
         this.tapa1.initBuffers();
-        this.tapa2 = new Tapa(this.formaExterna, this.formaInterna, this.colorExterna1, false);
+        this.tapa2 = new Tapa(this.formaExterna, this.formaInternaParaTapa, this.colorExterna1, false);
         this.tapa2.initBuffers();
     }
 
@@ -197,6 +244,7 @@ function ParteExterior() {
         this.createCaminoEstacion();
         this.createFormaExterna();
         this.createFormaInterna();
+        this.createFormaInternaParaTapa();
         this.createExterna();
         this.createInterna();
         this.createTapas();

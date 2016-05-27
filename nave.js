@@ -28,7 +28,9 @@ function Nave() {
     var angCabezeo = 0; // Z
     var anguloCabezeoTotal = 0;
     var angRolido = 0; // respecto del X de la Nave
+    var anguloRolidoTotal = 0;
     var angVirada = 0;
+    var anguloViradaTotal = 0;
 
     var momento = vec3.fromValues(0,0,0);
 
@@ -46,13 +48,22 @@ function Nave() {
         angRolido = (estadoTeclas[this.TECLA_GIRO_HORARIO])     ? -0.005 : angRolido;
         angRolido = (estadoTeclas[this.TECLA_GIRO_ANTIHORARIO]) ?  0.005 : angRolido;
 
+        anguloRolidoTotal += (estadoTeclas[this.TECLA_GIRO_HORARIO]) ? -0.005 : 0;
+        anguloRolidoTotal += (estadoTeclas[this.TECLA_GIRO_ANTIHORARIO])  ?  0.005 : 0;
+
 
         angVirada = 0;
         angVirada = (estadoTeclas[this.TECLA_IZQUIERDA]) ? -0.005 : angVirada;
         angVirada = (estadoTeclas[this.TECLA_DERECHA])   ?  0.005 : angVirada;
 
+        anguloViradaTotal += (estadoTeclas[this.TECLA_IZQUIERDA]) ? -0.005 : 0;
+        anguloViradaTotal += (estadoTeclas[this.TECLA_DERECHA])  ?  0.005 : 0;
+
         angRolido = (estadoTeclas[this.TECLA_DERECHA])   ? -0.001 : angRolido;
         angRolido = (estadoTeclas[this.TECLA_IZQUIERDA]) ?  0.001 : angRolido;
+
+        //anguloRolidoTotal += (estadoTeclas[this.TECLA_DERECHA]) ? -0.001 : 0;
+        //anguloRolidoTotal += (estadoTeclas[this.TECLA_IZQUIERDA])  ?  0.001 : 0;
 
 
         var impulso = 0;
@@ -121,5 +132,23 @@ function Nave() {
             anguloCabezeoTotal += Math.PI*2;
         }
         return anguloCabezeoTotal;
+    }
+
+    this.getAnguloRolido = function() {
+        if (anguloRolidoTotal > Math.PI*2) {
+            anguloRolidoTotal -= Math.PI*2
+        } else if (anguloRolidoTotal < -Math.PI*2) {
+            anguloRolidoTotal += Math.PI*2;
+        }
+        return anguloRolidoTotal;
+    }
+
+    this.getAnguloVirada = function() {
+        if (anguloViradaTotal > Math.PI*2) {
+            anguloViradaTotal -= Math.PI*2
+        } else if (anguloViradaTotal < -Math.PI*2) {
+            anguloViradaTotal += Math.PI*2;
+        }
+        return anguloViradaTotal;
     }
 }
