@@ -35,6 +35,10 @@ function CuerpoNave() {
 
         this.parte1.draw(model_matrix_cuerpo);
 
+        var posicionNave = vec3.create();
+        vec3.set(posicionNave,1,1,1);
+        vec3.transformMat4(traslacionNave, posicionNave, model_matrix_cuerpo);
+
         var model_matrix_pata1 = mat4.create();
         mat4.identity(model_matrix_pata1);
         mat4.translate(model_matrix_pata1, model_matrix_cuerpo, [-4.5,traslacionPatasNave-0.1,-10]);
