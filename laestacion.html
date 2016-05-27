@@ -135,8 +135,8 @@
     var rotarCamaraX        = 0.0;
     var rotarCamaraY        = -45.0;
     var aumento             = 0.0;
-    var traslacionPersonaX  = 0.0;
-    var traslacionPersonaZ  = 0.0;
+    var traslacionPersonaX  = -59.0;
+    var traslacionPersonaZ  = 3;
 
     //Antena
     var desplegarAntena         = true;
@@ -217,8 +217,8 @@
         }
 
         if(camaraPersona) {
-            vec3.set(eye_point, 30, 65, -90 + aumento);
-            vec3.set(at_point, 0, 0, 0);
+            vec3.set(eye_point, traslacionPersonaX, 1, traslacionPersonaZ);
+            vec3.set(at_point, traslacionPersonaX, 1, traslacionPersonaZ - 1.0);
 
             mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
             mat4.rotateX(camaraAux, camaraAux, degToRad(rotarCamaraX));
