@@ -25,4 +25,4 @@ function handleLoadedTexture(gl) {
     gl.generateMipmap(gl.TEXTURE_2D);
 
     gl.bindTexture(gl.TEXTURE_2D, null);
-}     
+}

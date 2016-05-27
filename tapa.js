@@ -6,7 +6,7 @@ function Tapa(externo, interno, color, esTexturada) { // -> externo e interno so
 
     this.externo = externo;
     this.interno = interno;
-	
+    
     this.vertex_buffer = null;
     this.position_buffer = null;
     this.tangent_buffer = null;

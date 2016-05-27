@@ -1,15 +1,15 @@
 function ModeloNave() {
-	this.ejeTurbinas = null;
-	this.cuerpo = null;
+    this.ejeTurbinas = null;
+    this.cuerpo = null;
 
-	this.create = function() {
-		this.ejeTurbinas = new EjeTurbinas();
-		this.ejeTurbinas.create();
-		this.cuerpo = new CuerpoNave();
-		this.cuerpo.create();
-	}
+    this.create = function() {
+        this.ejeTurbinas = new EjeTurbinas();
+        this.ejeTurbinas.create();
+        this.cuerpo = new CuerpoNave();
+        this.cuerpo.create();
+    }
 
-	this.draw = function(modelMatrix) {
+    this.draw = function(modelMatrix) {
         //Aplico las transformaciones que aplican a toda la nave
         var model_matrix_nave = mat4.create();
         mat4.identity(model_matrix_nave);
@@ -26,5 +26,5 @@ function ModeloNave() {
         mat4.identity(model_matrix_cuerpo);
         mat4.translate(model_matrix_cuerpo, model_matrix_nave, [0,0,0]);
         this.cuerpo.draw(model_matrix_cuerpo);
-	}
+    }
 }

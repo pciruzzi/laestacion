@@ -6,39 +6,39 @@ onkeydown = function(evento){
     //Seleccion de camara
     // Numero 1, pone la camara global (aerea).
     if ((teclaAscii == '97') || (teclaAscii == '49')) {
-        camaraGlobal    	= true;
-        camaraCabina		= false;
+        camaraGlobal        = true;
+        camaraCabina        = false;
         camaraPersecucion   = false;
-        camaraPersona  		= false;
-        rotarCamaraY 		= 0.0;
-        rotarCamaraX 		= 0.0;
+        camaraPersona       = false;
+        rotarCamaraY        = 0.0;
+        rotarCamaraX        = 0.0;
     }
     // Numero 2, pone la camara en la cabina de la nave.
     else if ((teclaAscii == '98') || (teclaAscii == '50')) {
-        camaraGlobal    	= false;
-        camaraCabina   		= true;
+        camaraGlobal        = false;
+        camaraCabina        = true;
         camaraPersecucion   = false;
-        camaraPersona  		= false;
-        rotarCamaraY 		= 0.0;
-        rotarCamaraX 		= 0.0;
+        camaraPersona       = false;
+        rotarCamaraY        = 0.0;
+        rotarCamaraX        = 0.0;
     }
     // Numero 3, pone la camara detras de la nava, a modo de perseucion.
     else if ((teclaAscii == '99') || (teclaAscii == '51')) {
-        camaraGlobal    	= false;
-        camaraCabina   		= false;
-        camaraPersecucion 	= true;
-        camaraPersona  		= false;
-        rotarCamaraY 		= 0.0;
-        rotarCamaraX 		= 0.0;
+        camaraGlobal        = false;
+        camaraCabina        = false;
+        camaraPersecucion   = true;
+        camaraPersona       = false;
+        rotarCamaraY        = 0.0;
+        rotarCamaraX        = 0.0;
     }
     // Numero 4, pone la camara en la persona en la bahia de carga.
     else if ((teclaAscii == '100') || (teclaAscii == '52')) {
-        camaraGlobal    	= false;
-        camaraCabina   		= false;
-        camaraPersecucion 	= false;
-        camaraPersona  		= true;
-        rotarCamaraY 		= 0.0;
-        rotarCamaraX 		= 0.0;
+        camaraGlobal        = false;
+        camaraCabina        = false;
+        camaraPersecucion   = false;
+        camaraPersona       = true;
+        rotarCamaraY        = 0.0;
+        rotarCamaraX        = 0.0;
     }
 
     //Manejo del Zoom

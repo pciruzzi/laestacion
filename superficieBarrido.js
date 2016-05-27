@@ -6,7 +6,7 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
 
     this.camino = camino;
     this.forma = forma;
-	
+    
     this.vertex_buffer = null;
     this.position_buffer = null;
     this.tangent_buffer = null;
@@ -105,11 +105,11 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
             for (var j = 0; j < 3*this.columnas-2; j+=3) {
                 var angle = this.calcularAngulo(tg, [0,-1,0]);
                 if (yCamino < 0) {
-                	angle = -angle;
+                    angle = -angle;
                 }
                 mat4.identity(modelado);
                 mat4.translate(modelado, modelado, [xCamino,yCamino,zCamino]);
-            	//Hago que la tangente del camino coincida con la normal de la forma
+                //Hago que la tangente del camino coincida con la normal de la forma
                 mat4.rotate(modelado, modelado, -angle, [0,0,1]);
 
                 var punto = vec3.fromValues(positionBufferForma[j], positionBufferForma[j+1], positionBufferForma[j+2]);

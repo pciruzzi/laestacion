@@ -7,7 +7,7 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
     this.perfil = perfil;
     this.eje = eje;
     this.n = n;
-	
+    
     this.vertex_buffer = null;
     this.position_buffer = null;
     this.tangent_buffer = null;
