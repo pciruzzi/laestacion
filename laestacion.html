@@ -89,7 +89,7 @@
         } else {
             vec3 transformedNormal = normalize(uNMatrix * aVertexNormal);
             float directionalLightWeighting = max(dot(transformedNormal, light_dir), 0.0);
-            vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
+            vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting * 0.1;
         }
     }
 </script>
@@ -266,15 +266,16 @@
         // Matriz de modelado del sol
         var model_matrix_sol = mat4.create();
         mat4.identity(model_matrix_sol);
-        mat4.rotate(model_matrix_sol, model_matrix_escena, -rotacionSol, [0,0,1]);
-        mat4.translate(model_matrix_sol, model_matrix_sol, [500.0, 0.0, -300.0]);
+        mat4.translate(model_matrix_sol, model_matrix_escena, [0.0, 0.0, -300.0]);
+        mat4.rotate(model_matrix_sol, model_matrix_sol, -rotacionSol, [0,0,1]);
+        mat4.translate(model_matrix_sol, model_matrix_sol, [500.0, 0.0, 0.0]);
         mat4.scale(model_matrix_sol, model_matrix_sol, [20.0, 20.0, 20.0]);
         sol.draw(model_matrix_sol);
 
         // Matriz de modelado de la tierra
         var model_matrix_tierra = mat4.create();
         mat4.identity(model_matrix_tierra);
-        mat4.translate(model_matrix_tierra, model_matrix_tierra, [0.0, -300.0, 0.0]);
+        mat4.translate(model_matrix_tierra, model_matrix_escena, [0.0, 0.0, -300.0]);
         mat4.scale(model_matrix_tierra, model_matrix_tierra, [200.0, 200.0, 200.0]);
         tierra.draw(model_matrix_tierra);
 
