@@ -53,7 +53,7 @@ function Estacion() {
         mat4.translate(model_matrix_cilindro2, model_matrix_cilindro2, [0.0, 6.9, 0.0]);
         mat4.scale(model_matrix_cilindro2, model_matrix_cilindro2, [0.5, 13.8, 0.5]);
         mat4.rotate(model_matrix_cilindro2, model_matrix_cilindro2, Math.PI/2, [1,0,0]);
-        this.cilindro1.draw(model_matrix_cilindro2);
+        this.cilindro2.draw(model_matrix_cilindro2);
 
         var model_matrix_cilindro3 = mat4.create();
         mat4.identity(model_matrix_cilindro3);
@@ -61,13 +61,13 @@ function Estacion() {
         mat4.translate(model_matrix_cilindro3, model_matrix_cilindro3, [0.0, 6.9, 0.0]);
         mat4.scale(model_matrix_cilindro3, model_matrix_cilindro3, [0.5, 13.8, 0.5]);
         mat4.rotate(model_matrix_cilindro3, model_matrix_cilindro3, Math.PI/2, [1,0,0]);
-        this.cilindro1.draw(model_matrix_cilindro3);
+        this.cilindro3.draw(model_matrix_cilindro3);
 
         var model_matrix_cilindro4 = mat4.create();
         mat4.identity(model_matrix_cilindro4);
         mat4.rotate(model_matrix_cilindro4, model_matrix_estacion, Math.PI*-0.75, [0,0,1]);
         mat4.scale(model_matrix_cilindro4, model_matrix_cilindro4, [0.5, 6.9, 0.5]);
         mat4.rotate(model_matrix_cilindro4, model_matrix_cilindro4, Math.PI/2, [1,0,0]);
-        this.cilindro1.draw(model_matrix_cilindro4);
+        this.cilindro4.draw(model_matrix_cilindro4);
     }
 }

@@ -174,7 +174,6 @@
     var rotacionSol = 0.0;
     var tierra      = null;
     var cubo        = null;
-    var manguera    = null;
 
     function drawScene() {
         // Se configura el viewport dentro de área ¨canvas¨. en este caso se utiliza toda el área disponible
@@ -262,9 +261,8 @@
         //mat4.rotate(model_matrix_estacion, model_matrix_estacion, angle, [0,1,0]);
         //mat4.rotate(model_matrix_estacion, model_matrix_estacion, Math.PI/2, [1,0,0]);
         //mat4.rotate(model_matrix_estacion, model_matrix_estacion, Math.PI, [0,1,0]);
-        //estacion.draw(model_matrix_estacion);
+        estacion.draw(model_matrix_estacion);
         //cubo.draw(model_matrix_estacion);
-        manguera.draw(model_matrix_estacion);
 
         // Matriz de modelado del sol
         var model_matrix_sol = mat4.create();
@@ -414,51 +412,6 @@
         }
     }
 
-
-    function createManguera () {
-        var caminoManguera = [];
-        var colorManguera1 = getColor("red");
-        var colorManguera = [];
-
-        var formaManguera = new CircunferenciaXZ(Math.PI*0, Math.PI*2, 0.2, 20);
-
-        var n = 9;
-        var P = [];
-
-        pushColor(colorManguera, colorManguera1, n+1, 32/4);
-
-        var radio = 4;
-        var paso = 0.5;
-
-        //Camino de la manguera
-        P.push([0.0, 0.0, 0.0]);
-        P.push([radio, paso, -radio]);
-        P.push([0.0, 2*paso, -2*radio]);
-        P.push([-radio, 3*paso, -radio]);
-        P.push([0.0, 4*paso, 0.0]);
-        P.push([radio, 5*paso, -radio]);
-        P.push([0.0, 6*paso, -2*radio]);
-        P.push([-radio, 7*paso, -radio]);
-        P.push([0.0, 8*paso, 0.0]);
-        P.push([radio, 9*paso, -radio]);
-        P.push([0.0, 10*paso, -2*radio]);
-        var tramosForma = [];
-        var cantPControl = P.length;
-        for (var i = 0; i < cantPControl - 3; i++){
-            tramosForma.push(new CurvaBSpline(P[i], P[i+1], P[i+2], P[i+3], n));    
-        }
-/*        tramos.push(new curvaBSpline(P[cantPControl - 2], P[cantPControl - 1], P[cantPControl], P[0], n));    
-        tramos.push(new curvaBSpline(P[cantPControl - 1], P[cantPControl], P[0], P[1], n));    
-        tramos.push(new curvaBSpline(P[cantPControl], P[0], P[1], P[2], n));  */
-        for (var i in tramosForma){
-            caminoManguera = caminoManguera.concat(tramosForma[i].getVertexBuffer());
-        }
-
-        console.log("MANGUERAAAAAAA");
-        manguera = new SuperficieBarrido(formaManguera.getVertexBuffer(), caminoManguera, colorManguera, false);
-        manguera.initBuffers();
-    }
-
     function start() {
         var canvas = document.getElementById("glcanvas");
         initGL(canvas);
@@ -466,8 +419,6 @@
 
         estacion = new Estacion();
         estacion.create();
-
-        createManguera();
 
         cubo = new Cubo(1.0, 0.5, 2.0, getColor("red"), false);
         cubo.initBuffers();

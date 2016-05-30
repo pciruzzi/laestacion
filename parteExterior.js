@@ -210,23 +210,34 @@ function ParteExterior() {
     }
 
     this.createManguera = function() {
-        this.formaManguera = new CircunferenciaXZ(Math.PI*0, Math.PI*2, 1, 20);
+        this.formaManguera = new CircunferenciaXZ(Math.PI*0, Math.PI*2, 0.15, 20);
 
         var n = 9;
         var P = [];
 
-        this.pushColor(this.colorManguera, this.colorManguera1, n+1, 24/4);
+        this.pushColor(this.colorManguera, this.colorManguera1, n+1, 12);
+
+        var radio = 5;
+        var paso = -0.3;
 
         //Camino de la manguera
         P.push([0.0, 0.0, 0.0]);
         P.push([0.0, 0.0, 0.0]);
         P.push([0.0, 0.0, 0.0]);
-        P.push([2.0, 2.0, 0.0]);
-        P.push([4.0, 2.0, 0.0]);
-        P.push([6.0, 0.0, 0.0]);
-        P.push([8.0, -2.0, 0.0]);
-        P.push([10.0, -2.0, 0.0]);
-        P.push([12.0, 0.0, 0.0]);
+        P.push([radio, paso, -radio]);
+        P.push([0.0, 2*paso, -2*radio]);
+        P.push([-radio, 3*paso, -radio]);
+        P.push([0.0, 4*paso, 0.0]);
+        P.push([radio, 5*paso, -radio]);
+        P.push([0.0, 6*paso, -2*radio]);
+        P.push([-radio, 7*paso, -radio]);
+        P.push([0.0, 8*paso, 0.0]);
+        P.push([radio, 9*paso, -radio]);
+        P.push([0.0, 10*paso, -2*radio]);
+        P.push([0.0, 10*paso, -2*radio]);
+        P.push([0.0, 10*paso, -2*radio]);
+        //P.push([-radio, 11*paso, -radio]);
+        //P.push([0.0, 12*paso, 0.0]);
         var tramosForma = [];
         var cantPControl = P.length;
         for (var i = 0; i < cantPControl - 3; i++){
@@ -239,7 +250,6 @@ function ParteExterior() {
             this.caminoManguera = this.caminoManguera.concat(tramosForma[i].getVertexBuffer());
         }
 
-        console.log("MANGUERAAAAAAA");
         this.manguera = new SuperficieBarrido(this.formaManguera.getVertexBuffer(), this.caminoManguera, this.colorManguera, false);
         this.manguera.initBuffers();
     }
@@ -313,7 +323,10 @@ function ParteExterior() {
 
         var model_matrix_manguera = mat4.create();
         mat4.identity(model_matrix_manguera);
-        mat4.translate(model_matrix_manguera, model_matrix_casco, [2,2,2]);
+        mat4.rotate(model_matrix_manguera, model_matrix_casco, Math.PI*3/4, [0,0,1]);
+        mat4.translate(model_matrix_manguera, model_matrix_manguera, [0,10,0]);
+        mat4.rotate(model_matrix_manguera, model_matrix_manguera, Math.PI/2, [1,0,0]);
+        mat4.rotate(model_matrix_manguera, model_matrix_manguera, Math.PI/4, [0,1,0]);
         this.manguera.draw(model_matrix_manguera);
     }
 }
