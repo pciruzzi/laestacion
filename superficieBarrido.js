@@ -139,9 +139,9 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
                 var z = bnzCamino * xForma + nzCamino * zForma - tgzCamino * yForma + zCamino;
                 this.position_buffer.push(x, y, z);
 
-                var nx = bnxCamino * nxForma + nxCamino * nyForma + tgxCamino * nzForma;
-                var ny = bnyCamino * nxForma + nyCamino * nyForma + tgyCamino * nzForma;
-                var nz = bnzCamino * nxForma + nzCamino * nyForma + tgzCamino * nzForma;
+                var nx = -(bnxCamino * nxForma + nxCamino * nzForma + tgxCamino * nyForma);
+                var ny = -(bnyCamino * nxForma + nyCamino * nzForma + tgyCamino * nyForma);
+                var nz = -(bnzCamino * nxForma + nzCamino * nzForma + tgzCamino * nyForma);
                 this.normal_buffer.push(nx, ny, nz);
 
                 this.color_buffer.push(this.color[j], this.color[j+1], this.color[j+2]);
