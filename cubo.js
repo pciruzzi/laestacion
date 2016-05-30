@@ -53,10 +53,10 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
             //textureDelantera = [u,v];
         }
         //Vertices
-        this.vertex_buffer.push(new Vertice([-width,-height,z], this.color, normalDelantera, tangenteDelantera, textureDelantera));
-        this.vertex_buffer.push(new Vertice([width,-height,z], this.color, normalDelantera, tangenteDelantera, textureDelantera));
-        this.vertex_buffer.push(new Vertice([width,height,z], this.color, normalDelantera, tangenteDelantera, textureDelantera));
-        this.vertex_buffer.push(new Vertice([-width,height,z], this.color, normalDelantera, tangenteDelantera, textureDelantera));
+        this.vertex_buffer.push(new Vertice([-width,-height,z], getColor("red"), normalDelantera, tangenteDelantera, textureDelantera));
+        this.vertex_buffer.push(new Vertice([width,-height,z], getColor("red"), normalDelantera, tangenteDelantera, textureDelantera));
+        this.vertex_buffer.push(new Vertice([width,height,z], getColor("red"), normalDelantera, tangenteDelantera, textureDelantera));
+        this.vertex_buffer.push(new Vertice([-width,height,z], getColor("red"), normalDelantera, tangenteDelantera, textureDelantera));
 
         //Cara Trasera
         //Normal
@@ -70,10 +70,10 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
             //textureTrasera = [u,v];
         }
         //Vertices
-        this.vertex_buffer.push(new Vertice([-width,-height,-z], this.color, normalTrasera, tangenteTrasera, textureTrasera));
-        this.vertex_buffer.push(new Vertice([width,-height,-z], this.color, normalTrasera, tangenteTrasera, textureTrasera));
-        this.vertex_buffer.push(new Vertice([width,height,-z], this.color, normalTrasera, tangenteTrasera, textureTrasera));
-        this.vertex_buffer.push(new Vertice([-width,height,-z], this.color, normalTrasera, tangenteTrasera, textureTrasera));
+        this.vertex_buffer.push(new Vertice([-width,-height,-z], getColor("blue"), normalTrasera, tangenteTrasera, textureTrasera));
+        this.vertex_buffer.push(new Vertice([width,-height,-z], getColor("blue"), normalTrasera, tangenteTrasera, textureTrasera));
+        this.vertex_buffer.push(new Vertice([width,height,-z], getColor("blue"), normalTrasera, tangenteTrasera, textureTrasera));
+        this.vertex_buffer.push(new Vertice([-width,height,-z], getColor("blue"), normalTrasera, tangenteTrasera, textureTrasera));
 
         //Cara Izquierda
         //Normal
@@ -87,10 +87,10 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
             //textureIzquierda = [u,v];
         }
         //Vertices
-        this.vertex_buffer.push(new Vertice([-width,-height,-z], this.color, normalIzquierda, tangenteIzquierda, textureIzquierda));
-        this.vertex_buffer.push(new Vertice([-width,-height,z], this.color, normalIzquierda, tangenteIzquierda, textureIzquierda));
-        this.vertex_buffer.push(new Vertice([-width,height,z], this.color, normalIzquierda, tangenteIzquierda, textureIzquierda));
-        this.vertex_buffer.push(new Vertice([-width,height,-z], this.color, normalIzquierda, tangenteIzquierda, textureIzquierda));
+        this.vertex_buffer.push(new Vertice([-width,height,-z], getColor("yellow"), normalIzquierda, tangenteIzquierda, textureIzquierda));
+        this.vertex_buffer.push(new Vertice([-width,-height,-z], getColor("yellow"), normalIzquierda, tangenteIzquierda, textureIzquierda));
+        this.vertex_buffer.push(new Vertice([-width,-height,z], getColor("yellow"), normalIzquierda, tangenteIzquierda, textureIzquierda));
+        this.vertex_buffer.push(new Vertice([-width,height,z], getColor("yellow"), normalIzquierda, tangenteIzquierda, textureIzquierda));
 
         //Cara Derecha
         //Normal
@@ -104,10 +104,10 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
             //textureDerecha = [u,v];
         }
         //Vertices
-        this.vertex_buffer.push(new Vertice([width,-height,-z], this.color, normalDerecha, tangenteDerecha, textureDerecha));
-        this.vertex_buffer.push(new Vertice([width,-height,z], this.color, normalDerecha, tangenteDerecha, textureDerecha));
-        this.vertex_buffer.push(new Vertice([width,height,z], this.color, normalDerecha, tangenteDerecha, textureDerecha));
-        this.vertex_buffer.push(new Vertice([width,height,-z], this.color, normalDerecha, tangenteDerecha, textureDerecha));
+        this.vertex_buffer.push(new Vertice([width,-height,-z], getColor("green"), normalDerecha, tangenteDerecha, textureDerecha));
+        this.vertex_buffer.push(new Vertice([width,-height,z], getColor("green"), normalDerecha, tangenteDerecha, textureDerecha));
+        this.vertex_buffer.push(new Vertice([width,height,z], getColor("green"), normalDerecha, tangenteDerecha, textureDerecha));
+        this.vertex_buffer.push(new Vertice([width,height,-z], getColor("green"), normalDerecha, tangenteDerecha, textureDerecha));
 
         //Cara Superior
         //Normal
@@ -121,10 +121,10 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
             //textureSuperior = [u,v];
         }
         //Vertices
-        this.vertex_buffer.push(new Vertice([-width,height,z], this.color, normalSuperior, tangenteSuperior, textureSuperior));
-        this.vertex_buffer.push(new Vertice([width,height,z], this.color, normalSuperior, tangenteSuperior, textureSuperior));
-        this.vertex_buffer.push(new Vertice([width,height,-z], this.color, normalSuperior, tangenteSuperior, textureSuperior));
-        this.vertex_buffer.push(new Vertice([-width,height,-z], this.color, normalSuperior, tangenteSuperior, textureSuperior));
+        this.vertex_buffer.push(new Vertice([width,height,z], getColor("brown"), normalSuperior, tangenteSuperior, textureSuperior));
+        this.vertex_buffer.push(new Vertice([width,height,-z], getColor("brown"), normalSuperior, tangenteSuperior, textureSuperior));
+        this.vertex_buffer.push(new Vertice([-width,height,-z], getColor("brown"), normalSuperior, tangenteSuperior, textureSuperior));
+        this.vertex_buffer.push(new Vertice([-width,height,z], getColor("brown"), normalSuperior, tangenteSuperior, textureSuperior));
 
         //Cara Inferior
         //Normal
@@ -138,10 +138,10 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
             //textureInferior = [u,v];
         }
         //Vertices
-        this.vertex_buffer.push(new Vertice([-width,-height,z], this.color, normalInferior, tangenteInferior, textureInferior));
-        this.vertex_buffer.push(new Vertice([width,-height,z], this.color, normalInferior, tangenteInferior, textureInferior));
-        this.vertex_buffer.push(new Vertice([width,-height,-z], this.color, normalInferior, tangenteInferior, textureInferior));
-        this.vertex_buffer.push(new Vertice([-width,-height,-z], this.color, normalInferior, tangenteInferior, textureInferior));
+        this.vertex_buffer.push(new Vertice([-width,-height,z], getColor("violet"), normalInferior, tangenteInferior, textureInferior));
+        this.vertex_buffer.push(new Vertice([width,-height,z], getColor("violet"), normalInferior, tangenteInferior, textureInferior));
+        this.vertex_buffer.push(new Vertice([width,-height,-z], getColor("violet"), normalInferior, tangenteInferior, textureInferior));
+        this.vertex_buffer.push(new Vertice([-width,-height,-z], getColor("violet"), normalInferior, tangenteInferior, textureInferior));
 
         // Buffer de indices de los triangulos
         this.index_buffer = [
@@ -159,8 +159,8 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
             8, 10, 11,
 
             // Cara Derecha
-            12, 14, 13,
-            12, 15, 14,
+            12, 13, 14,
+            12, 14, 15,
 
             // Cara Superior
             16, 17, 18,
@@ -243,7 +243,7 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
         gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
         
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
-        //gl.drawElements(gl.LINE_LOOP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
-        gl.drawElements(gl.TRIANGLE_STRIP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+        gl.drawElements(gl.LINE_LOOP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+        //gl.drawElements(gl.TRIANGLE_STRIP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
     }
 }

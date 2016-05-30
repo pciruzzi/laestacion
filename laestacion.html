@@ -174,6 +174,7 @@
     var sol         = null;
     var rotacionSol = 0.0;
     var tierra      = null;
+    var cubo        = null;
 
     function drawScene() {
         // Se configura el viewport dentro de área ¨canvas¨. en este caso se utiliza toda el área disponible
@@ -261,7 +262,8 @@
         //mat4.rotate(model_matrix_estacion, model_matrix_estacion, angle, [0,1,0]);
         //mat4.rotate(model_matrix_estacion, model_matrix_estacion, Math.PI/2, [1,0,0]);
         //mat4.rotate(model_matrix_estacion, model_matrix_estacion, Math.PI, [0,1,0]);
-        estacion.draw(model_matrix_estacion);
+        //estacion.draw(model_matrix_estacion);
+        cubo.draw(model_matrix_estacion);
 
         // Matriz de modelado del sol
         var model_matrix_sol = mat4.create();
@@ -410,6 +412,9 @@
 
         estacion = new Estacion();
         estacion.create();
+
+        cubo = new Cubo(1.0, 0.5, 2.0, getColor("red"), false);
+        cubo.initBuffers();
 
         sol = new Esfera(30, 30, getColor("yellow"), false);
         sol.initBuffers();
