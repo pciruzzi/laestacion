@@ -1,6 +1,7 @@
 function Vertice(posicion, color, normal, tangente, coordTextura) {
     this.posicion = posicion;
     this.color = color;
+    this.binormal = [];
 
     this.normal = normal;
     vec3.normalize(this.normal,this.normal);
@@ -8,7 +9,8 @@ function Vertice(posicion, color, normal, tangente, coordTextura) {
     this.tangente = tangente;
     vec3.normalize(this.tangente,this.tangente);
 
-    this.binormal = productoVectorial(tangente,normal);
+    vec3.cross(this.binormal, this.normal, this.tangente);
+    //this.binormal = productoVectorial(tangente,normal);
     vec3.normalize(this.binormal,this.binormal);
 
     this.coordTextura = coordTextura;

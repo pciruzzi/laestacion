@@ -88,10 +88,15 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
         this.vertex_buffer = [];
         this.position_buffer = [];
         this.color_buffer = [];
+        this.normal_buffer = [];
         this.columnas = getCantidadVertices(this.forma);
         this.filas = getCantidadVertices(this.camino);
+
         var positionBufferCamino = getPositionBuffer(this.camino);
         var tangentBufferCamino = getTangentBuffer(this.camino);
+        var normalBufferCamino = getNormalBuffer(this.camino);
+        var binormalBufferCamino = getBinormalBuffer(this.camino);
+
         var positionBufferForma = getPositionBuffer(this.forma);
         var normalBufferForma = getNormalBuffer(this.forma);
 
@@ -99,40 +104,52 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
             var xCamino = positionBufferCamino[3*i];
             var yCamino = positionBufferCamino[3*i+1];
             var zCamino = positionBufferCamino[3*i+2];
-            
-            var tgXY = vec3.fromValues(tangentBufferCamino[3*i], tangentBufferCamino[3*i+1], 0);
-            //var angleXY = this.calcularAngulo(tgXY, [0,-1,0]);
-            var angleXY = (tangentBufferCamino[3*i+1] != 0) ? this.calcularAngulo(tgXY, [0,-1,0]) : 0;
-            var tgYZ = vec3.fromValues(0, tangentBufferCamino[3*i+1], tangentBufferCamino[3*i+2]);
-            var angleYZ = (tangentBufferCamino[3*i+1] != 0) ? this.calcularAngulo(tgYZ, [0,1,0]) : 0;
-            if (angleYZ >= Math.PI) angleYZ -= Math.PI;
-            if (angleYZ <= -Math.PI) angleYZ += Math.PI;
-            if (yCamino < 0) {
-                angleXY = -angleXY;
-            }
-            if (yCamino > 0) {
-                angleYZ = -angleYZ;
-            }
 
-            console.log("AngleYZ: " + angleYZ);
+            var tgxCamino = tangentBufferCamino[3*i];
+            var tgyCamino = tangentBufferCamino[3*i+1];
+            var tgzCamino = tangentBufferCamino[3*i+2];
 
-            var modelado = mat4.create();
-            mat4.identity(modelado);
-            mat4.translate(modelado, modelado, [xCamino,yCamino,zCamino]);
-            //Hago que la tangente del camino coincida con la normal de la forma
-            mat4.rotate(modelado, modelado, -angleXY, [0,0,1]);
-            mat4.rotate(modelado, modelado, angleYZ, [1,0,0]);
+            var nxCamino = normalBufferCamino[3*i];
+            var nyCamino = normalBufferCamino[3*i+1];
+            var nzCamino = normalBufferCamino[3*i+2];
+
+            var bnxCamino = binormalBufferCamino[3*i];
+            var bnyCamino = binormalBufferCamino[3*i+1];
+            var bnzCamino = binormalBufferCamino[3*i+2];
+
             for (var j = 0; j < 3*this.columnas-2; j+=3) {
-                var punto = vec3.fromValues(positionBufferForma[j], positionBufferForma[j+1], positionBufferForma[j+2]);
+                var rotacion = mat4.create();
+                mat4.rotate(rotacion, rotacion, Math.PI/2, [0,1,0]);
+                var posicion = vec3.fromValues(positionBufferForma[j], positionBufferForma[j+1], positionBufferForma[j+2]);
+                var normal = vec3.fromValues(normalBufferForma[j], normalBufferForma[j+1], normalBufferForma[j+2]);
                 var vertice = vec3.create();
-                vec3.transformMat4(vertice, punto, modelado);
-                this.position_buffer.push(vertice[0], vertice[1], vertice[2]);
+                vec3.transformMat4(vertice, posicion, rotacion);
+
+                var xForma = vertice[0];
+                var yForma = vertice[1];
+                var zForma = vertice[2];
+
+                vec3.transformMat4(vertice, normal, rotacion);
+                var nxForma = vertice[0];
+                var nyForma = vertice[1];
+                var nzForma = vertice[2];
+
+                var x = bnxCamino * xForma + nxCamino * zForma - tgxCamino * yForma + xCamino;
+                var y = bnyCamino * xForma + nyCamino * zForma - tgyCamino * yForma + yCamino;
+                var z = bnzCamino * xForma + nzCamino * zForma - tgzCamino * yForma + zCamino;
+                this.position_buffer.push(x, y, z);
+
+                var nx = bnxCamino * nxForma + nxCamino * nyForma + tgxCamino * nzForma;
+                var ny = bnyCamino * nxForma + nyCamino * nyForma + tgyCamino * nzForma;
+                var nz = bnzCamino * nxForma + nzCamino * nyForma + tgzCamino * nzForma;
+                this.normal_buffer.push(nx, ny, nz);
+
                 this.color_buffer.push(this.color[j], this.color[j+1], this.color[j+2]);
             }
         }
 
         this.calcularTangentes();
-        this.calcularNormales();
+        //this.calcularNormales();
 
         this.index_buffer = grid(this.filas, this.columnas);
 

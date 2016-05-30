@@ -8,13 +8,12 @@ function CircunferenciaXZ(inicial, final, radio, cantPasos) {
 
         var posicion = [x, y, z];
 
-
         var dx = -z;
         var dy = 0;
         var dz = x;
 
         var tangente = [dx, dy, dz];
-        var normal = [0,0,0] // No me interesa
+        var normal = [x,0,z];
 
         var vertex = new Vertice(posicion, [0,0,0], normal, tangente, [0,0,0]);
         this.vertex_buffer.push(vertex);
