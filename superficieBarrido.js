@@ -100,18 +100,29 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
             var yCamino = positionBufferCamino[3*i+1];
             var zCamino = positionBufferCamino[3*i+2];
             
-            var modelado = mat4.create();
-            var tg = vec3.fromValues(tangentBufferCamino[3*i], tangentBufferCamino[3*i+1], tangentBufferCamino[3*i+2]);
-            for (var j = 0; j < 3*this.columnas-2; j+=3) {
-                var angle = this.calcularAngulo(tg, [0,-1,0]);
-                if (yCamino < 0) {
-                    angle = -angle;
-                }
-                mat4.identity(modelado);
-                mat4.translate(modelado, modelado, [xCamino,yCamino,zCamino]);
-                //Hago que la tangente del camino coincida con la normal de la forma
-                mat4.rotate(modelado, modelado, -angle, [0,0,1]);
+            var tgXY = vec3.fromValues(tangentBufferCamino[3*i], tangentBufferCamino[3*i+1], 0);
+            //var angleXY = this.calcularAngulo(tgXY, [0,-1,0]);
+            var angleXY = (tangentBufferCamino[3*i+1] != 0) ? this.calcularAngulo(tgXY, [0,-1,0]) : 0;
+            var tgYZ = vec3.fromValues(0, tangentBufferCamino[3*i+1], tangentBufferCamino[3*i+2]);
+            var angleYZ = (tangentBufferCamino[3*i+1] != 0) ? this.calcularAngulo(tgYZ, [0,1,0]) : 0;
+            if (angleYZ >= Math.PI) angleYZ -= Math.PI;
+            if (angleYZ <= -Math.PI) angleYZ += Math.PI;
+            if (yCamino < 0) {
+                angleXY = -angleXY;
+            }
+            if (yCamino > 0) {
+                angleYZ = -angleYZ;
+            }
 
+            console.log("AngleYZ: " + angleYZ);
+
+            var modelado = mat4.create();
+            mat4.identity(modelado);
+            mat4.translate(modelado, modelado, [xCamino,yCamino,zCamino]);
+            //Hago que la tangente del camino coincida con la normal de la forma
+            mat4.rotate(modelado, modelado, -angleXY, [0,0,1]);
+            mat4.rotate(modelado, modelado, angleYZ, [1,0,0]);
+            for (var j = 0; j < 3*this.columnas-2; j+=3) {
                 var punto = vec3.fromValues(positionBufferForma[j], positionBufferForma[j+1], positionBufferForma[j+2]);
                 var vertice = vec3.create();
                 vec3.transformMat4(vertice, punto, modelado);

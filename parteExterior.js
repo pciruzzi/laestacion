@@ -22,7 +22,8 @@ function ParteExterior() {
     this.manguera = null;
     this.caminoManguera = [];
     this.formaManguera = null;
-    this.coloManguera = getColor("green");
+    this.colorManguera1 = getColor("red");
+    this.colorManguera = [];
 
     this.createCaminoEstacion = function() {
         this.caminoEstacion = new Circunferencia(Math.PI*0, Math.PI*1.5, 16, 40);
@@ -209,10 +210,12 @@ function ParteExterior() {
     }
 
     this.createManguera = function() {
-        this.formaManguera = new Circunferencia(Math.PI*0, Math.PI*2, 1, 20);
+        this.formaManguera = new CircunferenciaXZ(Math.PI*0, Math.PI*2, 1, 20);
 
         var n = 9;
         var P = [];
+
+        this.pushColor(this.colorManguera, this.colorManguera1, n+1, 24/4);
 
         //Camino de la manguera
         P.push([0.0, 0.0, 0.0]);
@@ -236,7 +239,8 @@ function ParteExterior() {
             this.caminoManguera = this.caminoManguera.concat(tramosForma[i].getVertexBuffer());
         }
 
-        this.manguera = new SuperficieBarrido(this.formaManguera.getVertexBuffer(), this.caminoManguera, this.coloManguera, false);
+        console.log("MANGUERAAAAAAA");
+        this.manguera = new SuperficieBarrido(this.formaManguera.getVertexBuffer(), this.caminoManguera, this.colorManguera, false);
         this.manguera.initBuffers();
     }
 
@@ -310,6 +314,6 @@ function ParteExterior() {
         var model_matrix_manguera = mat4.create();
         mat4.identity(model_matrix_manguera);
         mat4.translate(model_matrix_manguera, model_matrix_casco, [2,2,2]);
-        //this.manguera.draw(model_matrix_manguera);
+        this.manguera.draw(model_matrix_manguera);
     }
 }
