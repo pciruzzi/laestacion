@@ -262,6 +262,7 @@
         //mat4.rotate(model_matrix_estacion, model_matrix_estacion, Math.PI/2, [1,0,0]);
         //mat4.rotate(model_matrix_estacion, model_matrix_estacion, Math.PI, [0,1,0]);
         estacion.draw(model_matrix_estacion);
+        //mat4.rotate(model_matrix_estacion, model_matrix_estacion, Math.PI/4, [0,1,0]);
         //cubo.draw(model_matrix_estacion);
 
         // Matriz de modelado del sol
@@ -420,8 +421,10 @@
         estacion = new Estacion();
         estacion.create();
 
-        cubo = new Cubo(1.0, 0.5, 2.0, getColor("red"), false);
-        cubo.initBuffers();
+/*        var color = [];
+        color.push(getColor("brown"), getColor("red"), getColor("green"), getColor("blue"), getColor("yellow"), getColor("violet"));
+        cubo = new Cubo(1.0, 0.5, 2.0, color, false);
+        cubo.initBuffers();*/
 
         sol = new Esfera(30, 30, getColor("yellow"), false);
         sol.initBuffers();

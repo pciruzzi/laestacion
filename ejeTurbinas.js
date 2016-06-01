@@ -22,9 +22,13 @@ function EjeTurbinas() {
         this.cilindro = new Cilindro(4, 20, getColor("brown"), false);
         this.cilindro.initBuffers();
 
-        this.unionTurbinas1y2 = new Cubo(15.0, 2.0, 2.0, getColor("brown"), false);
+        var colorUnion = [];
+        for (var i = 0; i < 6; i++) {
+            colorUnion.push(getColor("brown"));
+        }
+        this.unionTurbinas1y2 = new Cubo(15.0, 2.0, 2.0, colorUnion, false);
         this.unionTurbinas1y2.initBuffers();
-        this.unionTurbinas3y4 = new Cubo(15.0, 2.0, 2.0, getColor("brown"), false);
+        this.unionTurbinas3y4 = new Cubo(15.0, 2.0, 2.0, colorUnion, false);
         this.unionTurbinas3y4.initBuffers();
     }
 

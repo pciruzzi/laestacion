@@ -217,7 +217,7 @@ function ParteExterior() {
 
         this.pushColor(this.colorManguera, this.colorManguera1, n+1, 12);
 
-        var radio = 5;
+        var radio = 4;
         var paso = -0.3;
 
         //Camino de la manguera

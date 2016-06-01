@@ -15,7 +15,14 @@ function CuerpoNave() {
     this.punto8 = [-1,-10,-1];
 
     this.create = function() {
-        this.parte1 = new Cubo(10.0, 15.0, 30.0, getColor("red"), false);
+        var color = [];
+        color.push(getColor("brown"));
+        color.push(getColor("red"));
+        color.push(getColor("green"));
+        color.push(getColor("blue"));
+        color.push(getColor("yellow"));
+        color.push(getColor("violet"));
+        this.parte1 = new Cubo(10.0, 15.0, 30.0, color, false);
         //this.parte1 = new Paralelepipedo(this.punto1, this.punto2, this.punto3, this.punto4, this.punto5, this.punto6, this.punto7, this.punto8, getColor("red"), false);
         this.parte1.initBuffers();
 
