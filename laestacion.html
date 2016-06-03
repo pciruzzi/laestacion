@@ -13,6 +13,7 @@
 <script type="text/javascript" src="circunferenciaXZ.js"></script>
 <script type="text/javascript" src="color.js"></script>
 <script type="text/javascript" src="cubo.js"></script>
+<script type="text/javascript" src="cuerpoCentralNave.js"></script>
 <script type="text/javascript" src="cuerpoNave.js"></script>
 <script type="text/javascript" src="curvaBezier.js"></script>
 <script type="text/javascript" src="curvaBSpline.js"></script>
@@ -334,7 +335,7 @@
         var position_matrix_nave = mat4.create();
         mat4.identity(position_matrix_nave);
         mat4.rotate(position_matrix_nave, position_matrix_nave, -Math.PI/4-0.1, [0,1,0]);
-        mat4.translate(position_matrix_nave, position_matrix_nave, [-40, -3.1, -40]);
+        mat4.translate(position_matrix_nave, position_matrix_nave, [-40, -2.97, -40]);
         mat4.rotate(position_matrix_nave, position_matrix_nave, -Math.PI*3/4, [0,1,0]);
         mat4.scale(position_matrix_nave, position_matrix_nave, [0.2, 0.2, 0.2]);
         
