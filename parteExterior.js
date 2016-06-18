@@ -276,18 +276,18 @@ function ParteExterior() {
         var model_matrix_externa = mat4.create();
         mat4.identity(model_matrix_externa);
         mat4.scale(model_matrix_externa, model_matrix_casco, [0.5, 0.5, 0.5]);
-        this.externa.draw(model_matrix_externa);
+        this.externa.draw(model_matrix_externa, shaderProgramSimple);
 
         var model_matrix_interna = mat4.create();
         mat4.identity(model_matrix_interna);
         mat4.scale(model_matrix_interna, model_matrix_casco, [0.5, 0.5, 0.5]);
-        this.interna.draw(model_matrix_interna);
+        this.interna.draw(model_matrix_interna, shaderProgramSimple);
 
         var model_matrix_tapa1 = mat4.create();
         mat4.identity(model_matrix_tapa1);
         mat4.translate(model_matrix_tapa1, model_matrix_casco, [8, 0, 0]);
         mat4.scale(model_matrix_tapa1, model_matrix_tapa1, [0.5, 0.5, 0.5]);
-        this.tapa1.draw(model_matrix_tapa1);
+        this.tapa1.draw(model_matrix_tapa1, shaderProgramSimple);
 
         var model_matrix_tapa2 = mat4.create();
         mat4.identity(model_matrix_tapa2);
@@ -295,7 +295,7 @@ function ParteExterior() {
         mat4.translate(model_matrix_tapa2, model_matrix_tapa2, [8, 0, 0]);
         mat4.scale(model_matrix_tapa2, model_matrix_tapa2, [0.5, 0.5, 0.5]);
         mat4.rotate(model_matrix_tapa2, model_matrix_tapa2, Math.PI, [0,0,1]);
-        this.tapa1.draw(model_matrix_tapa2);
+        this.tapa2.draw(model_matrix_tapa2, shaderProgramSimple);
 
         var model_matrix_escotilla1 = mat4.create();
         mat4.identity(model_matrix_escotilla1);
@@ -303,7 +303,7 @@ function ParteExterior() {
         mat4.translate(model_matrix_escotilla1, model_matrix_escotilla1, [0,10,0]);
         mat4.scale(model_matrix_escotilla1, model_matrix_escotilla1, [1.4,1,1.4]);
         mat4.rotate(model_matrix_escotilla1, model_matrix_escotilla1, Math.PI/2, [1,0,0]);
-        this.escotilla1.draw(model_matrix_escotilla1);
+        this.escotilla1.draw(model_matrix_escotilla1, shaderProgramSimple);
 
         var model_matrix_escotilla2 = mat4.create();
         mat4.identity(model_matrix_escotilla2);
@@ -311,7 +311,7 @@ function ParteExterior() {
         mat4.translate(model_matrix_escotilla2, model_matrix_escotilla2, [0,10,0]);
         mat4.scale(model_matrix_escotilla2, model_matrix_escotilla2, [1.4,1,1.4]);
         mat4.rotate(model_matrix_escotilla2, model_matrix_escotilla2, Math.PI/2, [1,0,0]);
-        this.escotilla1.draw(model_matrix_escotilla2);
+        this.escotilla1.draw(model_matrix_escotilla2, shaderProgramSimple);
 
         var model_matrix_escotilla3 = mat4.create();
         mat4.identity(model_matrix_escotilla3);
@@ -319,7 +319,7 @@ function ParteExterior() {
         mat4.translate(model_matrix_escotilla3, model_matrix_escotilla3, [0,10,0]);
         mat4.scale(model_matrix_escotilla3, model_matrix_escotilla3, [1.4,1,1.4]);
         mat4.rotate(model_matrix_escotilla3, model_matrix_escotilla3, Math.PI/2, [1,0,0]);
-        this.escotilla1.draw(model_matrix_escotilla3);
+        this.escotilla1.draw(model_matrix_escotilla3, shaderProgramSimple);
 
         var model_matrix_manguera = mat4.create();
         mat4.identity(model_matrix_manguera);
@@ -327,6 +327,6 @@ function ParteExterior() {
         mat4.translate(model_matrix_manguera, model_matrix_manguera, [0,10,0]);
         mat4.rotate(model_matrix_manguera, model_matrix_manguera, Math.PI/2, [1,0,0]);
         mat4.rotate(model_matrix_manguera, model_matrix_manguera, Math.PI/4, [0,1,0]);
-        this.manguera.draw(model_matrix_manguera);
+        this.manguera.draw(model_matrix_manguera, shaderProgramSimple);
     }
 }

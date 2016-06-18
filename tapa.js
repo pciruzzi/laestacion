@@ -106,7 +106,7 @@ function Tapa(externo, interno, color, esTexturada) { // -> externo e interno so
         }
     }
 
-    this.draw = function(modelMatrix){
+    this.draw = function(modelMatrix, shaderProgram){
         // Se configuran los buffers que alimentarán el pipeline
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);

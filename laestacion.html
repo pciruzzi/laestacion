@@ -98,7 +98,6 @@
     }
 </script>
 
-
 <script type="text/javascript">
 
     // Variable global para el contexto GL
@@ -164,19 +163,10 @@
     var rotacionSol = 0.0;
     var tierra      = null;
     
-    function initGL(canvas) {
-        try {
-            gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-            gl.viewportWidth = canvas.width;
-            gl.viewportHeight = canvas.height;
-        } catch (e) {
-
-        } if (! gl) {
-            alert("Could not initialise WebGL, sorry :-(");
-        }
-    }
-
+    // Variables de los shaders
+    var shaderProgramSimple;
 </script>
+
 </head>
 <body onload="start();">
     <center>

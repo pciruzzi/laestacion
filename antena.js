@@ -51,7 +51,7 @@ function Antena() {
 
     }
 
-    this.draw = function(modelMatrix, rotacionPlegado) {
+    this.draw = function(modelMatrix, rotacionPlegado, shaderProgram) {
         var scaleCilindrosUnion = [0.5,0.5,0.3];
         var scaleCilindrosLargo = [0.05,0.05,11];
 
@@ -59,7 +59,7 @@ function Antena() {
         mat4.identity(matrix_seccionAntenaUno);
         mat4.translate(matrix_seccionAntenaUno, modelMatrix, [-1.98, -2, 0]);
         mat4.rotate(matrix_seccionAntenaUno, matrix_seccionAntenaUno, rotacionPlegado, [1,0,0]);
-        this.seccionAntenaUno.draw(matrix_seccionAntenaUno);
+        this.seccionAntenaUno.draw(matrix_seccionAntenaUno, shaderProgram);
 
         var matrix_seccionAntenaDos = mat4.create();
         mat4.identity(matrix_seccionAntenaDos);
@@ -69,7 +69,7 @@ function Antena() {
         mat4.translate(matrix_seccionAntenaDos, matrix_seccionAntenaDos, [0, 0, 2.4]);
         mat4.translate(matrix_seccionAntenaDos, matrix_seccionAntenaDos, [-1.98, -2, 0]);
         mat4.rotate(matrix_seccionAntenaDos, matrix_seccionAntenaDos, rotacionPlegado, [1,0,0]);
-        this.seccionAntenaDos.draw(matrix_seccionAntenaDos);
+        this.seccionAntenaDos.draw(matrix_seccionAntenaDos, shaderProgram);
 
         var matrix_seccionAntenaTres = mat4.create();
         mat4.identity(matrix_seccionAntenaTres);
@@ -79,7 +79,7 @@ function Antena() {
         mat4.translate(matrix_seccionAntenaTres, matrix_seccionAntenaTres, [0, 0, 4.8]);
         mat4.translate(matrix_seccionAntenaTres, matrix_seccionAntenaTres, [-1.98, -2, 0]);
         mat4.rotate(matrix_seccionAntenaTres, matrix_seccionAntenaTres, rotacionPlegado, [1,0,0]);
-        this.seccionAntenaTres.draw(matrix_seccionAntenaTres);
+        this.seccionAntenaTres.draw(matrix_seccionAntenaTres, shaderProgram);
 
         var matrix_seccionAntenaCuatro = mat4.create();
         mat4.identity(matrix_seccionAntenaCuatro);
@@ -89,14 +89,14 @@ function Antena() {
         mat4.translate(matrix_seccionAntenaCuatro, matrix_seccionAntenaCuatro, [0,0, 7.2]);
         mat4.translate(matrix_seccionAntenaCuatro, matrix_seccionAntenaCuatro, [-1.98, -2, 0]);
         mat4.rotate(matrix_seccionAntenaCuatro, matrix_seccionAntenaCuatro, rotacionPlegado, [1,0,0]);
-        this.seccionAntenaCuatro.draw(matrix_seccionAntenaCuatro);
+        this.seccionAntenaCuatro.draw(matrix_seccionAntenaCuatro, shaderProgram);
 
         var matrix_cilindroUnionUno = mat4.create();
         mat4.identity(matrix_cilindroUnionUno);
         mat4.multiply(matrix_cilindroUnionUno, matrix_cilindroUnionUno, modelMatrix);
         mat4.translate(matrix_cilindroUnionUno, matrix_cilindroUnionUno, [0, -2, -0.1]);
         mat4.scale(matrix_cilindroUnionUno, matrix_cilindroUnionUno, scaleCilindrosUnion);
-        this.cilindroUnionDos.draw(matrix_cilindroUnionUno);
+        this.cilindroUnionDos.draw(matrix_cilindroUnionUno, shaderProgram);
 
         var matrix_cilindroUnionDos = mat4.create();
         mat4.identity(matrix_cilindroUnionDos);
@@ -105,7 +105,7 @@ function Antena() {
         if (4.8 <= traslacionPlegadoAntena) mat4.translate(matrix_cilindroUnionDos, matrix_cilindroUnionDos, [0,0,-4.8+3.2]);
         mat4.translate(matrix_cilindroUnionDos, matrix_cilindroUnionDos, [0, -2, 2.3]);
         mat4.scale(matrix_cilindroUnionDos, matrix_cilindroUnionDos, scaleCilindrosUnion);
-        this.cilindroUnionUno.draw(matrix_cilindroUnionDos);
+        this.cilindroUnionUno.draw(matrix_cilindroUnionDos, shaderProgram);
 
         var matrix_cilindroUnionTres = mat4.create();
         mat4.identity(matrix_cilindroUnionTres);
@@ -114,7 +114,7 @@ function Antena() {
         if (4.8 <= traslacionPlegadoAntena) mat4.translate(matrix_cilindroUnionTres, matrix_cilindroUnionTres, [0,0,-4.8+1.6]);
         mat4.translate(matrix_cilindroUnionTres, matrix_cilindroUnionTres, [0, -2, 4.7]);
         mat4.scale(matrix_cilindroUnionTres, matrix_cilindroUnionTres, scaleCilindrosUnion);
-        this.cilindroUnionTres.draw(matrix_cilindroUnionTres);
+        this.cilindroUnionTres.draw(matrix_cilindroUnionTres, shaderProgram);
 
         var matrix_cilindroUnionCuatro = mat4.create();
         mat4.identity(matrix_cilindroUnionCuatro);
@@ -123,18 +123,18 @@ function Antena() {
         if (4.8 <= traslacionPlegadoAntena) mat4.translate(matrix_cilindroUnionCuatro, matrix_cilindroUnionCuatro, [0,0,-4.8]);
         mat4.translate(matrix_cilindroUnionCuatro, matrix_cilindroUnionCuatro, [0, -2, 7.1]);
         mat4.scale(matrix_cilindroUnionCuatro, matrix_cilindroUnionCuatro, scaleCilindrosUnion);
-        this.cilindroUnionCuatro.draw(matrix_cilindroUnionCuatro);
+        this.cilindroUnionCuatro.draw(matrix_cilindroUnionCuatro, shaderProgram);
 
         var matrix_cilindroLargoUno = mat4.create();
         mat4.identity(matrix_cilindroLargoUno);
         mat4.translate(matrix_cilindroLargoUno, modelMatrix, [0.1, -2, -1.6]);
         mat4.scale(matrix_cilindroLargoUno, matrix_cilindroLargoUno, scaleCilindrosLargo);
-        this.cilindroLargoUno.draw(matrix_cilindroLargoUno);
+        this.cilindroLargoUno.draw(matrix_cilindroLargoUno, shaderProgram);
 
         var matrix_cilindroLargoDos = mat4.create();
         mat4.identity(matrix_cilindroLargoDos);
         mat4.translate(matrix_cilindroLargoDos, modelMatrix, [-0.1, -2, -1.6]);
         mat4.scale(matrix_cilindroLargoDos, matrix_cilindroLargoDos, scaleCilindrosLargo);
-        this.cilindroLargoDos.draw(matrix_cilindroLargoDos);
+        this.cilindroLargoDos.draw(matrix_cilindroLargoDos, shaderProgram);
     }
 }

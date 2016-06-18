@@ -34,7 +34,7 @@ function CuerpoNave() {
         mat4.identity(model_matrix_cuerpo_central);
         mat4.rotate(model_matrix_cuerpo_central, model_matrix_cuerpo, Math.PI/2, [0,1,0]);
         mat4.scale(model_matrix_cuerpo_central, model_matrix_cuerpo_central, [1.5,1.5,1.5]);
-        this.cuerpo.draw(model_matrix_cuerpo_central);
+        this.cuerpo.draw(model_matrix_cuerpo_central, shaderProgramSimple);
 
         var posicionNave = vec3.create();
         vec3.set(posicionNave,1,1,1);

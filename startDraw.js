@@ -8,10 +8,10 @@ function drawScene() {
     // Configuración de la luz
     // Se inicializan las variables asociadas con la Iluminación
     var lighting = true;
-    gl.uniform1i(shaderProgram.useLightingUniform, lighting);       
+    gl.uniform1i(shaderProgramSimple.useLightingUniform, lighting);       
     var lightPosition = vec3.fromValues(500.0*Math.cos(rotacionSol), 0.0, 500.0*Math.sin(rotacionSol)); 
     //vec3.transformMat4(lightPosition, lightPosition, cameraMatrix);
-    gl.uniform3fv(shaderProgram.lightingDirectionUniform, lightPosition);
+    gl.uniform3fv(shaderProgramSimple.lightingDirectionUniform, lightPosition);
 
     // Se configura la matriz de perspectiva.
     mat4.perspective(pMatrix, degToRad(80), gl.viewportWidth / gl.viewportHeight, 0.01, 2000.0);
@@ -63,13 +63,13 @@ function drawScene() {
     }
 
     //Se Asignan las matrices para la camara de vista y la perspectiva.        
-    gl.uniformMatrix4fv(shaderProgram.ViewMatrixUniform, false, cameraMatrix);
-    gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);           
+    gl.uniformMatrix4fv(shaderProgramSimple.ViewMatrixUniform, false, cameraMatrix);
+    gl.uniformMatrix4fv(shaderProgramSimple.pMatrixUniform, false, pMatrix);           
 
     // Dibujamos la escena        
     // Configuramos la iluminación
-    gl.uniform3f(shaderProgram.ambientColorUniform, 0.3, 0.3, 0.3);
-    gl.uniform3f(shaderProgram.directionalColorUniform, 0.05, 0.05, 0.05);
+    gl.uniform3f(shaderProgramSimple.ambientColorUniform, 0.3, 0.3, 0.3);
+    gl.uniform3f(shaderProgramSimple.directionalColorUniform, 0.05, 0.05, 0.05);
 
     var model_matrix_escena = mat4.create();
     mat4.identity(model_matrix_escena);
@@ -91,14 +91,14 @@ function drawScene() {
     mat4.rotate(model_matrix_sol, model_matrix_sol, -rotacionSol, [0,0,1]);
     mat4.translate(model_matrix_sol, model_matrix_sol, [500.0, 0.0, 0.0]);
     mat4.scale(model_matrix_sol, model_matrix_sol, [20.0, 20.0, 20.0]);
-    sol.draw(model_matrix_sol);
+    sol.draw(model_matrix_sol, shaderProgramSimple);
 
     // Matriz de modelado de la tierra
     var model_matrix_tierra = mat4.create();
     mat4.identity(model_matrix_tierra);
     mat4.translate(model_matrix_tierra, model_matrix_escena, [0.0, 0.0, -300.0]);
     mat4.scale(model_matrix_tierra, model_matrix_tierra, [200.0, 200.0, 200.0]);
-    tierra.draw(model_matrix_tierra);
+    tierra.draw(model_matrix_tierra, shaderProgramSimple);
 
     //Movimiento de las antenas
     if (plegarODesplegarAntena) {
@@ -224,10 +224,24 @@ function tick() {
     drawScene();
 }
 
+function initGL(canvas) {
+    try {
+        gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+        gl.viewportWidth = canvas.width;
+        gl.viewportHeight = canvas.height;
+    } catch (e) {
+
+    } if (! gl) {
+        alert("Could not initialise WebGL, sorry :-(");
+    }
+}
+
 function start() {
     var canvas = document.getElementById("glcanvas");
     initGL(canvas);
-    var shaderProgram = initShaders(gl);
+
+    // Inicializo todos los shaders que se van a usar
+    initShaders(gl);
 
     estacion = new Estacion();
     estacion.create();
@@ -239,6 +253,7 @@ function start() {
     tierra.initBuffers();
 
     nave = new Nave();
+
     modeloNave = new ModeloNave();
     modeloNave.create();
     

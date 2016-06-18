@@ -113,7 +113,7 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
         }
     }
 
-    this.draw = function(modelMatrix){
+    this.draw = function(modelMatrix, shaderProgram){
 
         // Se configuran los buffers que alimentarán el pipeline
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);

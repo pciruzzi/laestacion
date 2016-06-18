@@ -34,10 +34,14 @@ function getShader(gl, id) {
 }
 
 function initShaders(gl) {
+    shaderProgramSimple = initShaderSimple(gl);
+}
+
+function initShaderSimple(gl) {
     var fragmentShader = getShader(gl, "shader-fs");
     var vertexShader = getShader(gl, "shader-vs");
 
-    shaderProgram = gl.createProgram();
+    var shaderProgram = gl.createProgram();
     gl.attachShader(shaderProgram, vertexShader);
     gl.attachShader(shaderProgram, fragmentShader);
     gl.linkProgram(shaderProgram);
