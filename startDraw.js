@@ -277,7 +277,7 @@ function start() {
 
     tierra = new Esfera(30, 30, getColor("light blue"), true);
     tierra.initBuffers();
-    tierra.initTexture("images/earth.jpg");
+    tierra.initTexture("images/earth_2.jpg");
     
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
