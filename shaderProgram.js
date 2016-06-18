@@ -1,19 +1,23 @@
 function getShader(gl, id) {
-    var shaderScript = document.getElementById(id);
+    var shaderScript, src, currentChild, shader;
+
+    // Obtenemos el elemento <script> que contiene el código fuente del shader.
+    shaderScript = document.getElementById(id);
     if (!shaderScript) {
         return null;
     }
 
-    var str = "";
-    var k = shaderScript.firstChild;
-    while (k) {
-        if (k.nodeType == 3) {
-            str += k.textContent;
+    // Extraemos el contenido de texto del <script>.
+    src = "";
+    currentChild = shaderScript.firstChild;
+    while(currentChild) {
+        if (currentChild.nodeType == currentChild.TEXT_NODE) {
+            src += currentChild.textContent;
         }
-        k = k.nextSibling;
+        currentChild = currentChild.nextSibling;
     }
 
-    var shader;
+    // Creamos un shader WebGL según el atributo type del <script>.
     if (shaderScript.type == "x-shader/x-fragment") {
         shader = gl.createShader(gl.FRAGMENT_SHADER);
     } else if (shaderScript.type == "x-shader/x-vertex") {
@@ -22,11 +26,15 @@ function getShader(gl, id) {
         return null;
     }
 
-    gl.shaderSource(shader, str);
-    gl.compileShader(shader);
+    // Le decimos a WebGL que vamos a usar el texto como fuente para el shader.
+    gl.shaderSource(shader, src);
 
+    // Compilamos el shader.
+    gl.compileShader(shader);  
+
+    // Chequeamos y reportamos si hubo algún error.
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        alert(gl.getShaderInfoLog(shader));
+        alert("An error occurred compiling the shaders: " + gl.getShaderInfoLog(shader));
         return null;
     }
 
@@ -35,23 +43,35 @@ function getShader(gl, id) {
 
 function initShaders(gl) {
     shaderProgramSimple = initShaderSimple(gl);
+    if (! gl.shaderProgramSimple)
+        return;
 }
 
 function initShaderSimple(gl) {
+    // Obtenemos los shaders ya compilados
     var fragmentShader = getShader(gl, "shader-fs");
     var vertexShader = getShader(gl, "shader-vs");
 
+    // Creamos un programa de shaders de WebGL.
     var shaderProgram = gl.createProgram();
+
+    // Asociamos cada shader compilado al programa.
     gl.attachShader(shaderProgram, vertexShader);
     gl.attachShader(shaderProgram, fragmentShader);
+
+    // Linkeamos los shaders para generar el programa ejecutable.
     gl.linkProgram(shaderProgram);
 
+    // Chequeamos y reportamos si hubo algún error.
     if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-        alert("Could not initialise shaders");
+        alert("Unable to initialize the shader program: " + gl.getProgramInfoLog(shaderProgramSimple));
+        return null;
     }
 
+    // Le decimos a WebGL que de aquí en adelante use el programa generado.
     gl.useProgram(shaderProgram);
 
+    // Tomamos referencias Javascript para acceder a las variables propias del shader.
     shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
     gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
 
@@ -61,6 +81,7 @@ function initShaderSimple(gl) {
     shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
     gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
 
+    // Con esto accedo a los uniforms del shader
     shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
     shaderProgram.ViewMatrixUniform = gl.getUniformLocation(shaderProgram, "uViewMatrix");
     shaderProgram.ModelMatrixUniform = gl.getUniformLocation(shaderProgram, "uModelMatrix");
@@ -73,3 +94,6 @@ function initShaderSimple(gl) {
 
     return shaderProgram;
 }
+
+
+
