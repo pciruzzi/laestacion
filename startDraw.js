@@ -5,14 +5,6 @@ function drawScene() {
     // Se habilita el color de borrado para la pantalla (Color Buffer) y otros buffers
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    // Configuración de la luz
-    // Se inicializan las variables asociadas con la Iluminación
-    var lighting = true;
-    gl.uniform1i(shaderProgramSimple.useLightingUniform, lighting);       
-    var lightPosition = vec3.fromValues(500.0*Math.cos(rotacionSol), 0.0, 500.0*Math.sin(rotacionSol)); 
-    //vec3.transformMat4(lightPosition, lightPosition, cameraMatrix);
-    gl.uniform3fv(shaderProgramSimple.lightingDirectionUniform, lightPosition);
-
     // Se configura la matriz de perspectiva.
     mat4.perspective(pMatrix, degToRad(80), gl.viewportWidth / gl.viewportHeight, 0.01, 2000.0);
 
@@ -62,20 +54,29 @@ function drawScene() {
         mat4.multiply(cameraMatrix, camaraAux, cameraMatrix);
     }
 
-    //Se Asignan las matrices para la camara de vista y la perspectiva.        
+    // ################################### CONTEXTO COLORES ###################################
+    gl.useProgram(shaderProgramSimple);
     gl.uniformMatrix4fv(shaderProgramSimple.ViewMatrixUniform, false, cameraMatrix);
-    gl.uniformMatrix4fv(shaderProgramSimple.pMatrixUniform, false, pMatrix);           
+    gl.uniformMatrix4fv(shaderProgramSimple.pMatrixUniform, false, pMatrix);
 
-    // Dibujamos la escena        
+    // Configuración de la luz
+    // Se inicializan las variables asociadas con la iluminación
+    var lighting = true;
+    gl.uniform1i(shaderProgramSimple.useLightingUniform, lighting);
+    var lightPosition = vec3.fromValues(500.0*Math.cos(rotacionSol), 0.0, 500.0*Math.sin(rotacionSol)); 
+    //vec3.transformMat4(lightPosition, lightPosition, cameraMatrix);
+    gl.uniform3fv(shaderProgramSimple.lightingDirectionUniform, lightPosition);
+
     // Configuramos la iluminación
     gl.uniform3f(shaderProgramSimple.ambientColorUniform, 0.3, 0.3, 0.3);
     gl.uniform3f(shaderProgramSimple.directionalColorUniform, 0.05, 0.05, 0.05);
 
+
+    // Dibujamos la escena        
     var model_matrix_escena = mat4.create();
     mat4.identity(model_matrix_escena);
     mat4.rotate(model_matrix_escena, model_matrix_escena, Math.PI/2, [1,0,0]);
     mat4.rotate(model_matrix_escena, model_matrix_escena, Math.PI, [0,1,0]);
-
 
     // Matriz de modelado de la estacion
     var model_matrix_estacion = mat4.create();
@@ -83,22 +84,6 @@ function drawScene() {
     mat4.scale(model_matrix_estacion, model_matrix_escena, [7.0, 7.0, 7.0]);
     //mat4.rotate(model_matrix_estacion, model_matrix_estacion, angle, [0,1,0]);
     estacion.draw(model_matrix_estacion);
-
-    // Matriz de modelado del sol
-    var model_matrix_sol = mat4.create();
-    mat4.identity(model_matrix_sol);
-    mat4.translate(model_matrix_sol, model_matrix_escena, [0.0, 0.0, -300.0]);
-    mat4.rotate(model_matrix_sol, model_matrix_sol, -rotacionSol, [0,0,1]);
-    mat4.translate(model_matrix_sol, model_matrix_sol, [500.0, 0.0, 0.0]);
-    mat4.scale(model_matrix_sol, model_matrix_sol, [20.0, 20.0, 20.0]);
-    sol.draw(model_matrix_sol, shaderProgramSimple);
-
-    // Matriz de modelado de la tierra
-    var model_matrix_tierra = mat4.create();
-    mat4.identity(model_matrix_tierra);
-    mat4.translate(model_matrix_tierra, model_matrix_escena, [0.0, 0.0, -300.0]);
-    mat4.scale(model_matrix_tierra, model_matrix_tierra, [200.0, 200.0, 200.0]);
-    tierra.draw(model_matrix_tierra, shaderProgramSimple);
 
     //Movimiento de las antenas
     if (plegarODesplegarAntena) {
@@ -216,6 +201,40 @@ function drawScene() {
     }
 
     modeloNave.draw(position_matrix_nave);
+
+    // ################################### CONTEXTO TEXTURAS ###################################
+    gl.useProgram(shaderProgramTextura);
+    gl.uniformMatrix4fv(shaderProgramTextura.ViewMatrixUniform, false, cameraMatrix);
+    gl.uniformMatrix4fv(shaderProgramTextura.pMatrixUniform, false, pMatrix);
+
+    // Configuración de la luz
+    // Se inicializan las variables asociadas con la iluminación
+    var lighting = true;
+    gl.uniform1i(shaderProgramTextura.useLightingUniform, lighting);
+    var lightPosition = vec3.fromValues(500.0*Math.cos(rotacionSol), 0.0, 500.0*Math.sin(rotacionSol)); 
+    //vec3.transformMat4(lightPosition, lightPosition, cameraMatrix);
+    gl.uniform3fv(shaderProgramTextura.lightingDirectionUniform, lightPosition);
+
+    // Configuramos la iluminación
+    gl.uniform3f(shaderProgramTextura.ambientColorUniform, 0.3, 0.3, 0.3);
+    gl.uniform3f(shaderProgramTextura.directionalColorUniform, 0.05, 0.05, 0.05);
+
+    // Matriz de modelado del sol
+    var model_matrix_sol = mat4.create();
+    mat4.identity(model_matrix_sol);
+    mat4.translate(model_matrix_sol, model_matrix_escena, [0.0, 0.0, -300.0]);
+    mat4.rotate(model_matrix_sol, model_matrix_sol, -rotacionSol, [0,0,1]);
+    mat4.translate(model_matrix_sol, model_matrix_sol, [500.0, 0.0, 0.0]);
+    mat4.scale(model_matrix_sol, model_matrix_sol, [20.0, 20.0, 20.0]);
+    sol.draw(model_matrix_sol, shaderProgramTextura);
+
+    // Matriz de modelado de la tierra
+    var model_matrix_tierra = mat4.create();
+    mat4.identity(model_matrix_tierra);
+    mat4.translate(model_matrix_tierra, model_matrix_escena, [0.0, 0.0, -300.0]);
+    mat4.rotate(model_matrix_tierra, model_matrix_tierra, Math.PI/2, [1,0,0]);
+    mat4.scale(model_matrix_tierra, model_matrix_tierra, [200.0, 200.0, 200.0]);
+    tierra.draw(model_matrix_tierra, shaderProgramTextura);
 }
 
 function tick() {
@@ -242,21 +261,23 @@ function start() {
     initGL(canvas);
 
     // Inicializo todos los shaders que se van a usar
-    initShaders(gl);
+    initShaders();
 
     estacion = new Estacion();
     estacion.create();
-
-    sol = new Esfera(30, 30, getColor("yellow"), false);
-    sol.initBuffers();
-
-    tierra = new Esfera(30, 30, getColor("light blue"), false);
-    tierra.initBuffers();
 
     nave = new Nave();
 
     modeloNave = new ModeloNave();
     modeloNave.create();
+
+    sol = new Esfera(30, 30, getColor("yellow"), true);
+    sol.initBuffers();
+    sol.initTexture("images/sun.jpg");
+
+    tierra = new Esfera(30, 30, getColor("light blue"), true);
+    tierra.initBuffers();
+    tierra.initTexture("images/earth.jpg");
     
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.DEPTH_TEST);

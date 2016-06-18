@@ -16,10 +16,8 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
 
     this.texture = null;
 
-    this.initTexture = function(gl,texture_file) { 
-    
-        var aux_texture = gl.createTexture();
-        this.texture = aux_texture;
+    this.initTexture = function(texture_file) { 
+        this.texture = gl.createTexture();
         this.texture.image = new Image();
 
         this.texture.image.onload = function () {

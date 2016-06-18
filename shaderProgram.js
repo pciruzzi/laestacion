@@ -41,13 +41,17 @@ function getShader(gl, id) {
     return shader;
 }
 
-function initShaders(gl) {
-    shaderProgramSimple = initShaderSimple(gl);
-    if (! gl.shaderProgramSimple)
+function initShaders() {
+    shaderProgramSimple = initShaderSimple();
+    if (! shaderProgramSimple)
+        return;
+
+    shaderProgramTextura = initShaderTextura();
+    if (! shaderProgramTextura)
         return;
 }
 
-function initShaderSimple(gl) {
+function initShaderSimple() {
     // Obtenemos los shaders ya compilados
     var fragmentShader = getShader(gl, "shader-fs");
     var vertexShader = getShader(gl, "shader-vs");
@@ -64,7 +68,54 @@ function initShaderSimple(gl) {
 
     // Chequeamos y reportamos si hubo algún error.
     if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-        alert("Unable to initialize the shader program: " + gl.getProgramInfoLog(shaderProgramSimple));
+        alert("Unable to initialize the shader program (shaderColor): " + gl.getProgramInfoLog(shaderProgramSimple));
+        return null;
+    }
+
+    // Le decimos a WebGL que de aquí en adelante use el programa generado.
+    gl.useProgram(shaderProgram);
+
+    // Tomamos referencias Javascript para acceder a las variables propias del shader.
+    shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+    gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+
+    shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
+    gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
+
+    shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
+    gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
+
+    // Con esto accedo a los uniforms del shader
+    shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
+    shaderProgram.ViewMatrixUniform = gl.getUniformLocation(shaderProgram, "uViewMatrix");
+    shaderProgram.ModelMatrixUniform = gl.getUniformLocation(shaderProgram, "uModelMatrix");
+    shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
+    shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
+    shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
+    shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightPosition");
+    shaderProgram.directionalColorUniform = gl.getUniformLocation(shaderProgram, "uDirectionalColor");
+
+    return shaderProgram;
+}
+
+function initShaderTextura() {
+    // Obtenemos los shaders ya compilados
+    var fragmentShader = getShader(gl, "shaderTextura-fs");
+    var vertexShader = getShader(gl, "shaderTextura-vs");
+
+    // Creamos un programa de shaders de WebGL.
+    var shaderProgram = gl.createProgram();
+
+    // Asociamos cada shader compilado al programa.
+    gl.attachShader(shaderProgram, vertexShader);
+    gl.attachShader(shaderProgram, fragmentShader);
+
+    // Linkeamos los shaders para generar el programa ejecutable.
+    gl.linkProgram(shaderProgram);
+
+    // Chequeamos y reportamos si hubo algún error.
+    if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+        alert("Unable to initialize the shader program (shaderTextura): " + gl.getProgramInfoLog(shaderProgramSimple));
         return null;
     }
 
@@ -94,6 +145,3 @@ function initShaderSimple(gl) {
 
     return shaderProgram;
 }
-
-
-
