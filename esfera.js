@@ -31,7 +31,7 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
     // Y también la información de las normales y coordenadas de textura para cada vertice de la esfera.
     // La esfera se renderizara utilizando triangle_strip, para ello se arma un buffer de índices 
     // de todos los vértices de la esfera.
-    this.initBuffers = function(){
+    this.initBuffers = function(normalesParaAdentro){
 
         this.vertex_buffer = [];
 
@@ -54,6 +54,9 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
                 
                 var position = [x,y,z];
                 var normal = [-x,-y,-z];
+                if (normalesParaAdentro) {
+                    normal = [x,y,z];
+                }
                 var tangent = [-y,x,0];
                 var texture = [0,0];
 

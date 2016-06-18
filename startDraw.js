@@ -236,6 +236,11 @@ function drawScene() {
     mat4.scale(model_matrix_tierra, model_matrix_tierra, [200.0, 200.0, 200.0]);
     tierra.draw(model_matrix_tierra, shaderProgramTextura);
 
+    var model_matrix_universo = mat4.create();
+    mat4.identity(model_matrix_universo);
+    mat4.scale(model_matrix_universo, model_matrix_universo, [1000.0, 1000.0, 1000.0]);
+    universo.draw(model_matrix_universo, shaderProgramTextura);
+
     astronauta.draw(model_matrix_astronauta, shaderProgramTextura);
 }
 
@@ -274,12 +279,16 @@ function start() {
     modeloNave.create();
 
     sol = new Esfera(30, 30, getColor("yellow"), true);
-    sol.initBuffers();
+    sol.initBuffers(false);
     sol.initTexture("images/sun.jpg");
 
     tierra = new Esfera(30, 30, getColor("light blue"), true);
-    tierra.initBuffers();
+    tierra.initBuffers(false);
     tierra.initTexture("images/earth_2.jpg");
+
+    universo = new Esfera(30, 30, getColor("black"), true);
+    universo.initBuffers(true);
+    universo.initTexture("images/sky.jpg");
 
     astronauta = new Cubo(1.5, 3.0, 0.1, null, true);
     astronauta.initBuffers();
