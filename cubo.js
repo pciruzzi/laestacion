@@ -1,13 +1,16 @@
+// La textura es para aplicarle a un solo lado del cubo!
 function Cubo(alto, ancho, profundo, color, esTexturada) {
     this.alto = alto;
     this.ancho = ancho;
     this.profundo = profundo;
-    this.colorInferior = color[0];
-    this.colorDelantera = color[1];
-    this.colorDerecha = color[2];
-    this.colorTrasera = color[3];
-    this.colorIzquierda = color[4];
-    this.colorSuperior = color[5];
+    if (! esTexturada) {
+        this.colorInferior = color[0];
+        this.colorDelantera = color[1];
+        this.colorDerecha = color[2];
+        this.colorTrasera = color[3];
+        this.colorIzquierda = color[4];
+        this.colorSuperior = color[5];
+    }
     this.esTexturada = esTexturada;
 
     this.vertex_buffer = null;
@@ -22,7 +25,7 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
 
     this.texture = null;
 
-    this.initTexture = function(gl,texture_file){
+    this.initTexture = function(texture_file){
         
         var aux_texture = gl.createTexture();
         this.texture = aux_texture;
@@ -50,55 +53,42 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
         var normalDelantera = [0.0,0.0,-1.0];
         var tangenteDelantera = [1.0,0.0,0.0];
         var textureDelantera = [0,0];
+        var textureDelanteraInferiorIzquierda = [0,0];
+        var textureDelanteraInferiorDerecha = [0,0];
+        var textureDelanteraSuperiorIzquierda = [0,0];
+        var textureDelanteraSuperiorDerecha = [0,0];
+
         if (this.esTexturada) {
-            //Ver que hacer con los u y v
-            //textureDelantera = [u,v];
+            textureDelanteraInferiorIzquierda = [0,0];
+            textureDelanteraInferiorDerecha = [0,1];
+            textureDelanteraSuperiorIzquierda = [1,0];
+            textureDelanteraSuperiorDerecha = [1,1];
         }
 
         //Cara Derecha
         var normalDerecha = [-1.0,0.0,0.0];
         var tangenteDerecha = [0.0,0.0,-1.0];
         var textureDerecha = [0,0];
-        if (this.esTexturada) {
-            //Ver que hacer con los u y v
-            //textureDerecha = [u,v];
-        }
 
         //Cara Trasera
         var normalTrasera = [0.0,0.0,1.0];
         var tangenteTrasera = [-1.0,0.0,0.0];
         var textureTrasera = [0,0];
-        if (this.esTexturada) {
-            //Ver que hacer con los u y v
-            //textureTrasera = [u,v];
-        }
 
         //Cara Izquierda
         var normalIzquierda = [1.0,0.0,0.0];
         var tangenteIzquierda = [0.0,0.0,1.0];
         var textureIzquierda = [0,0];
-        if (this.esTexturada) {
-            //Ver que hacer con los u y v
-            //textureIzquierda = [u,v];
-        }
 
         //Cara Superior
         var normalSuperior = [0.0,-1.0,0.0];
         var tangenteSuperior = [1.0,0.0,0.0];
         var textureSuperior = [0,0];
-        if (this.esTexturada) {
-            //Ver que hacer con los u y v
-            //textureSuperior = [u,v];
-        }
 
         //Cara Inferior
         var normalInferior = [0.0,1.0,0.0];
         var tangenteInferior = [-1.0,0.0,0.0];
         var textureInferior = [0,0];
-        if (this.esTexturada) {
-            //Ver que hacer con los u y v
-            //textureInferior = [u,v];
-        }
 
 
         //inferior
@@ -122,8 +112,8 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
 
 
         //delantera
-        this.vertex_buffer.push(new Vertice([-width,-height,z], this.colorDelantera, normalDelantera, tangenteDelantera, textureDelantera));
-        this.vertex_buffer.push(new Vertice([width,-height,z], this.colorDelantera, normalDelantera, tangenteDelantera, textureDelantera));
+        this.vertex_buffer.push(new Vertice([-width,-height,z], this.colorDelantera, normalDelantera, tangenteDelantera, textureDelanteraInferiorIzquierda));
+        this.vertex_buffer.push(new Vertice([width,-height,z], this.colorDelantera, normalDelantera, tangenteDelantera, textureDelanteraInferiorDerecha));
         //derecha
         this.vertex_buffer.push(new Vertice([width,-height,z], this.colorDerecha, normalDerecha, tangenteDerecha, textureDerecha));
         this.vertex_buffer.push(new Vertice([width,-height,-z], this.colorDerecha, normalDerecha, tangenteDerecha, textureDerecha));
@@ -135,8 +125,8 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
         this.vertex_buffer.push(new Vertice([-width,-height,z], this.colorIzquierda, normalIzquierda, tangenteIzquierda, textureIzquierda));
 
         //delantera
-        this.vertex_buffer.push(new Vertice([-width,height,z], this.colorDelantera, normalDelantera, tangenteDelantera, textureDelantera));
-        this.vertex_buffer.push(new Vertice([width,height,z], this.colorDelantera, normalDelantera, tangenteDelantera, textureDelantera));
+        this.vertex_buffer.push(new Vertice([-width,height,z], this.colorDelantera, normalDelantera, tangenteDelantera, textureDelanteraSuperiorIzquierda));
+        this.vertex_buffer.push(new Vertice([width,height,z], this.colorDelantera, normalDelantera, tangenteDelantera, textureDelanteraSuperiorDerecha));
         //derecha
         this.vertex_buffer.push(new Vertice([width,height,z], this.colorDerecha, normalDerecha, tangenteDerecha, textureDerecha));
         this.vertex_buffer.push(new Vertice([width,height,-z], this.colorDerecha, normalDerecha, tangenteDerecha, textureDerecha));

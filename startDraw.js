@@ -235,6 +235,8 @@ function drawScene() {
     mat4.rotate(model_matrix_tierra, model_matrix_tierra, Math.PI/2, [1,0,0]);
     mat4.scale(model_matrix_tierra, model_matrix_tierra, [200.0, 200.0, 200.0]);
     tierra.draw(model_matrix_tierra, shaderProgramTextura);
+
+    astronauta.draw(model_matrix_astronauta, shaderProgramTextura);
 }
 
 function tick() {
@@ -278,9 +280,16 @@ function start() {
     tierra = new Esfera(30, 30, getColor("light blue"), true);
     tierra.initBuffers();
     tierra.initTexture("images/earth_2.jpg");
+
+    astronauta = new Cubo(1.5, 3.0, 0.1, null, true);
+    astronauta.initBuffers();
+    astronauta.initTexture("images/astronauta256.png");
     
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
+    // Para que los PNG se vean con la transparencia
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    gl.enable(gl.BLEND);
 
     tick();
 }

@@ -201,12 +201,10 @@
     var finRotacionAntena       = true;
 
     // Variables de la Nave
-    var nave                    = null;
     var rotacionEjeNave         = -Math.PI/2;
     var cabezeoNave             = null;
     var viradaNave              = null;
     var rolidoNave              = null;
-    var modeloNave              = null;
     var naveVertical            = false;
     var plegarODesplegarPatas   = false;
     var plegarPatas             = false;
@@ -214,11 +212,17 @@
     var traslacionPatasNave     = -4.9;
     var deltaPatas              = 0;
 
+    // Astronauta
+    var model_matrix_astronauta = null;
+
     // Variables de los elementos de la escena
+    var nave        = null;
+    var modeloNave  = null;
     var estacion    = null;
     var sol         = null;
-    var rotacionSol = 0.0;
     var tierra      = null;
+    var astronauta  = null;
+    var rotacionSol = 0.0;
 
     // Variables de los shaders
     var shaderProgramSimple;

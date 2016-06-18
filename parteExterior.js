@@ -328,5 +328,13 @@ function ParteExterior() {
         mat4.rotate(model_matrix_manguera, model_matrix_manguera, Math.PI/2, [1,0,0]);
         mat4.rotate(model_matrix_manguera, model_matrix_manguera, Math.PI/4, [0,1,0]);
         this.manguera.draw(model_matrix_manguera, shaderProgramSimple);
+
+        // Como el astronauta tiene texturas se dibuja en el loop principal
+        model_matrix_astronauta = mat4.create();
+        mat4.identity(model_matrix_astronauta);
+        mat4.translate(model_matrix_astronauta, model_matrix_manguera, [0.0, -3.0, -8]);
+        mat4.rotate(model_matrix_astronauta, model_matrix_astronauta, Math.PI, [0,1,0]);
+        mat4.rotate(model_matrix_astronauta, model_matrix_astronauta, Math.PI/2, [0,0,1]);
+        mat4.rotate(model_matrix_astronauta, model_matrix_astronauta, Math.PI/3, [1,0,0]);
     }
 }
