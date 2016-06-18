@@ -45,45 +45,6 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
         }
     }
 
-    this.posicion = function(i,j){
-        if (j < 0)
-            return this.posicion(i,0);
-        if (j >= this.columnas)
-            return this.posicion(i, this.columnas-1);
-
-        var posicion = vec3.create();
-        posicion[0] = this.position_buffer[3*(this.columnas*i + j)];
-        posicion[1] = this.position_buffer[3*(this.columnas*i + j) + 1];
-        posicion[2] = this.position_buffer[3*(this.columnas*i + j) + 2];
-        return posicion;
-    }
-
-    this.calcularNormales = function(){
-        this.normal_buffer = [];
-        for (var i = 0; i < this.filas; i++) {
-            for (var j = 0; j < this.columnas; j++) {
-                var anterior = this.posicion(i,j-1);
-                var siguiente = this.posicion(i,j+1);
-
-                var resta = vec3.create();
-                vec3.subtract(resta, siguiente, anterior);
-
-                var tangentePunto = [this.tangent_buffer[3*(this.columnas*i + j)], this.tangent_buffer[3*(this.columnas*i + j)+1], this.tangent_buffer[3*(this.columnas*i + j)+2]];
-                var normal = vec3.create();
-                vec3.cross(normal, tangentePunto, resta);
-                vec3.normalize(normal, normal);
-
-                this.normal_buffer.push(normal[0], normal[1], normal[2]);
-            }
-        }
-    }
-
-    this.calcularAngulo = function(vector1, vector2){
-        var dotProduct = vec3.dot(vector1, vector2);
-        var acos = dotProduct/(vec3.length(vector1)*vec3.length(vector2));
-        return Math.acos(acos);
-    }
-
     this.initBuffers = function(){
         this.vertex_buffer = [];
         this.position_buffer = [];
@@ -149,8 +110,6 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
         }
 
         this.calcularTangentes();
-        //this.calcularNormales();
-
         this.index_buffer = grid(this.filas, this.columnas);
 
         // Creación e Inicialización de los buffers a nivel de OpenGL
