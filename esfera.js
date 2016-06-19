@@ -1,5 +1,4 @@
 function Esfera(latitude_bands, longitude_bands, color, esTexturada){
-
     this.latitudeBands = latitude_bands;
     this.longitudeBands = longitude_bands;
     this.color = color;
@@ -15,13 +14,14 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
     this.webgl_index_buffer = null;
 
     this.texture = null;
+    var weakThis = this;
 
     this.initTexture = function(texture_file) { 
         this.texture = gl.createTexture();
         this.texture.image = new Image();
 
         this.texture.image.onload = function () {
-               handleLoadedTexture(gl);
+            handleLoadedTexture(weakThis);
         }
         this.texture.image.src = texture_file;
     }
@@ -64,7 +64,7 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
                     var u = 1.0 - (longNumber / (this.longitudeBands - 1));
                     var v = 1.0 - (latNumber / (this.latitudeBands - 1));
                     texture = [u,v];
-                }                
+                }
 
                 var verticeActual = new Vertice(position, this.color, normal, tangent, texture);
                 this.vertex_buffer.push(verticeActual);

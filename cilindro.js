@@ -16,14 +16,14 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
 
     this.texture = null;
 
-    this.initTexture = function(gl,texture_file){
+    this.initTexture = function(texture_file){
         
         var aux_texture = gl.createTexture();
         this.texture = aux_texture;
         this.texture.image = new Image();
 
         this.texture.image.onload = function () {
-               handleLoadedTexture(gl);
+               handleLoadedTexture();
         }
         this.texture.image.src = texture_file;
     }

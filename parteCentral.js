@@ -77,8 +77,9 @@ function ParteCentral() {
 
     this.create = function() {
         this.createPerfilCentro();
-        this.centro = new SuperficieRevolucion(this.perfilCentro, [0,0,1], 37, this.colorCentro, false);
+        this.centro = new SuperficieRevolucion(this.perfilCentro, [0,0,1], 37, this.colorCentro, true);
         this.centro.initBuffers();
+        this.centro.initTexture("images/shiphull512.jpg");
         this.antenaInf = new Antena();
         this.antenaInf.initBuffers();
         this.antenaSup = new Antena();
@@ -92,12 +93,14 @@ function ParteCentral() {
         mat4.multiply(model_matrix_centro, model_matrix_centro, modelMatrix);
 
         //Llamo a cada uno de los elementos para que se dibujen con la nueva matriz
+        gl.useProgram(shaderProgramTextura);
         var model_matrix_estructura = mat4.create();
         mat4.identity(model_matrix_estructura);
         mat4.translate(model_matrix_estructura, model_matrix_centro, [0, 0, -2.9]);
         mat4.scale(model_matrix_estructura, model_matrix_estructura, [0.25, 0.25, 0.25]);
-        this.centro.draw(model_matrix_estructura, shaderProgramSimple);
+        this.centro.draw(model_matrix_estructura, shaderProgramTextura);
 
+        gl.useProgram(shaderProgramSimple);
         // Matriz de modelado de la antena inf
         var model_matrix_antenaInf = mat4.create();
         mat4.identity(model_matrix_antenaInf);

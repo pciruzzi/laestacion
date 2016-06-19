@@ -21,6 +21,7 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
     this.webgl_index_buffer = null;
 
     this.texture = null;
+    var weakThis = this;
 
     this.initTexture = function(texture_file){
         var aux_texture = gl.createTexture();
@@ -28,7 +29,7 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
         this.texture.image = new Image();
 
         this.texture.image.onload = function () {
-               handleLoadedTexture()
+            handleLoadedTexture(weakThis);
         }
         this.texture.image.src = texture_file;
     }
@@ -62,7 +63,15 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
                 vec3.transformMat4(normal, normalPunto, modelado);
                 var color = [this.color[i], this.color[i+1], this.color[i+2]];
 
-                var vertex = new Vertice(position, color, normal, tangent, [0,0]);
+                var texture = [0,0];
+                // Asi tengo 2 veces la textura en u y 2 en v (La repito 4 veces)
+                if (this.esTexturada) {
+                    var u = 2.0 - 2*(i / (3*(this.filas-2 - 1)));
+                    var v = 2.0 - 2*(j / (this.columnas - 1));
+                    texture = [u,v];
+                }
+
+                var vertex = new Vertice(position, color, normal, tangent, texture);
                 this.vertex_buffer.push(vertex);
             }
         }

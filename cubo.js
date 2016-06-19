@@ -24,6 +24,7 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
     this.webgl_index_buffer = null;
 
     this.texture = null;
+    var weakThis = this;
 
     this.initTexture = function(texture_file){
         
@@ -32,7 +33,7 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
         this.texture.image = new Image();
 
         this.texture.image.onload = function () {
-               handleLoadedTexture(gl);
+            handleLoadedTexture(weakThis);
         }
         this.texture.image.src = texture_file;
     }
