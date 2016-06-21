@@ -42,12 +42,14 @@ function ParteExterior() {
         var P = [];
 
         //Superficie a barrer
-        this.pushColor(this.colorExterna, this.colorExterna1, n+1, 4/4);
+        this.pushColor(this.colorExterna, this.colorExterna1, n+1, 8/4);
         this.pushColor(this.colorExterna, this.colorExterna2, n+1, 12/4);
         this.pushColor(this.colorExterna, this.colorExterna1, n+1, 8/4);
         this.pushColor(this.colorExterna, this.colorExterna2, n+1, 12/4);
-        this.pushColor(this.colorExterna, this.colorExterna1, n+1, 4/4);
 
+        P.push([3.0, 0.0, 1.0]);
+        P.push([3.0, 0.0, 2.5]);
+        P.push([1.5, 0.0, 4.0]);
         P.push([0.0, 0.0, 4.0]);
         P.push([-1.5, 0.0, 4.0]);
         P.push([-3.0, 0.0, 2.5]);
@@ -76,9 +78,6 @@ function ParteExterior() {
         P.push([2.75, 0.0, 1.0]);
         P.push([2.75, 0.0, 1.0]);
         P.push([3.0, 0.0, 1.0]);
-        P.push([3.0, 0.0, 2.5]);
-        P.push([1.5, 0.0, 4.0]);
-        P.push([0.0, 0.0, 4.0]);
         var tramosForma = [];
         var cantPControl = P.length;
         for (var i = 0; i < cantPControl - 3; i+=3){
@@ -96,9 +95,6 @@ function ParteExterior() {
         this.pushColor(this.colorInterna, this.colorInterna1, n+1, 40/4);
 
         //Superficie a barrer
-        P.push([0.0, 0.0, 3.0]);
-        P.push([1.0, 0.0, 3.0]);
-        P.push([2.0, 0.0, 2.0]);
         P.push([2.0, 0.0, 1.0]);
         P.push([2.0, 0.0, 1.0]);
         P.push([2.0, 0.0, 1.0]);
@@ -127,6 +123,9 @@ function ParteExterior() {
         P.push([-2.0, 0.0, 2.0]);
         P.push([-1.0, 0.0, 3.0]);
         P.push([0.0, 0.0, 3.0]);
+        P.push([1.0, 0.0, 3.0]);
+        P.push([2.0, 0.0, 2.0]);
+        P.push([2.0, 0.0, 1.0]);
         var tramosForma = [];
         var cantPControl = P.length;
         for (var i = 0; i < cantPControl - 3; i+=3){
@@ -142,6 +141,9 @@ function ParteExterior() {
         var P = [];
 
         //Superficie a barrer
+        P.push([2.0, 0.0, 1.0]);
+        P.push([2.0, 0.0, 2.0]);
+        P.push([1.0, 0.0, 3.0]);
         P.push([0.0, 0.0, 3.0]);
         P.push([-1.0, 0.0, 3.0]);
         P.push([-2.0, 0.0, 2.0]);
@@ -170,9 +172,6 @@ function ParteExterior() {
         P.push([2.0, 0.0, 1.0]);
         P.push([2.0, 0.0, 1.0]);
         P.push([2.0, 0.0, 1.0]);
-        P.push([2.0, 0.0, 2.0]);
-        P.push([1.0, 0.0, 3.0]);
-        P.push([0.0, 0.0, 3.0]);
         var tramosForma = [];
         var cantPControl = P.length;
         for (var i = 0; i < cantPControl - 3; i+=3){
