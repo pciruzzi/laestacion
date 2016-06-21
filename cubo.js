@@ -33,7 +33,7 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
         this.texture.image = new Image();
 
         this.texture.image.onload = function () {
-            handleLoadedTexture(weakThis);
+            handleLoadedTexture(weakThis.texture);
         }
         this.texture.image.src = texture_file;
     }

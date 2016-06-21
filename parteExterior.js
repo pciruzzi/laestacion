@@ -184,8 +184,12 @@ function ParteExterior() {
     }
 
     this.createExterna = function() {
-        this.externa = new SuperficieBarrido(this.formaExterna, this.caminoEstacion.getVertexBuffer(), this.colorExterna, false);
+        this.externa = new SuperficieBarrido(this.formaExterna, this.caminoEstacion.getVertexBuffer(), this.colorExterna, true);
         this.externa.initBuffers();
+        this.externa.initTexture0("images/paredInterna11024.jpg");
+        this.externa.initTexture1("images/shiphull512.jpg");
+        this.externa.initTexture2("images/paredInterna11024.jpg");
+        this.externa.initTexture3("images/techo.jpg");
     }
 
     this.createInterna = function() {
@@ -273,11 +277,13 @@ function ParteExterior() {
         mat4.multiply(model_matrix_casco, model_matrix_casco, modelMatrix);
 
         //Llamo a cada uno de los elementos para que se dibujen con la nueva matriz
+        gl.useProgram(shaderProgramTextura);
         var model_matrix_externa = mat4.create();
         mat4.identity(model_matrix_externa);
         mat4.scale(model_matrix_externa, model_matrix_casco, [0.5, 0.5, 0.5]);
-        this.externa.draw(model_matrix_externa, shaderProgramSimple);
+        this.externa.draw(model_matrix_externa, shaderProgramTextura);
 
+        gl.useProgram(shaderProgramSimple);
         var model_matrix_interna = mat4.create();
         mat4.identity(model_matrix_interna);
         mat4.scale(model_matrix_interna, model_matrix_casco, [0.5, 0.5, 0.5]);

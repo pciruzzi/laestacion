@@ -29,7 +29,7 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
         this.texture.image = new Image();
 
         this.texture.image.onload = function () {
-            handleLoadedTexture(weakThis);
+            handleLoadedTexture(weakThis.texture);
         }
         this.texture.image.src = texture_file;
     }
@@ -66,7 +66,7 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
                 var texture = [0,0];
                 // Asi tengo 2 veces la textura en u y 2 en v (La repito 4 veces)
                 if (this.esTexturada) {
-                    var u = 2.0 - 2*(i / (3*(this.filas-2 - 1)));
+                    var u = 2.0 - 2*(i / (3*this.filas - 2 - 1));
                     var v = 2.0 - 2*(j / (this.columnas - 1));
                     texture = [u,v];
                 }

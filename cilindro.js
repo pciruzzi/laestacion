@@ -23,7 +23,7 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
         this.texture.image = new Image();
 
         this.texture.image.onload = function () {
-               handleLoadedTexture();
+            handleLoadedTexture();
         }
         this.texture.image.src = texture_file;
     }

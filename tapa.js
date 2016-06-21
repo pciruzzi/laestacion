@@ -27,7 +27,7 @@ function Tapa(externo, interno, color, esTexturada) { // -> externo e interno so
         this.texture.image = new Image();
 
         this.texture.image.onload = function () {
-               handleLoadedTexture()
+            handleLoadedTexture();
         }
         this.texture.image.src = texture_file;
     }

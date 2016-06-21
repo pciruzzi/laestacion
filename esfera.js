@@ -21,7 +21,7 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
         this.texture.image = new Image();
 
         this.texture.image.onload = function () {
-            handleLoadedTexture(weakThis);
+            handleLoadedTexture(weakThis.texture);
         }
         this.texture.image.src = texture_file;
     }

@@ -12,6 +12,7 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
     this.tangent_buffer = null;
     this.color_buffer = null;
     this.index_buffer = null;
+    this.texture_coord_buffer = null;
 
     this.webgl_position_buffer = null;
     this.webgl_normal_buffer = null;
@@ -19,17 +20,54 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
     this.webgl_color_buffer = null;
     this.webgl_index_buffer = null;
 
-    this.texture = null;
+    this.texture0 = null;
+    this.texture1 = null;
+    this.texture2 = null;
+    this.texture3 = null;
+    var weakThis = this;
 
-    this.initTexture = function(texture_file){
+    this.initTexture0 = function(texture_file){
         var aux_texture = gl.createTexture();
-        this.texture = aux_texture;
-        this.texture.image = new Image();
+        this.texture0 = aux_texture;
+        this.texture0.image = new Image();
 
-        this.texture.image.onload = function () {
-               handleLoadedTexture()
+        this.texture0.image.onload = function () {
+            handleLoadedTexture(weakThis.texture0);
         }
-        this.texture.image.src = texture_file;
+        this.texture0.image.src = texture_file;
+    }
+
+    this.initTexture1 = function(texture_file){
+        var aux_texture = gl.createTexture();
+        this.texture1 = aux_texture;
+        this.texture1.image = new Image();
+
+        this.texture1.image.onload = function () {
+            handleLoadedTexture(weakThis.texture1);
+        }
+        this.texture1.image.src = texture_file;
+    }
+
+    this.initTexture2 = function(texture_file){
+        var aux_texture = gl.createTexture();
+        this.texture2 = aux_texture;
+        this.texture2.image = new Image();
+
+        this.texture2.image.onload = function () {
+            handleLoadedTexture(weakThis.texture2);
+        }
+        this.texture2.image.src = texture_file;
+    }
+
+    this.initTexture3 = function(texture_file){
+        var aux_texture = gl.createTexture();
+        this.texture3 = aux_texture;
+        this.texture3.image = new Image();
+
+        this.texture3.image.onload = function () {
+            handleLoadedTexture(weakThis.texture3);
+        }
+        this.texture3.image.src = texture_file;
     }
 
     this.calcularTangentes = function(){
@@ -50,6 +88,7 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
         this.position_buffer = [];
         this.color_buffer = [];
         this.normal_buffer = [];
+        this.texture_coord_buffer = [];
         this.columnas = getCantidadVertices(this.forma);
         this.filas = getCantidadVertices(this.camino);
 
@@ -105,6 +144,17 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
                 var nz = bnzCamino * nxForma + nzCamino * nzForma + tgzCamino * nyForma;
                 this.normal_buffer.push(nx, ny, nz);
 
+                var u = 0;
+                var v = 0;
+                var c = 0; // Number of image to use
+                // Asi tengo 2 veces la textura en u y 2 en v (La repito 4 veces)
+                if (this.esTexturada) {
+                    u = 2.0 - 2*(i / (this.filas - 1));
+                    v = 2.0 - 2*(j / (3*this.columnas - 2 - 1));
+                    c = 0;
+                }
+                this.texture_coord_buffer.push(u,v,c);
+
                 this.color_buffer.push(this.color[j], this.color[j+1], this.color[j+2]);
             }
         }
@@ -132,13 +182,11 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
         this.webgl_index_buffer.numItems = this.index_buffer.length;
 
         if (this.esTexturada) {
-            var texture_coord_buffer = getTextureBuffer(this.vertex_buffer);
-
             this.webgl_texture_coord_buffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texture_coord_buffer), gl.STATIC_DRAW);
-            this.webgl_texture_coord_buffer.itemSize = 2;
-            this.webgl_texture_coord_buffer.numItems = texture_coord_buffer.length / 2;
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_coord_buffer), gl.STATIC_DRAW);
+            this.webgl_texture_coord_buffer.itemSize = 3;
+            this.webgl_texture_coord_buffer.numItems = this.texture_coord_buffer.length / 3;
         } else {
             //var color_buffer = getColorBuffer(this.vertex_buffer);
 
@@ -163,9 +211,9 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
             gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
             gl.activeTexture(gl.TEXTURE0);
-            gl.bindTexture(gl.TEXTURE_2D, this.texture);
+            gl.bindTexture(gl.TEXTURE_2D, this.texture0);
             gl.uniform1i(shaderProgram.samplerUniform, 0);
-            gl.bindTexture(gl.TEXTURE_2D, this.texture);
+            gl.bindTexture(gl.TEXTURE_2D, this.texture0);
         } else {
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
             gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_color_buffer.itemSize, gl.FLOAT, false, 0, 0);
