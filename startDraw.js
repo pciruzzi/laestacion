@@ -236,10 +236,12 @@ function drawScene() {
     mat4.scale(model_matrix_tierra, model_matrix_tierra, [200.0, 200.0, 200.0]);
     tierra.draw(model_matrix_tierra, shaderProgramTextura);
 
+    gl.uniform1i(shaderProgramTextura.useLightingUniform, !lighting);
     var model_matrix_universo = mat4.create();
     mat4.identity(model_matrix_universo);
     mat4.scale(model_matrix_universo, model_matrix_universo, [1000.0, 1000.0, 1000.0]);
     universo.draw(model_matrix_universo, shaderProgramTextura);
+    gl.uniform1i(shaderProgramTextura.useLightingUniform, lighting);
 
     astronauta.draw(model_matrix_astronauta, shaderProgramTextura);
 }
