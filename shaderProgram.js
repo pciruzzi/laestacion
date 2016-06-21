@@ -43,12 +43,22 @@ function getShader(gl, id) {
 
 function initShaders() {
     shaderProgramSimple = initShaderSimple();
-    if (! shaderProgramSimple)
+    if (! shaderProgramSimple) {
+        console.log("No se pudo inicializar el shaderSimple");
         return;
+    }
 
     shaderProgramTextura = initShaderTextura();
-    if (! shaderProgramTextura)
+    if (! shaderProgramTextura) {
+        console.log("No se pudo inicializar el shaderTextura");
         return;
+    }
+
+/*    shaderProgramNormal = initShaderNormal();
+    if (! shaderProgramNormal) {
+        console.log("No se pudo inicializar el shaderNormal");
+        return;
+    }*/
 }
 
 function initShaderSimple() {
@@ -138,6 +148,61 @@ function initShaderTextura() {
     shaderProgram.ModelMatrixUniform = gl.getUniformLocation(shaderProgram, "uModelMatrix");
     shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
     shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
+    shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
+    shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
+    shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightPosition");
+    shaderProgram.directionalColorUniform = gl.getUniformLocation(shaderProgram, "uDirectionalColor");
+
+    return shaderProgram;
+}
+
+function initShaderNormal() {
+    // Obtenemos los shaders ya compilados
+    var fragmentShader = getShader(gl, "shaderNormal-fs");
+    var vertexShader = getShader(gl, "shaderNormal-vs");
+
+    // Creamos un programa de shaders de WebGL.
+    var shaderProgram = gl.createProgram();
+
+    // Asociamos cada shader compilado al programa.
+    gl.attachShader(shaderProgram, vertexShader);
+    gl.attachShader(shaderProgram, fragmentShader);
+
+    // Linkeamos los shaders para generar el programa ejecutable.
+    gl.linkProgram(shaderProgram);
+
+    // Chequeamos y reportamos si hubo algún error.
+    if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+        alert("Unable to initialize the shader program (shaderTextura): " + gl.getProgramInfoLog(shaderProgramSimple));
+        return null;
+    }
+
+    // Le decimos a WebGL que de aquí en adelante use el programa generado.
+    gl.useProgram(shaderProgram);
+
+    // Tomamos referencias Javascript para acceder a las variables propias del shader.
+    shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+    gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+
+    shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
+    gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
+
+    shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
+    gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
+
+    shaderProgram.vertexTangentAttribute = gl.getAttribLocation(shaderProgram, "aVertexTangent");
+    gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
+
+    shaderProgram.vertexBinormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexBinormal");
+    gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
+
+    // Con esto accedo a los uniforms del shader
+    shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
+    shaderProgram.ViewMatrixUniform = gl.getUniformLocation(shaderProgram, "uViewMatrix");
+    shaderProgram.ModelMatrixUniform = gl.getUniformLocation(shaderProgram, "uModelMatrix");
+    shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
+    shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
+    shaderProgram.samplerNormalMapUniform = gl.getUniformLocation(shaderProgram, "uSamplerNormalMap");
     shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
     shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
     shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightPosition");
