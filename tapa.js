@@ -20,6 +20,7 @@ function Tapa(externo, interno, color, esTexturada) { // -> externo e interno so
     this.webgl_index_buffer = null;
 
     this.texture = null;
+    var weakThis = this;
 
     this.initTexture = function(texture_file){
         var aux_texture = gl.createTexture();
@@ -27,7 +28,7 @@ function Tapa(externo, interno, color, esTexturada) { // -> externo e interno so
         this.texture.image = new Image();
 
         this.texture.image.onload = function () {
-            handleLoadedTexture();
+            handleLoadedTexture(weakThis.texture);
         }
         this.texture.image.src = texture_file;
     }

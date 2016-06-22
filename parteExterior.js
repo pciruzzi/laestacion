@@ -175,10 +175,10 @@ function ParteExterior() {
         this.formaTechoInterna = this.createForma(P);
 
         var P = [];
-        P.push([2.0, 0.0, 1.0]);
-        P.push([2.0, 0.0, 1/6]);
-        P.push([2.0, 0.0, -2/3]);
         P.push([2.0, 0.0, -1.5]);
+        P.push([2.0, 0.0, -2/3]);
+        P.push([2.0, 0.0, 1/6]);
+        P.push([2.0, 0.0, 1.0]);
         this.formaParedInterna1 = this.createForma(P);
 
         var P = [];
@@ -284,20 +284,20 @@ function ParteExterior() {
         this.externa.initBuffers();
 
         this.pisoExterna = new SuperficieBarrido(this.formaPisoExterna, this.caminoEstacion.getVertexBuffer(), null, true);
-        this.pisoExterna.initBuffers();
+        this.pisoExterna.initBuffers(1,20);
         this.pisoExterna.initTexture("images/shiphull512.jpg");
 
         this.ventanalExterna1 = new SuperficieBarrido(this.formaVentanalExterna1, this.caminoEstacion.getVertexBuffer(), null, true);
-        this.ventanalExterna1.initBuffers();
-        this.ventanalExterna1.initTexture("images/ventanal.jpg");
+        this.ventanalExterna1.initBuffers(1,4,true);
+        this.ventanalExterna1.initTexture("images/ventanal2.jpg");
 
         this.techoExterna = new SuperficieBarrido(this.formaTechoExterna, this.caminoEstacion.getVertexBuffer(), null, true);
-        this.techoExterna.initBuffers();
+        this.techoExterna.initBuffers(1,20);
         this.techoExterna.initTexture("images/shiphull512.jpg");
 
         this.ventanalExterna2 = new SuperficieBarrido(this.formaVentanalExterna2, this.caminoEstacion.getVertexBuffer(), null, true);
-        this.ventanalExterna2.initBuffers();
-        this.ventanalExterna2.initTexture("images/ventanal.jpg");
+        this.ventanalExterna2.initBuffers(1,4);
+        this.ventanalExterna2.initTexture("images/ventanal2.jpg");
     }
 
     this.createInterna = function() {
@@ -305,36 +305,41 @@ function ParteExterior() {
         this.interna.initBuffers();
 
         this.pisoInterna = new SuperficieBarrido(this.formaPisoInterna, this.caminoEstacion.getVertexBuffer(), null, true);
-        this.pisoInterna.initBuffers();
+        this.pisoInterna.initBuffers(1,20);
         this.pisoInterna.initTexture("images/piso.jpg");
 
         this.paredInterna1 = new SuperficieBarrido(this.formaParedInterna1, this.caminoEstacion.getVertexBuffer(), null, true);
-        this.paredInterna1.initBuffers();
+        this.paredInterna1.initBuffers(1,5);
         this.paredInterna1.initTexture("images/paredInterna11024.jpg");
 
         this.techoInterna = new SuperficieBarrido(this.formaTechoInterna, this.caminoEstacion.getVertexBuffer(), null, true);
-        this.techoInterna.initBuffers();
+        this.techoInterna.initBuffers(1,10);
         this.techoInterna.initTexture("images/techo.jpg");
 
         this.paredInterna2 = new SuperficieBarrido(this.formaParedInterna2, this.caminoEstacion.getVertexBuffer(), null, true);
-        this.paredInterna2.initBuffers();
+        this.paredInterna2.initBuffers(1,5,true);
         this.paredInterna2.initTexture("images/paredInterna11024.jpg");
     }
 
     this.createTapas = function() {
-        this.tapa1 = new Tapa(this.formaExterna, this.formaInternaParaTapa, this.colorExterna1, false);
+        this.tapa1 = new Tapa(this.formaExterna, this.formaInternaParaTapa, this.colorExterna1, true);
         this.tapa1.initBuffers();
-        this.tapa2 = new Tapa(this.formaExterna, this.formaInternaParaTapa, this.colorExterna1, false);
+        this.tapa1.initTexture("images/gray.jpg");
+        this.tapa2 = new Tapa(this.formaExterna, this.formaInternaParaTapa, this.colorExterna1, true);
         this.tapa2.initBuffers();
+        this.tapa2.initTexture("images/gray.jpg");
     }
 
     this.createEscotillas = function() {
         this.escotilla1 = new Cilindro(4, 30, this.colorExterna1, false);
         this.escotilla1.initBuffers();
+        this.escotilla1.initTexture("images/gray.jpg");
         this.escotilla2 = new Cilindro(4, 30, this.colorExterna1, false);
         this.escotilla2.initBuffers();
+        this.escotilla2.initTexture("images/gray.jpg");
         this.escotilla3 = new Cilindro(4, 30, this.colorExterna1, false);
         this.escotilla3.initBuffers();
+        this.escotilla3.initTexture("images/gray.jpg");
     }
 
     this.createManguera = function() {
@@ -420,12 +425,11 @@ function ParteExterior() {
         this.paredInterna1.draw(model_matrix_interna, shaderProgramTextura);
         this.paredInterna2.draw(model_matrix_interna, shaderProgramTextura);
 
-        gl.useProgram(shaderProgramSimple);
         var model_matrix_tapa1 = mat4.create();
         mat4.identity(model_matrix_tapa1);
         mat4.translate(model_matrix_tapa1, model_matrix_casco, [8, 0, 0]);
         mat4.scale(model_matrix_tapa1, model_matrix_tapa1, [0.5, 0.5, 0.5]);
-        this.tapa1.draw(model_matrix_tapa1, shaderProgramSimple);
+        this.tapa1.draw(model_matrix_tapa1, shaderProgramTextura);
 
         var model_matrix_tapa2 = mat4.create();
         mat4.identity(model_matrix_tapa2);
@@ -433,7 +437,7 @@ function ParteExterior() {
         mat4.translate(model_matrix_tapa2, model_matrix_tapa2, [8, 0, 0]);
         mat4.scale(model_matrix_tapa2, model_matrix_tapa2, [0.5, 0.5, 0.5]);
         mat4.rotate(model_matrix_tapa2, model_matrix_tapa2, Math.PI, [0,0,1]);
-        this.tapa2.draw(model_matrix_tapa2, shaderProgramSimple);
+        this.tapa2.draw(model_matrix_tapa2, shaderProgramTextura);
 
         var model_matrix_escotilla1 = mat4.create();
         mat4.identity(model_matrix_escotilla1);
@@ -441,7 +445,7 @@ function ParteExterior() {
         mat4.translate(model_matrix_escotilla1, model_matrix_escotilla1, [0,10,0]);
         mat4.scale(model_matrix_escotilla1, model_matrix_escotilla1, [1.4,1,1.4]);
         mat4.rotate(model_matrix_escotilla1, model_matrix_escotilla1, Math.PI/2, [1,0,0]);
-        this.escotilla1.draw(model_matrix_escotilla1, shaderProgramSimple);
+        this.escotilla1.draw(model_matrix_escotilla1, shaderProgramTextura);
 
         var model_matrix_escotilla2 = mat4.create();
         mat4.identity(model_matrix_escotilla2);
@@ -449,7 +453,7 @@ function ParteExterior() {
         mat4.translate(model_matrix_escotilla2, model_matrix_escotilla2, [0,10,0]);
         mat4.scale(model_matrix_escotilla2, model_matrix_escotilla2, [1.4,1,1.4]);
         mat4.rotate(model_matrix_escotilla2, model_matrix_escotilla2, Math.PI/2, [1,0,0]);
-        this.escotilla1.draw(model_matrix_escotilla2, shaderProgramSimple);
+        this.escotilla1.draw(model_matrix_escotilla2, shaderProgramTextura);
 
         var model_matrix_escotilla3 = mat4.create();
         mat4.identity(model_matrix_escotilla3);
@@ -457,8 +461,9 @@ function ParteExterior() {
         mat4.translate(model_matrix_escotilla3, model_matrix_escotilla3, [0,10,0]);
         mat4.scale(model_matrix_escotilla3, model_matrix_escotilla3, [1.4,1,1.4]);
         mat4.rotate(model_matrix_escotilla3, model_matrix_escotilla3, Math.PI/2, [1,0,0]);
-        this.escotilla1.draw(model_matrix_escotilla3, shaderProgramSimple);
+        this.escotilla1.draw(model_matrix_escotilla3, shaderProgramTextura);
 
+        gl.useProgram(shaderProgramSimple);
         var model_matrix_manguera = mat4.create();
         mat4.identity(model_matrix_manguera);
         mat4.rotate(model_matrix_manguera, model_matrix_casco, Math.PI*3/4, [0,0,1]);

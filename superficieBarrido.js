@@ -47,7 +47,7 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
         }
     }
 
-    this.initBuffers = function(){
+    this.initBuffers = function(cantidadU, cantidadV, inversed){
         this.vertex_buffer = [];
         this.position_buffer = [];
         this.color_buffer = [];
@@ -113,8 +113,9 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
                 var c = 0; // Number of image to use
                 // Asi tengo 2 veces la textura en u y 2 en v (La repito 4 veces)
                 if (this.esTexturada) {
-                    u = 2.0 - 2*(i / (this.filas - 1));
-                    v = 2.0 - 2*(j / (3*this.columnas - 2 - 1));
+                    u = cantidadU - cantidadU*(j / (3*this.columnas - 2 - 1));
+                    v = cantidadV - cantidadV*(i / (this.filas - 1));
+                    if (inversed) u = 1-u;
                     c = 0;
                 } else {
                     this.color_buffer.push(this.color[j], this.color[j+1], this.color[j+2]);
