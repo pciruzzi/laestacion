@@ -284,7 +284,7 @@ function ParteExterior() {
         this.externa.initBuffers();
 
         this.pisoExterna = new SuperficieBarrido(this.formaPisoExterna, this.caminoEstacion.getVertexBuffer(), null, true);
-        this.pisoExterna.initBuffers(1,20);
+        this.pisoExterna.initBuffers(2,20);
         this.pisoExterna.initTexture("images/shiphull512.jpg");
 
         this.ventanalExterna1 = new SuperficieBarrido(this.formaVentanalExterna1, this.caminoEstacion.getVertexBuffer(), null, true);
@@ -292,7 +292,7 @@ function ParteExterior() {
         this.ventanalExterna1.initTexture("images/ventanal2.jpg");
 
         this.techoExterna = new SuperficieBarrido(this.formaTechoExterna, this.caminoEstacion.getVertexBuffer(), null, true);
-        this.techoExterna.initBuffers(1,20);
+        this.techoExterna.initBuffers(2,20);
         this.techoExterna.initTexture("images/shiphull512.jpg");
 
         this.ventanalExterna2 = new SuperficieBarrido(this.formaVentanalExterna2, this.caminoEstacion.getVertexBuffer(), null, true);
@@ -331,13 +331,13 @@ function ParteExterior() {
     }
 
     this.createEscotillas = function() {
-        this.escotilla1 = new Cilindro(4, 30, this.colorExterna1, false);
+        this.escotilla1 = new Cilindro(4, 30, this.colorExterna1, true);
         this.escotilla1.initBuffers();
         this.escotilla1.initTexture("images/gray.jpg");
-        this.escotilla2 = new Cilindro(4, 30, this.colorExterna1, false);
+        this.escotilla2 = new Cilindro(4, 30, this.colorExterna1, true);
         this.escotilla2.initBuffers();
         this.escotilla2.initTexture("images/gray.jpg");
-        this.escotilla3 = new Cilindro(4, 30, this.colorExterna1, false);
+        this.escotilla3 = new Cilindro(4, 30, this.colorExterna1, true);
         this.escotilla3.initBuffers();
         this.escotilla3.initTexture("images/gray.jpg");
     }
