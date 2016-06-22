@@ -126,36 +126,53 @@
 <script id="shaderTextura-fs" type="x-shader/x-fragment">
     precision mediump float;
 
-    varying vec2 vTextureCoord;
+    varying vec3 vTextureCoord;
     varying vec3 vLightWeighting;
+    varying vec3 reflectionDir;
+    varying float vUseReflection;
 
     uniform sampler2D uSampler;
+    uniform sampler2D uSamplerReflectionMap;
 
     void main(void) {
         vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
         gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
+        // Si utiliza reflexion
+        if (vTextureCoord[2] == 1.0 || vUseReflection == 1.0) {
+            vec4 reflectionTexture = texture2D(uSamplerReflectionMap, vec2(reflectionDir.x, reflectionDir.y));
+            //gl_FragColor = vec4(mix(textureColor, reflectionTexture, 0.3).rgb * vLightWeighting, textureColor.a);
+
+            //gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
+
+            // Probando...
+            vec4 reflectionTextureMock = texture2D(uSamplerReflectionMap, vec2(vTextureCoord.s, vTextureCoord.t));
+            gl_FragColor = vec4(reflectionTextureMock.rgb * vLightWeighting, textureColor.a);
+        }
     }
 </script>
 
 <script id="shaderTextura-vs" type="x-shader/x-vertex">
     attribute vec3 aVertexPosition;
     attribute vec3 aVertexNormal;
-    attribute vec2 aTextureCoord;
+    attribute vec3 aTextureCoord;
 
     uniform mat4 uViewMatrix;
     uniform mat4 uModelMatrix;
     uniform mat4 uPMatrix;
     uniform mat3 uNMatrix;
 
-    uniform vec3 uAmbientColor;
+    uniform vec3 worldCameraPosition;
 
+    uniform vec3 uAmbientColor;
     uniform vec3 uLightPosition;
     uniform vec3 uDirectionalColor;
-
+    uniform float uUseReflection;
     uniform bool uUseLighting;
 
-    varying vec2 vTextureCoord;
+    varying vec3 vTextureCoord;
     varying vec3 vLightWeighting;
+    varying vec3 reflectionDir;
+    varying float vUseReflection;
 
     void main(void) {
         // Transformamos al vértice al espacio de la cámara
@@ -167,6 +184,9 @@
         // Coordenada de textura sin modifiaciones
         vTextureCoord = aTextureCoord;
 
+        // Indica si usa reflection
+        vUseReflection = uUseReflection;
+
         // Calculos de la iluminación
         vec3 light_dir =  uLightPosition - vec3( pos_camera_view );
         normalize(light_dir);
@@ -177,6 +197,12 @@
             float directionalLightWeighting = max(dot(transformedNormal, light_dir), 0.0);
             vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting * 0.1;
         }
+
+        vec3 worldPos  = vec3( uModelMatrix * vec4(aVertexPosition,1.0) );
+        vec3 worldNorm = vec3( uModelMatrix * vec4(aVertexNormal,  0.0) ); 
+        vec3 worldView = normalize( worldCameraPosition - worldPos ); 
+        reflectionDir  = reflect( -worldView, worldNorm );
+        //reflectionDir.y -= 0.15;
     }
 </script>
 

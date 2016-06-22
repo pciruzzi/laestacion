@@ -54,6 +54,10 @@ function drawScene() {
         mat4.multiply(cameraMatrix, camaraAux, cameraMatrix);
     }
 
+    var aux = mat4.create();
+    mat4.invert(aux, cameraMatrix);
+    worldCameraPosition = [ aux[12], aux[13], aux[14] ];  // La posicion de la cámara en coordenadas del mundo
+
     // ################################### CONTEXTO COLORES ###################################
     gl.useProgram(shaderProgramSimple);
     gl.uniformMatrix4fv(shaderProgramSimple.ViewMatrixUniform, false, cameraMatrix);
@@ -206,6 +210,9 @@ function drawScene() {
     gl.useProgram(shaderProgramTextura);
     gl.uniformMatrix4fv(shaderProgramTextura.ViewMatrixUniform, false, cameraMatrix);
     gl.uniformMatrix4fv(shaderProgramTextura.pMatrixUniform, false, pMatrix);
+    gl.uniform3fv(shaderProgramTextura.worldCameraPosition, worldCameraPosition);
+    // En principio no utilizo reflexion
+    gl.uniform1f(shaderProgramTextura.useReflectionUniform, 0.0);
 
     // Configuración de la luz
     // Se inicializan las variables asociadas con la iluminación

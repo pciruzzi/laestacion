@@ -15,6 +15,7 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
     this.webgl_index_buffer = null;
 
     this.texture = null;
+    this.reflectionTexture = null;
     var weakThis = this;
 
     this.initTexture = function(texture_file){
@@ -26,6 +27,17 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
             handleLoadedTexture(weakThis.texture);
         }
         this.texture.image.src = texture_file;
+    }
+
+    this.initReflectionTexture = function(texture_file){
+        var aux_texture = gl.createTexture();
+        this.reflectionTexture = aux_texture;
+        this.reflectionTexture.image = new Image();
+
+        this.reflectionTexture.image.onload = function () {
+            handleLoadedTexture(weakThis.reflectionTexture);
+        }
+        this.reflectionTexture.image.src = texture_file;
     }
 
     this.hacerTapa = function(altura) {
@@ -142,7 +154,7 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
         }
     }
 
-    this.draw = function(modelMatrix, shaderProgram){
+    this.draw = function(modelMatrix, shaderProgram, useReflection){
         // Se configuran los buffers que alimentarán el pipeline
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
@@ -157,7 +169,12 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
             gl.activeTexture(gl.TEXTURE0);
             gl.bindTexture(gl.TEXTURE_2D, this.texture);
             gl.uniform1i(shaderProgram.samplerUniform, 0);
-            gl.bindTexture(gl.TEXTURE_2D, this.texture);
+            //gl.bindTexture(gl.TEXTURE_2D, this.texture);
+            if (useReflection) {
+                gl.activeTexture(gl.TEXTURE1);
+                gl.bindTexture(gl.TEXTURE_2D, this.reflectionTexture);
+                gl.uniform1i(shaderProgram.samplerUniformReflectionMap, 1);
+            }
         } else {
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
             gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_color_buffer.itemSize, gl.FLOAT, false, 0, 0);

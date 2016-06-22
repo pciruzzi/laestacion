@@ -18,15 +18,22 @@ function Estacion() {
         this.cilindro1 = new Cilindro(4, 30, this.colorCilindros, true);
         this.cilindro1.initBuffers();
         this.cilindro1.initTexture("images/brown.jpg");
+        this.cilindro1.initReflectionTexture("images/refMap.jpg");
+
         this.cilindro2 = new Cilindro(4, 30, this.colorCilindros, true);
         this.cilindro2.initBuffers();
         this.cilindro2.initTexture("images/brown.jpg");
+        this.cilindro2.initReflectionTexture("images/refMap.jpg");
+
         this.cilindro3 = new Cilindro(4, 30, this.colorCilindros, true);
         this.cilindro3.initBuffers();
         this.cilindro3.initTexture("images/brown.jpg");
+        this.cilindro3.initReflectionTexture("images/refMap.jpg");
+
         this.cilindro4 = new Cilindro(4, 30, this.colorCilindros, true);
         this.cilindro4.initBuffers();
         this.cilindro4.initTexture("images/brown.jpg");
+        this.cilindro4.initReflectionTexture("images/refMap.jpg");
     }
 
     this.draw = function(modelMatrix) {
@@ -44,13 +51,14 @@ function Estacion() {
         this.parteExterior.draw(model_matrix_estacion);
 
         gl.useProgram(shaderProgramTextura);
+        gl.uniform1f(shaderProgramTextura.useReflectionUniform, 1.0);
         var model_matrix_cilindro1 = mat4.create();
         mat4.identity(model_matrix_cilindro1);
         mat4.rotate(model_matrix_cilindro1, model_matrix_estacion, Math.PI*-0.05, [0,0,1]);
         mat4.translate(model_matrix_cilindro1, model_matrix_cilindro1, [0.0, 6.9, 0.0]);
         mat4.scale(model_matrix_cilindro1, model_matrix_cilindro1, [0.5, 13.8, 0.5]);
         mat4.rotate(model_matrix_cilindro1, model_matrix_cilindro1, Math.PI/2, [1,0,0]);
-        this.cilindro1.draw(model_matrix_cilindro1, shaderProgramTextura);
+        this.cilindro1.draw(model_matrix_cilindro1, shaderProgramTextura, true);
 
         var model_matrix_cilindro2 = mat4.create();
         mat4.identity(model_matrix_cilindro2);
@@ -58,7 +66,7 @@ function Estacion() {
         mat4.translate(model_matrix_cilindro2, model_matrix_cilindro2, [0.0, 6.9, 0.0]);
         mat4.scale(model_matrix_cilindro2, model_matrix_cilindro2, [0.5, 13.8, 0.5]);
         mat4.rotate(model_matrix_cilindro2, model_matrix_cilindro2, Math.PI/2, [1,0,0]);
-        this.cilindro2.draw(model_matrix_cilindro2, shaderProgramTextura);
+        this.cilindro2.draw(model_matrix_cilindro2, shaderProgramTextura, true);
 
         var model_matrix_cilindro3 = mat4.create();
         mat4.identity(model_matrix_cilindro3);
@@ -66,15 +74,16 @@ function Estacion() {
         mat4.translate(model_matrix_cilindro3, model_matrix_cilindro3, [0.0, 6.9, 0.0]);
         mat4.scale(model_matrix_cilindro3, model_matrix_cilindro3, [0.5, 13.8, 0.5]);
         mat4.rotate(model_matrix_cilindro3, model_matrix_cilindro3, Math.PI/2, [1,0,0]);
-        this.cilindro3.draw(model_matrix_cilindro3, shaderProgramTextura);
+        this.cilindro3.draw(model_matrix_cilindro3, shaderProgramTextura, true);
 
         var model_matrix_cilindro4 = mat4.create();
         mat4.identity(model_matrix_cilindro4);
         mat4.rotate(model_matrix_cilindro4, model_matrix_estacion, Math.PI*-0.75, [0,0,1]);
         mat4.scale(model_matrix_cilindro4, model_matrix_cilindro4, [0.5, 6.9, 0.5]);
         mat4.rotate(model_matrix_cilindro4, model_matrix_cilindro4, Math.PI/2, [1,0,0]);
-        this.cilindro4.draw(model_matrix_cilindro4, shaderProgramTextura);
+        this.cilindro4.draw(model_matrix_cilindro4, shaderProgramTextura, true);
 
+        gl.uniform1f(shaderProgramTextura.useReflectionUniform, 0.0);
         gl.useProgram(shaderProgramSimple);
     }
 }
