@@ -1,10 +1,4 @@
 function drawScene() {
-    // Se configura el viewport dentro de área ¨canvas¨. en este caso se utiliza toda el área disponible
-    gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
-    
-    // Se habilita el color de borrado para la pantalla (Color Buffer) y otros buffers
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
     // Se configura la matriz de perspectiva.
     mat4.perspective(pMatrix, degToRad(80), gl.viewportWidth / gl.viewportHeight, 0.01, 2000.0);
 
@@ -305,6 +299,11 @@ function start() {
     
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
+    gl.depthFunc(gl.LEQUAL);
+    // Se configura el viewport dentro de área ¨canvas¨. en este caso se utiliza toda el área disponible
+    gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+    // Se habilita el color de borrado para la pantalla (Color Buffer) y otros buffers
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     // Para que los PNG se vean con la transparencia
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     gl.enable(gl.BLEND);
