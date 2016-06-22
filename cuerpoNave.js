@@ -6,13 +6,6 @@ function CuerpoNave() {
     this.pata3 = null;
 
     this.create = function() {
-        var color = [];
-        color.push(getColor("brown"));
-        color.push(getColor("red"));
-        color.push(getColor("green"));
-        color.push(getColor("blue"));
-        color.push(getColor("yellow"));
-        color.push(getColor("violet"));
         this.cuerpo = new CuerpoCentralNave();
         this.cuerpo.initBuffers();
 

@@ -4,6 +4,7 @@ function CuerpoCentralNave() {
 
     this.color_nave = getColor("blue");
     this.color_cabina = getColor("red");
+    this.color_vidrio = getColor("black");
 
     this.webgl_position_buffer = null;
     this.webgl_texture_coord_buffer = null;
@@ -137,8 +138,8 @@ function CuerpoCentralNave() {
         //Quinto bis
         this.vertex_buffer.push(new Vertice([-3, -4, ancho], this.color_cabina, normalDerecha, [0,0,0], [0,0]));
         this.vertex_buffer.push(new Vertice([-3, 4, ancho], this.color_cabina, normalDerecha, [0,0,0], [0,0]));
-        this.vertex_buffer.push(new Vertice([-3, 4, ancho], this.color_cabina, normal3, [0,0,0], [0,0]));
-        this.vertex_buffer.push(new Vertice([-3, 4, -ancho], this.color_cabina, normal3, [0,0,0], [0,0]));
+        this.vertex_buffer.push(new Vertice([-3, 4, ancho], this.color_vidrio, normal3, [0,0,0], [0,0]));
+        this.vertex_buffer.push(new Vertice([-3, 4, -ancho], this.color_vidrio, normal3, [0,0,0], [0,0]));
         this.vertex_buffer.push(new Vertice([-3, 4, -ancho], this.color_cabina, normalIzquierda, [0,0,0], [0,0]));
         this.vertex_buffer.push(new Vertice([-3, -4, -ancho], this.color_cabina, normalIzquierda, [0,0,0], [0,0]));
         this.vertex_buffer.push(new Vertice([-3, -4, -ancho], this.color_cabina, normalInferior, [0,0,0], [0,0]));
@@ -147,8 +148,8 @@ function CuerpoCentralNave() {
         //Sexto
         this.vertex_buffer.push(new Vertice([-8, -4, ancho], this.color_cabina, normalDerecha, [0,0,0], [0,0]));
         this.vertex_buffer.push(new Vertice([-8, 0, ancho], this.color_cabina, normalDerecha, [0,0,0], [0,0]));
-        this.vertex_buffer.push(new Vertice([-8, 0, ancho], this.color_cabina, normal3, [0,0,0], [0,0]));
-        this.vertex_buffer.push(new Vertice([-8, 0, -ancho], this.color_cabina, normal3, [0,0,0], [0,0]));
+        this.vertex_buffer.push(new Vertice([-8, 0, ancho], this.color_vidrio, normal3, [0,0,0], [0,0]));
+        this.vertex_buffer.push(new Vertice([-8, 0, -ancho], this.color_vidrio, normal3, [0,0,0], [0,0]));
         this.vertex_buffer.push(new Vertice([-8, 0, -ancho], this.color_cabina, normalIzquierda, [0,0,0], [0,0]));
         this.vertex_buffer.push(new Vertice([-8, -4, -ancho], this.color_cabina, normalIzquierda, [0,0,0], [0,0]));
         this.vertex_buffer.push(new Vertice([-8, -4, -ancho], this.color_cabina, normalInferior, [0,0,0], [0,0]));
