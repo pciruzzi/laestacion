@@ -416,6 +416,7 @@ function ParteExterior() {
         this.ventanalExterna1.draw(model_matrix_externa, shaderProgramTextura);
         this.ventanalExterna2.draw(model_matrix_externa, shaderProgramTextura);
 
+        gl.uniform1i(shaderProgramTextura.useLightingUniform, false);
         var model_matrix_interna = mat4.create();
         mat4.identity(model_matrix_interna);
         mat4.scale(model_matrix_interna, model_matrix_casco, [0.5, 0.5, 0.5]);
@@ -424,6 +425,7 @@ function ParteExterior() {
         this.pisoInterna.draw(model_matrix_interna, shaderProgramTextura);
         this.paredInterna1.draw(model_matrix_interna, shaderProgramTextura);
         this.paredInterna2.draw(model_matrix_interna, shaderProgramTextura);
+        gl.uniform1i(shaderProgramTextura.useLightingUniform, true);
 
         var model_matrix_tapa1 = mat4.create();
         mat4.identity(model_matrix_tapa1);

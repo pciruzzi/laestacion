@@ -150,6 +150,7 @@ function initShaderTextura() {
     shaderProgram.worldCameraPosition = gl.getUniformLocation(shaderProgram, "worldCameraPosition");
     shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
     shaderProgram.samplerUniformReflection = gl.getUniformLocation(shaderProgram, "uSamplerReflectionMap");
+    shaderProgram.useReflectionUniform = gl.getUniformLocation(shaderProgram, "uUseReflection");
     shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
     shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
     shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightPosition");
