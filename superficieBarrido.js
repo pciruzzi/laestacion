@@ -20,54 +20,18 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
     this.webgl_color_buffer = null;
     this.webgl_index_buffer = null;
 
-    this.texture0 = null;
-    this.texture1 = null;
-    this.texture2 = null;
-    this.texture3 = null;
+    this.texture = null;
     var weakThis = this;
 
-    this.initTexture0 = function(texture_file){
+    this.initTexture = function(texture_file){
         var aux_texture = gl.createTexture();
-        this.texture0 = aux_texture;
-        this.texture0.image = new Image();
+        this.texture = aux_texture;
+        this.texture.image = new Image();
 
-        this.texture0.image.onload = function () {
-            handleLoadedTexture(weakThis.texture0);
+        this.texture.image.onload = function () {
+            handleLoadedTexture(weakThis.texture);
         }
-        this.texture0.image.src = texture_file;
-    }
-
-    this.initTexture1 = function(texture_file){
-        var aux_texture = gl.createTexture();
-        this.texture1 = aux_texture;
-        this.texture1.image = new Image();
-
-        this.texture1.image.onload = function () {
-            handleLoadedTexture(weakThis.texture1);
-        }
-        this.texture1.image.src = texture_file;
-    }
-
-    this.initTexture2 = function(texture_file){
-        var aux_texture = gl.createTexture();
-        this.texture2 = aux_texture;
-        this.texture2.image = new Image();
-
-        this.texture2.image.onload = function () {
-            handleLoadedTexture(weakThis.texture2);
-        }
-        this.texture2.image.src = texture_file;
-    }
-
-    this.initTexture3 = function(texture_file){
-        var aux_texture = gl.createTexture();
-        this.texture3 = aux_texture;
-        this.texture3.image = new Image();
-
-        this.texture3.image.onload = function () {
-            handleLoadedTexture(weakThis.texture3);
-        }
-        this.texture3.image.src = texture_file;
+        this.texture.image.src = texture_file;
     }
 
     this.calcularTangentes = function(){
@@ -152,10 +116,10 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
                     u = 2.0 - 2*(i / (this.filas - 1));
                     v = 2.0 - 2*(j / (3*this.columnas - 2 - 1));
                     c = 0;
+                } else {
+                    this.color_buffer.push(this.color[j], this.color[j+1], this.color[j+2]);
                 }
                 this.texture_coord_buffer.push(u,v,c);
-
-                this.color_buffer.push(this.color[j], this.color[j+1], this.color[j+2]);
             }
         }
 
@@ -211,9 +175,9 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
             gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
             gl.activeTexture(gl.TEXTURE0);
-            gl.bindTexture(gl.TEXTURE_2D, this.texture0);
+            gl.bindTexture(gl.TEXTURE_2D, this.texture);
             gl.uniform1i(shaderProgram.samplerUniform, 0);
-            gl.bindTexture(gl.TEXTURE_2D, this.texture0);
+            gl.bindTexture(gl.TEXTURE_2D, this.texture);
         } else {
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
             gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_color_buffer.itemSize, gl.FLOAT, false, 0, 0);

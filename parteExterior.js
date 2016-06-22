@@ -1,14 +1,33 @@
 function ParteExterior() {
     this.formaExterna = [];
+    this.formaTechoExterna = null;
+    this.formaVentanalExterna1 = null;
+    this.formaPisoExterna = null;
+    this.formaVentanalExterna2 = null;
+
     this.formaInterna = [];
+    this.formaTechoInterna = null;
+    this.formaParedInterna1 = null;
+    this.formaPisoInterna = null;
+    this.formaParedInterna2 = null;
+
     this.formaInternaParaTapa = [];
     this.caminoEstacion = null;
 
     this.externa = null;
+    this.techoExterna = null;
+    this.ventanalExterna1 = null;
+    this.pisoExterna = null;
+    this.ventanalExterna2 = null;
     this.colorExterna1 = getColor("blue");//getColor("light gray");
     this.colorExterna2 = getColor("black");
     this.colorExterna = [];
+
     this.interna = null;
+    this.techoInterna = null;
+    this.paredInterna1 = null;
+    this.pisoInterna = null;
+    this.paredInterna2 = null;
     this.colorInterna1 = getColor("violet");
     this.colorInterna = [];
 
@@ -37,16 +56,79 @@ function ParteExterior() {
         }
     }
 
-    this.createFormaExterna = function() {
+    this.createForma = function(P) {
+        var forma = [];
         var n = 9;
+        var tramosForma = [];
+        var cantPControl = P.length;
+        for (var i = 0; i < cantPControl - 3; i+=3){
+            tramosForma.push(new CurvaBezier(P[i], P[i+1], P[i+2], P[i+3], n));    
+        }
+        for (var i in tramosForma){
+            forma = forma.concat(tramosForma[i].getVertexBuffer());
+        }
+        return forma;
+    }
+
+    this.createFormaExternaPorPartes = function() {
         var P = [];
+        P.push([3.0, 0.0, 1.0]);
+        P.push([3.0, 0.0, 2.5]);
+        P.push([1.5, 0.0, 4.0]);
+        P.push([0.0, 0.0, 4.0]);
+        P.push([-1.5, 0.0, 4.0]);
+        P.push([-3.0, 0.0, 2.5]);
+        P.push([-3.0, 0.0, 1.0]);
+        this.formaTechoExterna = this.createForma(P);
+
+        var P = [];
+        P.push([-3.0, 0.0, 1.0]);
+        P.push([-2.75, 0.0, 1.0]);
+        P.push([-2.75, 0.0, 1.0]);
+        P.push([-2.5, 0.0, 1.0]);
+        P.push([-3.0, 0.0, 0.5]);
+        P.push([-3.0, 0.0, -0.5]);
+        P.push([-2.5, 0.0, -1.0]);
+        P.push([-2.75, 0.0, -1.0]);
+        P.push([-2.75, 0.0, -1.0]);
+        P.push([-3.0, 0.0, -1.0]);
+        this.formaVentanalExterna1 = this.createForma(P);
+
+        var P = [];
+        P.push([-3.0, 0.0, -1.0]);
+        P.push([-3.0, 0.0, -2.5]);
+        P.push([-1.5, 0.0, -4.0]);
+        P.push([0.0, 0.0, -4.0]);
+        P.push([1.5, 0.0, -4.0]);
+        P.push([3.0, 0.0, -2.5]);
+        P.push([3.0, 0.0, -1.0]);
+        this.formaPisoExterna = this.createForma(P);
+
+        var P = [];
+        P.push([3.0, 0.0, -1.0]);
+        P.push([2.75, 0.0, -1.0]);
+        P.push([2.75, 0.0, -1.0]);
+        P.push([2.5, 0.0, -1.0]);
+        P.push([3.0, 0.0, -0.5]);
+        P.push([3.0, 0.0, 0.5]);
+        P.push([2.5, 0.0, 1.0]);
+        P.push([2.75, 0.0, 1.0]);
+        P.push([2.75, 0.0, 1.0]);
+        P.push([3.0, 0.0, 1.0]);
+        this.formaVentanalExterna2 = this.createForma(P);
+    }
+
+    this.createFormaExterna = function() {
+        this.createFormaExternaPorPartes();
 
         //Superficie a barrer
+        var n = 9;
         this.pushColor(this.colorExterna, this.colorExterna1, n+1, 8/4);
         this.pushColor(this.colorExterna, this.colorExterna2, n+1, 12/4);
         this.pushColor(this.colorExterna, this.colorExterna1, n+1, 8/4);
         this.pushColor(this.colorExterna, this.colorExterna2, n+1, 12/4);
 
+        var P = [];
         P.push([3.0, 0.0, 1.0]);
         P.push([3.0, 0.0, 2.5]);
         P.push([1.5, 0.0, 4.0]);
@@ -78,17 +160,45 @@ function ParteExterior() {
         P.push([2.75, 0.0, 1.0]);
         P.push([2.75, 0.0, 1.0]);
         P.push([3.0, 0.0, 1.0]);
-        var tramosForma = [];
-        var cantPControl = P.length;
-        for (var i = 0; i < cantPControl - 3; i+=3){
-            tramosForma.push(new CurvaBezier(P[i], P[i+1], P[i+2], P[i+3], n));    
-        }
-        for (var i in tramosForma){
-            this.formaExterna = this.formaExterna.concat(tramosForma[i].getVertexBuffer());
-        }
+        this.formaExterna = this.createForma(P);
     }
 
-    this.createFormaInterna = function() {   
+    this.createFormaInternaPorPartes = function() {
+        var P = [];
+        P.push([2.0, 0.0, 1.0]);
+        P.push([2.0, 0.0, 2.0]);
+        P.push([1.0, 0.0, 3.0]);
+        P.push([0.0, 0.0, 3.0]);
+        P.push([-1.0, 0.0, 3.0]);
+        P.push([-2.0, 0.0, 2.0]);
+        P.push([-2.0, 0.0, 1.0]);
+        this.formaTechoInterna = this.createForma(P);
+
+        var P = [];
+        P.push([2.0, 0.0, 1.0]);
+        P.push([2.0, 0.0, 1/6]);
+        P.push([2.0, 0.0, -2/3]);
+        P.push([2.0, 0.0, -1.5]);
+        this.formaParedInterna1 = this.createForma(P);
+
+        var P = [];
+        P.push([2.0, 0.0, -1.5]);
+        P.push([2/3, 0.0, -1.5]);
+        P.push([-2/3, 0.0, -1.5]);
+        P.push([-2.0, 0.0, -1.5]);
+        this.formaPisoInterna = this.createForma(P);
+
+        var P = [];
+        P.push([-2.0, 0.0, 1.0]);
+        P.push([-2.0, 0.0, 1/6]);
+        P.push([-2.0, 0.0, -2/3]);
+        P.push([-2.0, 0.0, -1.5]);
+        this.formaParedInterna2 = this.createForma(P);
+    }
+
+    this.createFormaInterna = function() {  
+        this.createFormaInternaPorPartes();
+
         var n = 9;
         var P = [];
 
@@ -126,14 +236,8 @@ function ParteExterior() {
         P.push([1.0, 0.0, 3.0]);
         P.push([2.0, 0.0, 2.0]);
         P.push([2.0, 0.0, 1.0]);
-        var tramosForma = [];
-        var cantPControl = P.length;
-        for (var i = 0; i < cantPControl - 3; i+=3){
-            tramosForma.push(new CurvaBezier(P[i], P[i+1], P[i+2], P[i+3], n));    
-        }
-        for (var i in tramosForma){
-            this.formaInterna = this.formaInterna.concat(tramosForma[i].getVertexBuffer());
-        }
+
+        this.formaInterna = this.createForma(P);
     }
 
     this.createFormaInternaParaTapa = function() {   
@@ -172,28 +276,49 @@ function ParteExterior() {
         P.push([2.0, 0.0, 1.0]);
         P.push([2.0, 0.0, 1.0]);
         P.push([2.0, 0.0, 1.0]);
-        var tramosForma = [];
-        var cantPControl = P.length;
-        for (var i = 0; i < cantPControl - 3; i+=3){
-            tramosForma.push(new CurvaBezier(P[i], P[i+1], P[i+2], P[i+3], n));    
-        }
-        for (var i in tramosForma){
-            this.formaInternaParaTapa = this.formaInternaParaTapa.concat(tramosForma[i].getVertexBuffer());
-        }
+        this.formaInternaParaTapa = this.createForma(P)
     }
 
     this.createExterna = function() {
-        this.externa = new SuperficieBarrido(this.formaExterna, this.caminoEstacion.getVertexBuffer(), this.colorExterna, true);
+        this.externa = new SuperficieBarrido(this.formaExterna, this.caminoEstacion.getVertexBuffer(), this.colorExterna, false);
         this.externa.initBuffers();
-        this.externa.initTexture0("images/paredInterna11024.jpg");
-        this.externa.initTexture1("images/shiphull512.jpg");
-        this.externa.initTexture2("images/paredInterna11024.jpg");
-        this.externa.initTexture3("images/techo.jpg");
+
+        this.pisoExterna = new SuperficieBarrido(this.formaPisoExterna, this.caminoEstacion.getVertexBuffer(), null, true);
+        this.pisoExterna.initBuffers();
+        this.pisoExterna.initTexture("images/shiphull512.jpg");
+
+        this.ventanalExterna1 = new SuperficieBarrido(this.formaVentanalExterna1, this.caminoEstacion.getVertexBuffer(), null, true);
+        this.ventanalExterna1.initBuffers();
+        this.ventanalExterna1.initTexture("images/ventanal.jpg");
+
+        this.techoExterna = new SuperficieBarrido(this.formaTechoExterna, this.caminoEstacion.getVertexBuffer(), null, true);
+        this.techoExterna.initBuffers();
+        this.techoExterna.initTexture("images/shiphull512.jpg");
+
+        this.ventanalExterna2 = new SuperficieBarrido(this.formaVentanalExterna2, this.caminoEstacion.getVertexBuffer(), null, true);
+        this.ventanalExterna2.initBuffers();
+        this.ventanalExterna2.initTexture("images/ventanal.jpg");
     }
 
     this.createInterna = function() {
         this.interna = new SuperficieBarrido(this.formaInterna, this.caminoEstacion.getVertexBuffer(), this.colorInterna, false);
         this.interna.initBuffers();
+
+        this.pisoInterna = new SuperficieBarrido(this.formaPisoInterna, this.caminoEstacion.getVertexBuffer(), null, true);
+        this.pisoInterna.initBuffers();
+        this.pisoInterna.initTexture("images/piso.jpg");
+
+        this.paredInterna1 = new SuperficieBarrido(this.formaParedInterna1, this.caminoEstacion.getVertexBuffer(), null, true);
+        this.paredInterna1.initBuffers();
+        this.paredInterna1.initTexture("images/paredInterna11024.jpg");
+
+        this.techoInterna = new SuperficieBarrido(this.formaTechoInterna, this.caminoEstacion.getVertexBuffer(), null, true);
+        this.techoInterna.initBuffers();
+        this.techoInterna.initTexture("images/techo.jpg");
+
+        this.paredInterna2 = new SuperficieBarrido(this.formaParedInterna2, this.caminoEstacion.getVertexBuffer(), null, true);
+        this.paredInterna2.initBuffers();
+        this.paredInterna2.initTexture("images/paredInterna11024.jpg");
     }
 
     this.createTapas = function() {
@@ -280,14 +405,22 @@ function ParteExterior() {
         var model_matrix_externa = mat4.create();
         mat4.identity(model_matrix_externa);
         mat4.scale(model_matrix_externa, model_matrix_casco, [0.5, 0.5, 0.5]);
-        this.externa.draw(model_matrix_externa, shaderProgramTextura);
+        //this.externa.draw(model_matrix_externa, shaderProgramTextura);
+        this.techoExterna.draw(model_matrix_externa, shaderProgramTextura);
+        this.pisoExterna.draw(model_matrix_externa, shaderProgramTextura);
+        this.ventanalExterna1.draw(model_matrix_externa, shaderProgramTextura);
+        this.ventanalExterna2.draw(model_matrix_externa, shaderProgramTextura);
 
-        gl.useProgram(shaderProgramSimple);
         var model_matrix_interna = mat4.create();
         mat4.identity(model_matrix_interna);
         mat4.scale(model_matrix_interna, model_matrix_casco, [0.5, 0.5, 0.5]);
-        this.interna.draw(model_matrix_interna, shaderProgramSimple);
+        //this.interna.draw(model_matrix_interna, shaderProgramSimple);
+        this.techoInterna.draw(model_matrix_interna, shaderProgramTextura);
+        this.pisoInterna.draw(model_matrix_interna, shaderProgramTextura);
+        this.paredInterna1.draw(model_matrix_interna, shaderProgramTextura);
+        this.paredInterna2.draw(model_matrix_interna, shaderProgramTextura);
 
+        gl.useProgram(shaderProgramSimple);
         var model_matrix_tapa1 = mat4.create();
         mat4.identity(model_matrix_tapa1);
         mat4.translate(model_matrix_tapa1, model_matrix_casco, [8, 0, 0]);
