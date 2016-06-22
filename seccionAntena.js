@@ -23,16 +23,16 @@ function SeccionAntena() {
         var longitude_bands = 64;
 
         this.panelUno = new Cubo(alto, ancho, profundo, colorAntenas, esTexturada);
-        this.panelUno.initBuffers();
+        this.panelUno.initBuffers(false, 3, 5);
 
         this.panelDos = new Cubo(alto, ancho, profundo, colorAntenas, esTexturada);
-        this.panelDos.initBuffers();
+        this.panelDos.initBuffers(false, 3, 5);
 
         this.panelTres = new Cubo(alto, ancho, profundo, colorAntenas, esTexturada);
-        this.panelTres.initBuffers();
+        this.panelTres.initBuffers(false, 3, 5);
 
         this.panelCuatro = new Cubo(alto, ancho, profundo, colorAntenas, esTexturada);
-        this.panelCuatro.initBuffers();
+        this.panelCuatro.initBuffers(false, 3, 5);
 
         this.cilindroVerticalUno = new Cilindro(latitude_bands, longitude_bands, colorCilindros, esTexturada);
         this.cilindroVerticalUno.initBuffers();

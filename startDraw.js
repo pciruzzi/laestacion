@@ -293,7 +293,7 @@ function start() {
     universo.initTexture("images/sky.jpg");
 
     astronauta = new Cubo(1.5, 3.0, 0.1, null, true);
-    astronauta.initBuffers();
+    astronauta.initBuffers(true);
     astronauta.initTexture("images/astronauta256.png");
     
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
