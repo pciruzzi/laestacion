@@ -25,10 +25,10 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
     this.webgl_index_buffer = null;
 
     this.texture = null;
+    this.normalTexture = null;
     var weakThis = this;
 
     this.initTexture = function(texture_file){
-        
         var aux_texture = gl.createTexture();
         this.texture = aux_texture;
         this.texture.image = new Image();
@@ -39,6 +39,16 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
         this.texture.image.src = texture_file;
     }
 
+    this.initNormalTexture = function(texture_file){
+        var aux_texture = gl.createTexture();
+        this.normalTexture = aux_texture;
+        this.normalTexture.image = new Image();
+
+        this.normalTexture.image.onload = function () {
+            handleLoadedTexture(weakThis.normalTexture);
+        }
+        this.normalTexture.image.src = texture_file;
+    }
 
     // Se generan los Vertices para el cubo con alto, ancho y profundo pasados por parametro.
     // El cubo se renderizara utilizando triangle_strip, para ello se arma un buffer de índices a todos los vértices del cubo.
@@ -233,7 +243,7 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
         }
     }
 
-    this.draw = function(modelMatrix, shaderProgram){
+    this.draw = function(modelMatrix, shaderProgram, conNormalMap){
         // Se configuran los buffers que alimentarán el pipeline
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
@@ -248,6 +258,7 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
         gl.vertexAttribPointer(shaderProgram.vertexTangentAttribute, this.webgl_tangent_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
         if (this.esTexturada) {
+            gl.uniform1i(shaderProgram.useColorUniform, false);
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
             gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
@@ -255,7 +266,14 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
             gl.bindTexture(gl.TEXTURE_2D, this.texture);
             gl.uniform1i(shaderProgram.samplerUniform, 0);
             gl.bindTexture(gl.TEXTURE_2D, this.texture);
+            if (conNormalMap) {
+                gl.uniform1f(shaderProgram.useNormalUniform, true);
+                gl.activeTexture(gl.TEXTURE1);
+                gl.bindTexture(gl.TEXTURE_2D, this.normalTexture);
+                gl.uniform1i(shaderProgram.samplerUniformNormal, 1);
+            }
         } else {
+            gl.uniform1i(shaderProgram.useColorUniform, true);
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
             gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_color_buffer.itemSize, gl.FLOAT, false, 0, 0);
         }
@@ -270,5 +288,6 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
         //gl.drawElements(gl.LINE_LOOP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
         gl.drawElements(gl.TRIANGLE_STRIP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+        gl.uniform1f(shaderProgram.useNormalUniform, false);
     }
 }
