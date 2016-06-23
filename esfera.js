@@ -16,6 +16,7 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
     this.webgl_index_buffer = null;
 
     this.texture = null;
+    this.iluminationTexture = null;
     var weakThis = this;
 
     this.initTexture = function(texture_file) { 
@@ -26,6 +27,17 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
             handleLoadedTexture(weakThis.texture);
         }
         this.texture.image.src = texture_file;
+    }
+
+    this.initIluminationTexture = function(texture_file){
+        var aux_texture = gl.createTexture();
+        this.iluminationTexture = aux_texture;
+        this.iluminationTexture.image = new Image();
+
+        this.iluminationTexture.image.onload = function () {
+            handleLoadedTexture(weakThis.iluminationTexture);
+        }
+        this.iluminationTexture.image.src = texture_file;
     }
 
 
@@ -130,7 +142,7 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
         }
     }
 
-    this.draw = function(modelMatrix, shaderProgram){
+    this.draw = function(modelMatrix, shaderProgram, useIlumination, iluminationIntensity){
 
         // Se configuran los buffers que alimentarán el pipeline
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
@@ -158,6 +170,14 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
             gl.uniform1i(shaderProgram.useColorUniform, true);
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
             gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_color_buffer.itemSize, gl.FLOAT, false, 0, 0);
+        }
+
+        if (useIlumination) {
+            gl.uniform1f(shaderProgram.useIluminationUniform, true);
+            gl.uniform1f(shaderProgram.iluminationIntensityUniform, iluminationIntensity);
+            gl.activeTexture(gl.TEXTURE2);
+            gl.bindTexture(gl.TEXTURE_2D, this.iluminationTexture);
+            gl.uniform1i(shaderProgram.samplerUniformIlumination, 2);
         }
 
         gl.uniformMatrix4fv(shaderProgram.ModelMatrixUniform, false, modelMatrix);

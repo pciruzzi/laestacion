@@ -226,18 +226,8 @@ function drawScene() {
         desplegarPatas = false;
     }
 
-    gl.uniform1i(shaderProgramSimple.useColorUniform, true);
     modeloNave.draw(position_matrix_nave);
-    gl.uniform1i(shaderProgramSimple.useColorUniform, false);
 
-    // Matriz de modelado del sol
-    var model_matrix_sol = mat4.create();
-    mat4.identity(model_matrix_sol);
-    mat4.translate(model_matrix_sol, model_matrix_escena, [0.0, 0.0, -300.0]);
-    mat4.rotate(model_matrix_sol, model_matrix_sol, -rotacionSol, [0,0,1]);
-    mat4.translate(model_matrix_sol, model_matrix_sol, [500.0, 0.0, 0.0]);
-    mat4.scale(model_matrix_sol, model_matrix_sol, [20.0, 20.0, 20.0]);
-    sol.draw(model_matrix_sol, shaderProgramSimple);
 
     // Matriz de modelado de la tierra
     var model_matrix_tierra = mat4.create();
@@ -249,10 +239,22 @@ function drawScene() {
 
     // Hago que el "universo" no se ilumine
     gl.uniform1i(shaderProgramSimple.useLightingUniform, !lighting);
+
     var model_matrix_universo = mat4.create();
     mat4.identity(model_matrix_universo);
     mat4.scale(model_matrix_universo, model_matrix_universo, [1000.0, 1000.0, 1000.0]);
     universo.draw(model_matrix_universo, shaderProgramSimple);
+
+    // Hago que el sol se autoilumine, sin necesidad de la luz
+    // Matriz de modelado del sol
+    var model_matrix_sol = mat4.create();
+    mat4.identity(model_matrix_sol);
+    mat4.translate(model_matrix_sol, model_matrix_escena, [0.0, 0.0, -300.0]);
+    mat4.rotate(model_matrix_sol, model_matrix_sol, -rotacionSol, [0,0,1]);
+    mat4.translate(model_matrix_sol, model_matrix_sol, [500.0, 0.0, 0.0]);
+    mat4.scale(model_matrix_sol, model_matrix_sol, [20.0, 20.0, 20.0]);
+    sol.draw(model_matrix_sol, shaderProgramSimple, true, 1.0);
+
     gl.uniform1i(shaderProgramSimple.useLightingUniform, lighting);
 
     astronauta.draw(model_matrix_astronauta, shaderProgramSimple);
@@ -295,6 +297,7 @@ function start() {
     sol = new Esfera(30, 30, getColor("yellow"), true);
     sol.initBuffers(false);
     sol.initTexture("images/sun.jpg");
+    sol.initIluminationTexture("images/white.jpg");
 
     tierra = new Esfera(30, 30, getColor("light blue"), true);
     tierra.initBuffers(false);
