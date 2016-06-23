@@ -2,8 +2,8 @@ function CuerpoCentralNave() {
     this.vertex_buffer = null;
     this.index_buffer = null;
 
-    this.color_nave = getColor("blue");
-    this.color_cabina = getColor("red");
+    this.color_nave = getColor("light gray");
+    this.color_cabina = getColor("light gray");
     this.color_vidrio = getColor("black");
 
     this.webgl_position_buffer = null;

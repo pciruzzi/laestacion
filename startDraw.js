@@ -63,6 +63,8 @@ function drawScene() {
     gl.uniform1i(shaderProgramSimple.useColorUniform, false);
     // En principio no utilizo mapa de normales
     gl.uniform1i(shaderProgramSimple.useNormalUniform, false);
+    // En principio no utilizo mapa de iluminacion
+    gl.uniform1i(shaderProgramSimple.useIluminationUniform, false);
 
     // Configuración de la luz
     // Se inicializan las variables asociadas con la iluminación

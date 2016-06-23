@@ -54,10 +54,13 @@
     uniform bool uUseLighting;
     uniform bool uUseColor;
     uniform bool uUseNormal;
+    uniform bool uUseIlumination;
+    uniform float uIluminationIntensity;
 
     uniform sampler2D uSampler;
     uniform sampler2D uSamplerReflectionMap;
     uniform sampler2D uSamplerNormalMap;
+    uniform sampler2D uSamplerIluminationMap;
 
     uniform vec3 uAmbientColor;
 
@@ -121,6 +124,10 @@
 
         vec3 vLightWeighting = vPrincipalLightWeighting + vSecondaryLightWeighting;
 
+        // No le interesan el resto de las luces
+        if (uUseIlumination) {
+            vLightWeighting = uIluminationIntensity * texture2D(uSamplerIluminationMap, vec2(vTextureCoord.s, vTextureCoord.t)).rgb;
+        }
 
         vec4 textureColor;
         if (uUseColor) {
