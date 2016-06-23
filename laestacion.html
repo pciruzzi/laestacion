@@ -126,7 +126,7 @@
 
         // No le interesan el resto de las luces
         if (uUseIlumination) {
-            vLightWeighting = uIluminationIntensity * texture2D(uSamplerIluminationMap, vec2(vTextureCoord.s, vTextureCoord.t)).rgb;
+            vLightWeighting += uIluminationIntensity * texture2D(uSamplerIluminationMap, vec2(vTextureCoord.s, vTextureCoord.t)).rgb;
         }
 
         vec4 textureColor;

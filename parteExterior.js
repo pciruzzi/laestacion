@@ -417,10 +417,10 @@ function ParteExterior() {
         //this.externa.draw(model_matrix_externa, shaderProgramSimple);
         this.techoExterna.draw(model_matrix_externa, shaderProgramSimple, false);
         this.pisoExterna.draw(model_matrix_externa, shaderProgramSimple, false);
+        gl.uniform1i(shaderProgramSimple.useLightingUniform, false);
         this.ventanalExterna1.draw(model_matrix_externa, shaderProgramSimple, false, true, 2.0);
         this.ventanalExterna2.draw(model_matrix_externa, shaderProgramSimple, false, true, 2.0);
 
-        gl.uniform1i(shaderProgramSimple.useLightingUniform, false);
         var model_matrix_interna = mat4.create();
         mat4.identity(model_matrix_interna);
         mat4.scale(model_matrix_interna, model_matrix_casco, [0.5, 0.5, 0.5]);

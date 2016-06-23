@@ -10,11 +10,11 @@ function EjeTurbinas() {
     this.unionTurbinas3y4 = null;
 
     this.create = function() {
-        this.turbina1 = new Turbina(false);
+        this.turbina1 = new Turbina(true);
         this.turbina1.create();
         this.turbina2 = new Turbina(false);
         this.turbina2.create();
-        this.turbina3 = new Turbina(false);
+        this.turbina3 = new Turbina(true);
         this.turbina3.create();
         this.turbina4 = new Turbina(false);
         this.turbina4.create();
