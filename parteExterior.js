@@ -417,15 +417,23 @@ function ParteExterior() {
         this.ventanalExterna1.draw(model_matrix_externa, shaderProgramSimple);
         this.ventanalExterna2.draw(model_matrix_externa, shaderProgramSimple);
 
+        //Se desactiva las luces direccional del Sol y la Tierra y se activan las luces puntuales
         gl.uniform1i(shaderProgramSimple.useLightingUniform, false);
+        gl.uniform1i(shaderProgramSimple.usePunctualLights, true);
         var model_matrix_interna = mat4.create();
         mat4.identity(model_matrix_interna);
         mat4.scale(model_matrix_interna, model_matrix_casco, [0.5, 0.5, 0.5]);
         //this.interna.draw(model_matrix_interna, shaderProgramSimple);
+
+        //La autoiluminacion solo sirve para el techo interno.
+        gl.uniform1i(shaderProgramSimple.useAutoIlumination, true);
         this.techoInterna.draw(model_matrix_interna, shaderProgramSimple);
+        gl.uniform1i(shaderProgramSimple.useAutoIlumination, false);
+        
         this.pisoInterna.draw(model_matrix_interna, shaderProgramSimple);
         this.paredInterna1.draw(model_matrix_interna, shaderProgramSimple);
         this.paredInterna2.draw(model_matrix_interna, shaderProgramSimple);
+        gl.uniform1i(shaderProgramSimple.usePunctualLights, false);
         gl.uniform1i(shaderProgramSimple.useLightingUniform, true);
 
         var model_matrix_tapa1 = mat4.create();

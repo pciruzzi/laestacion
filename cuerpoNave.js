@@ -30,7 +30,7 @@ function CuerpoNave() {
         this.cuerpo.draw(model_matrix_cuerpo_central, shaderProgramSimple);
 
         var posicionNave = vec3.create();
-        vec3.set(posicionNave,1,1,1);
+        vec3.set(posicionNave,0,0,0);
         vec3.transformMat4(traslacionNave, posicionNave, model_matrix_cuerpo);
 
         var model_matrix_pata1 = mat4.create();

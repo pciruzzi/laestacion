@@ -63,6 +63,14 @@ function drawScene() {
     gl.uniform1i(shaderProgramSimple.useColorUniform, false);
     // En principio no utilizo mapa de normales
     gl.uniform1i(shaderProgramSimple.useNormalUniform, false);
+    // En principio no utilizo autoiluminacion
+    gl.uniform1i(shaderProgramSimple.useAutoIlumination, false);
+    // En principio no utilizo luces puntuales(Solo adentro de la bahia de carga)
+    gl.uniform1i(shaderProgramSimple.usePunctualLights, false);
+
+    // Asigno los valores para la autoiluminacion
+    gl.uniform1f(shaderProgramSimple.autoIluminationIntensity, 0.9);
+    gl.uniform3f(shaderProgramSimple.autoIluminationColorUniform, 1.0, 1.0, 1.0);
 
     // Configuración de la luz
     // Se inicializan las variables asociadas con la iluminación
@@ -71,17 +79,27 @@ function drawScene() {
     // Sol
     var sunPosition = vec3.fromValues(500.0*Math.cos(rotacionSol), 0.0, 500.0*Math.sin(rotacionSol)); 
     gl.uniform3fv(shaderProgramSimple.lightingPrincipalDirectionUniform, sunPosition);
-    gl.uniform1f(shaderProgramSimple.lightPrincipalIntensity, 1.5);                           //Intensidad 
-    gl.uniform3f(shaderProgramSimple.ambientColorUniform, 0.3, 0.3, 0.3);                     //Ambiente
-    gl.uniform3f(shaderProgramSimple.diffusePrincipalColorUniform, 1.0, 1.0, 1.0);            //Difusa
-    gl.uniform3f(shaderProgramSimple.specularPrincipalColorUniform, 0.1, 0.1, 0.1);           //Especular
+    gl.uniform1f(shaderProgramSimple.lightPrincipalIntensity, 1.5);                         //Intensidad 
+    gl.uniform3f(shaderProgramSimple.ambientColorUniform, 0.3, 0.3, 0.3);                   //Ambiente
+    gl.uniform3f(shaderProgramSimple.diffusePrincipalColorUniform, 1.0, 1.0, 1.0);          //Difusa
+    gl.uniform3f(shaderProgramSimple.specularPrincipalColorUniform, 0.1, 0.1, 0.1);         //Especular
 
     // Tierra
     var earthPosition = [0.0, -300.0, 0.0];
     gl.uniform3fv(shaderProgramSimple.lightingSecondaryDirectionUniform, [0,1,0]);
-    gl.uniform1f(shaderProgramSimple.lightSecondaryIntensity, 0.4);                           //Intensidad 
-    gl.uniform3f(shaderProgramSimple.diffuseSecondaryColorUniform, 0.0, 0.0, 0.7);            //Difusa
-    gl.uniform3f(shaderProgramSimple.specularSecondaryColorUniform, 0.0, 0.0, 1.0);           //Especular 
+    gl.uniform1f(shaderProgramSimple.lightSecondaryIntensity, 0.4);                          //Intensidad 
+    gl.uniform3f(shaderProgramSimple.diffuseSecondaryColorUniform, 0.0, 0.0, 0.7);           //Difusa
+    gl.uniform3f(shaderProgramSimple.specularSecondaryColorUniform, 0.0, 0.0, 1.0);          //Especular
+
+    //Luces Puntuales
+    gl.uniform1f(shaderProgramSimple.punctualLightRadio, 20.0);
+    gl.uniform1f(shaderProgramSimple.lightPunctualIntensity, 0.2);                            //Intensidad 
+    gl.uniform3f(shaderProgramSimple.diffusePunctualColorUniform, 1.0, 1.0, 1.0);             //Difusa
+    gl.uniform3f(shaderProgramSimple.specularPunctualColorUniform, 1.0, 1.0, 1.0);            //Especular 
+    gl.uniform3fv(shaderProgramSimple.lightingPunctual1PositionUniform, [-54, -1,  13]);      //Punctual 1
+    gl.uniform3fv(shaderProgramSimple.lightingPunctual2PositionUniform, [  8, -1,  54]);      //Punctual 2
+    gl.uniform3fv(shaderProgramSimple.lightingPunctual3PositionUniform, [ 57, -1,   0]);      //Punctual 3
+    gl.uniform3fv(shaderProgramSimple.lightingPunctual4PositionUniform, [ 13, -1, -54]);      //Punctual 4
 
     // ################################### DIBUJADO DE LA ESCENA ###################################
     // Dibujamos la escena        
