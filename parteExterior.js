@@ -291,6 +291,7 @@ function ParteExterior() {
         this.ventanalExterna1 = new SuperficieBarrido(this.formaVentanalExterna1, this.caminoEstacion.getVertexBuffer(), null, true);
         this.ventanalExterna1.initBuffers(1,4,true);
         this.ventanalExterna1.initTexture("images/ventanal2.jpg");
+        this.ventanalExterna1.initIluminationTexture("images/white.jpg");
 
         this.techoExterna = new SuperficieBarrido(this.formaTechoExterna, this.caminoEstacion.getVertexBuffer(), null, true);
         this.techoExterna.initBuffers(2,20);
@@ -300,6 +301,7 @@ function ParteExterior() {
         this.ventanalExterna2 = new SuperficieBarrido(this.formaVentanalExterna2, this.caminoEstacion.getVertexBuffer(), null, true);
         this.ventanalExterna2.initBuffers(1,4);
         this.ventanalExterna2.initTexture("images/ventanal2.jpg");
+        this.ventanalExterna2.initIluminationTexture("images/white.jpg");
     }
 
     this.createInterna = function() {
@@ -317,6 +319,7 @@ function ParteExterior() {
         this.techoInterna = new SuperficieBarrido(this.formaTechoInterna, this.caminoEstacion.getVertexBuffer(), null, true);
         this.techoInterna.initBuffers(1,10);
         this.techoInterna.initTexture("images/techo.jpg");
+        this.techoInterna.initIluminationTexture("images/techo-ilumMap.jpg");
 
         this.paredInterna2 = new SuperficieBarrido(this.formaParedInterna2, this.caminoEstacion.getVertexBuffer(), null, true);
         this.paredInterna2.initBuffers(1,5,true);
@@ -411,25 +414,23 @@ function ParteExterior() {
         var model_matrix_externa = mat4.create();
         mat4.identity(model_matrix_externa);
         mat4.scale(model_matrix_externa, model_matrix_casco, [0.5, 0.5, 0.5]);
-        //this.externa.draw(model_matrix_externa, shaderProgramSimple);
         this.techoExterna.draw(model_matrix_externa, shaderProgramSimple, false);
         this.pisoExterna.draw(model_matrix_externa, shaderProgramSimple, false);
-        this.ventanalExterna1.draw(model_matrix_externa, shaderProgramSimple);
-        this.ventanalExterna2.draw(model_matrix_externa, shaderProgramSimple);
 
-        //Se desactiva las luces direccional del Sol y la Tierra y se activan las luces puntuales
+        //Se desactiva las luces direccional del Sol y la Tierra y se activa la autoiluminacion.
         gl.uniform1i(shaderProgramSimple.useLightingUniform, false);
+        gl.uniform1i(shaderProgramSimple.useAutoIlumination, true);
+        this.ventanalExterna1.draw(model_matrix_externa, shaderProgramSimple, false, true, 1.5);
+        this.ventanalExterna2.draw(model_matrix_externa, shaderProgramSimple, false, true, 1.5);
+
+		//Se activan las luces puntuales
         gl.uniform1i(shaderProgramSimple.usePunctualLights, true);
         var model_matrix_interna = mat4.create();
         mat4.identity(model_matrix_interna);
         mat4.scale(model_matrix_interna, model_matrix_casco, [0.5, 0.5, 0.5]);
-        //this.interna.draw(model_matrix_interna, shaderProgramSimple);
-
-        //La autoiluminacion solo sirve para el techo interno.
-        gl.uniform1i(shaderProgramSimple.useAutoIlumination, true);
-        this.techoInterna.draw(model_matrix_interna, shaderProgramSimple);
+        this.techoInterna.draw(model_matrix_interna, shaderProgramSimple, false, true, 1.0);
         gl.uniform1i(shaderProgramSimple.useAutoIlumination, false);
-        
+
         this.pisoInterna.draw(model_matrix_interna, shaderProgramSimple);
         this.paredInterna1.draw(model_matrix_interna, shaderProgramSimple);
         this.paredInterna2.draw(model_matrix_interna, shaderProgramSimple);

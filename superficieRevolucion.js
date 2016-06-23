@@ -26,6 +26,7 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
 
     this.texture = null;
     this.normalTexture = null;
+    this.iluminationTexture = null;
     var weakThis = this;
 
     this.initTexture = function(texture_file){
@@ -48,6 +49,17 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
             handleLoadedTexture(weakThis.normalTexture);
         }
         this.normalTexture.image.src = texture_file;
+    }
+
+    this.initIluminationTexture = function(texture_file){
+        var aux_texture = gl.createTexture();
+        this.iluminationTexture = aux_texture;
+        this.iluminationTexture.image = new Image();
+
+        this.iluminationTexture.image.onload = function () {
+            handleLoadedTexture(weakThis.iluminationTexture);
+        }
+        this.iluminationTexture.image.src = texture_file;
     }
 
     this.initBuffers = function(){
@@ -149,7 +161,7 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
         }
     }
 
-    this.draw = function(modelMatrix, shaderProgram, conNormalMap){
+    this.draw = function(modelMatrix, shaderProgram, conNormalMap, useIlumination, iluminationIntensity){
         // Se configuran los buffers que alimentarán el pipeline
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
@@ -184,6 +196,14 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
             gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_color_buffer.itemSize, gl.FLOAT, false, 0, 0);
         }
 
+        if (useIlumination) {
+            gl.uniform1f(shaderProgram.useIluminationUniform, true);
+            gl.uniform1f(shaderProgram.iluminationIntensityUniform, iluminationIntensity);
+            gl.activeTexture(gl.TEXTURE2);
+            gl.bindTexture(gl.TEXTURE_2D, this.iluminationTexture);
+            gl.uniform1i(shaderProgram.samplerUniformNormal, 2);
+        }
+
         gl.uniformMatrix4fv(shaderProgram.ModelMatrixUniform, false, modelMatrix);
         var normalMatrix = mat3.create();
         mat3.fromMat4(normalMatrix, modelMatrix);
@@ -195,5 +215,6 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
         //gl.drawElements(gl.LINE_LOOP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
         gl.drawElements(gl.TRIANGLE_STRIP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
         gl.uniform1f(shaderProgram.useNormalUniform, false);
+        gl.uniform1f(shaderProgram.useIluminationUniform, false);
     }
 }

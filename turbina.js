@@ -1,9 +1,10 @@
-function Turbina() {
+function Turbina(useIlumination) {
     this.perfil = null;
-    this.color1 = getColor("brown");
+    this.color1 = getColor("dark gray");
     this.color2 = getColor("light blue");
     this.color = [];
     this.turbina = null;
+    this.useIlumination = useIlumination;
 
     this.pushColor = function(buffer, color, n, k) {
         for (var i = 0; i < n; i++) {
@@ -52,6 +53,7 @@ function Turbina() {
 
         this.turbina = new SuperficieRevolucion(this.perfil, [0,0,1], 37, this.color, false);
         this.turbina.initBuffers();
+        this.turbina.initIluminationTexture("images/white.jpg");
     }
 
     this.draw = function(modelMatrix) {
@@ -59,6 +61,6 @@ function Turbina() {
         var model_matrix_turbina = mat4.create();
         mat4.identity(model_matrix_turbina);
         mat4.multiply(model_matrix_turbina, model_matrix_turbina, modelMatrix);
-        this.turbina.draw(model_matrix_turbina, shaderProgramSimple);
+        this.turbina.draw(model_matrix_turbina, shaderProgramSimple, false, this.useIlumination, 2.0);
     }
 }

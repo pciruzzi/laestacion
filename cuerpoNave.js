@@ -26,7 +26,7 @@ function CuerpoNave() {
         var model_matrix_cuerpo_central = mat4.create();
         mat4.identity(model_matrix_cuerpo_central);
         mat4.rotate(model_matrix_cuerpo_central, model_matrix_cuerpo, Math.PI/2, [0,1,0]);
-        mat4.scale(model_matrix_cuerpo_central, model_matrix_cuerpo_central, [1.5,1.5,1.5]);
+        mat4.scale(model_matrix_cuerpo_central, model_matrix_cuerpo_central, [1.5,1.5,1.25]);
         this.cuerpo.draw(model_matrix_cuerpo_central, shaderProgramSimple);
 
         var posicionNave = vec3.create();
@@ -35,14 +35,14 @@ function CuerpoNave() {
 
         var model_matrix_pata1 = mat4.create();
         mat4.identity(model_matrix_pata1);
-        mat4.translate(model_matrix_pata1, model_matrix_cuerpo, [-3,traslacionPatasNave,-7.5]);
-        mat4.scale(model_matrix_pata1, model_matrix_pata1, [0.9,1,0.9]);
+        mat4.translate(model_matrix_pata1, model_matrix_cuerpo, [-2.5,traslacionPatasNave,-7.5]);
+        mat4.scale(model_matrix_pata1, model_matrix_pata1, [0.75,1,0.75]);
         this.pata1.draw(model_matrix_pata1);
 
         var model_matrix_pata2 = mat4.create();
         mat4.identity(model_matrix_pata2);
-        mat4.translate(model_matrix_pata2, model_matrix_cuerpo, [3,traslacionPatasNave,-7.5]);
-        mat4.scale(model_matrix_pata2, model_matrix_pata2, [0.9,1,0.9]);
+        mat4.translate(model_matrix_pata2, model_matrix_cuerpo, [2.5,traslacionPatasNave,-7.5]);
+        mat4.scale(model_matrix_pata2, model_matrix_pata2, [0.75,1,0.75]);
         this.pata2.draw(model_matrix_pata2);
 
         var model_matrix_pata3 = mat4.create();

@@ -53,17 +53,17 @@
     varying float vUseReflection;
     uniform bool uUseColor;
     uniform bool uUseNormal;
+    uniform bool uUseIlumination;
+    uniform float uIluminationIntensity;
 
     uniform sampler2D uSampler;
     uniform sampler2D uSamplerReflectionMap;
     uniform sampler2D uSamplerNormalMap;
+    uniform sampler2D uSamplerIluminationMap;
 
     uniform vec3 uAmbientColor;
     uniform bool uUseLighting;
     uniform bool uUsePunctualLights;
-    uniform bool uUseAutoIlumination;
-    uniform float uAutoIluminationIntensity;
-    uniform vec3 uAutoIluminationColor;
 
     // Sol: Direccional
     uniform vec3 uPrincipalLightDirection;
@@ -214,11 +214,11 @@
                                                                     uSecondarySpecularColor *specularSecondaryLightWeighting);  
                                                                     
         vec3 vLightWeighting = vPrincipalLightWeighting + vSecondaryLightWeighting + vP1LightWeighting + vP2LightWeighting + vP3LightWeighting  + vP4LightWeighting;
-                               
-        // Auto Iluminación
-        if (uUseAutoIlumination) {
-            vLightWeighting = uAutoIluminationIntensity * uAutoIluminationColor;
-        }        
+
+        // Auto Iluminación: No le interesan el resto de las luces
+        if (uUseIlumination) {
+            vLightWeighting += uIluminationIntensity * texture2D(uSamplerIluminationMap, vec2(vTextureCoord.s, vTextureCoord.t)).rgb;
+        }
 
         vec4 textureColor;
         if (uUseColor) {

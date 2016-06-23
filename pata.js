@@ -3,7 +3,7 @@ function Pata() {
     this.base = null;
 
     this.create = function() {
-        this.pata = new Cilindro(4, 20, getColor("blue"), false);
+        this.pata = new Cilindro(4, 20, getColor("opaque yellow"), false);
         this.pata.initBuffers();
 
         this.base = new Cilindro(4, 20, getColor("dark gray"), false);

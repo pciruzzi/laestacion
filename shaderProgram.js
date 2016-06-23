@@ -100,8 +100,7 @@ function initShaderSimple() {
     // Con esto accedo a las uniforms del shader de fragmentos
     // Iluminacion
     shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
-    shaderProgram.autoIluminationIntensity = gl.getUniformLocation(shaderProgram, "uAutoIluminationIntensity");
-    shaderProgram.autoIluminationColorUniform = gl.getUniformLocation(shaderProgram, "uAutoIluminationColor");
+    shaderProgram.iluminationIntensityUniform = gl.getUniformLocation(shaderProgram, "uIluminationIntensity");
 
     // Sol
     shaderProgram.lightingPrincipalDirectionUniform = gl.getUniformLocation(shaderProgram, "uPrincipalLightDirection");
@@ -127,14 +126,15 @@ function initShaderSimple() {
 
     // Booleanos
     shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
-    shaderProgram.useAutoIlumination = gl.getUniformLocation(shaderProgram, "uUseAutoIlumination");
     shaderProgram.useColorUniform = gl.getUniformLocation(shaderProgram, "uUseColor");
     shaderProgram.useNormalUniform = gl.getUniformLocation(shaderProgram, "uUseNormal");
+    shaderProgram.useIluminationUniform = gl.getUniformLocation(shaderProgram, "uUseIlumination");
 
     // Samplers
     shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
     shaderProgram.samplerUniformReflection = gl.getUniformLocation(shaderProgram, "uSamplerReflectionMap");
     shaderProgram.samplerUniformNormal = gl.getUniformLocation(shaderProgram, "uSamplerNormalMap");
+    shaderProgram.samplerUniformIlumination = gl.getUniformLocation(shaderProgram, "uSamplerIluminationMap");
 
     return shaderProgram;
 }

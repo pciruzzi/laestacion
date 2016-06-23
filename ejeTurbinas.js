@@ -10,21 +10,21 @@ function EjeTurbinas() {
     this.unionTurbinas3y4 = null;
 
     this.create = function() {
-        this.turbina1 = new Turbina();
+        this.turbina1 = new Turbina(true);
         this.turbina1.create();
-        this.turbina2 = new Turbina();
+        this.turbina2 = new Turbina(true);
         this.turbina2.create();
-        this.turbina3 = new Turbina();
+        this.turbina3 = new Turbina(true);
         this.turbina3.create();
-        this.turbina4 = new Turbina();
+        this.turbina4 = new Turbina(true);
         this.turbina4.create();
         
-        this.cilindro = new Cilindro(4, 20, getColor("brown"), false);
+        this.cilindro = new Cilindro(4, 20, getColor("opaque yellow"), false);
         this.cilindro.initBuffers();
 
         var colorUnion = [];
         for (var i = 0; i < 6; i++) {
-            colorUnion.push(getColor("brown"));
+            colorUnion.push(getColor("opaque yellow"));
         }
         this.unionTurbinas1y2 = new Cubo(15.0, 2.0, 2.0, colorUnion, false);
         this.unionTurbinas1y2.initBuffers();
@@ -41,43 +41,49 @@ function EjeTurbinas() {
         //Aplico transformaciones a cada uno de los componentes del eje
         var model_matrix_cilindro = mat4.create();
         mat4.identity(model_matrix_cilindro);
-        mat4.translate(model_matrix_cilindro, model_matrix_eje, [-9.0, 0, 0]);
+        mat4.translate(model_matrix_cilindro, model_matrix_eje, [-7.0, 0, 0]);
         mat4.rotate(model_matrix_cilindro, model_matrix_cilindro, Math.PI/2, [0, 1, 0]);
-        mat4.scale(model_matrix_cilindro, model_matrix_cilindro, [3.0, 3.0, 18.0]);
+        mat4.scale(model_matrix_cilindro, model_matrix_cilindro, [3.0, 3.0, 14.0]);
         this.cilindro.draw(model_matrix_cilindro, shaderProgramSimple);
+
+        gl.uniform1i(shaderProgramSimple.useLightingUniform, false);
+        gl.uniform1i(shaderProgramSimple.useAutoIlumination, true);
 
         var model_matrix_turbina1 = mat4.create();
         mat4.identity(model_matrix_turbina1);
-        mat4.translate(model_matrix_turbina1, model_matrix_eje, [-11, 7.5, -2.1]);
+        mat4.translate(model_matrix_turbina1, model_matrix_eje, [-9.5, 7.5, -2.1]);
         mat4.scale(model_matrix_turbina1, model_matrix_turbina1, [0.5, 0.5, 1]);
         this.turbina1.draw(model_matrix_turbina1);
 
         var model_matrix_turbina2 = mat4.create();
         mat4.identity(model_matrix_turbina2);
-        mat4.translate(model_matrix_turbina2, model_matrix_eje, [-11, -7.5, -2.1]);
+        mat4.translate(model_matrix_turbina2, model_matrix_eje, [-9.5, -7.5, -2.1]);
         mat4.scale(model_matrix_turbina2, model_matrix_turbina2, [0.5, 0.5, 1]);
         this.turbina2.draw(model_matrix_turbina2);
 
         var model_matrix_turbina3 = mat4.create();
         mat4.identity(model_matrix_turbina3);
-        mat4.translate(model_matrix_turbina3, model_matrix_eje, [11, 7.5, -2.1]);
+        mat4.translate(model_matrix_turbina3, model_matrix_eje, [9.5, 7.5, -2.1]);
         mat4.scale(model_matrix_turbina3, model_matrix_turbina3, [0.5, 0.5, 1]);
         this.turbina3.draw(model_matrix_turbina3);
 
         var model_matrix_turbina4 = mat4.create();
         mat4.identity(model_matrix_turbina4);
-        mat4.translate(model_matrix_turbina4, model_matrix_eje, [11, -7.5, -2.1]);
+        mat4.translate(model_matrix_turbina4, model_matrix_eje, [9.5, -7.5, -2.1]);
         mat4.scale(model_matrix_turbina4, model_matrix_turbina4, [0.5, 0.5, 1]);
         this.turbina4.draw(model_matrix_turbina4);
 
+        gl.uniform1i(shaderProgramSimple.useLightingUniform, true);
+        gl.uniform1i(shaderProgramSimple.useAutoIlumination, false);
+
         var model_matrix_union1y2 = mat4.create();
         mat4.identity(model_matrix_union1y2);
-        mat4.translate(model_matrix_union1y2, model_matrix_eje, [-10, 0, 0]);
+        mat4.translate(model_matrix_union1y2, model_matrix_eje, [-8, 0, 0]);
         this.unionTurbinas1y2.draw(model_matrix_union1y2, shaderProgramSimple);
 
         var model_matrix_union3y4 = mat4.create();
         mat4.identity(model_matrix_union3y4);
-        mat4.translate(model_matrix_union3y4, model_matrix_eje, [10, 0, 0]);
+        mat4.translate(model_matrix_union3y4, model_matrix_eje, [8, 0, 0]);
         this.unionTurbinas3y4.draw(model_matrix_union3y4, shaderProgramSimple);
     }
 }

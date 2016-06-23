@@ -63,14 +63,10 @@ function drawScene() {
     gl.uniform1i(shaderProgramSimple.useColorUniform, false);
     // En principio no utilizo mapa de normales
     gl.uniform1i(shaderProgramSimple.useNormalUniform, false);
-    // En principio no utilizo autoiluminacion
-    gl.uniform1i(shaderProgramSimple.useAutoIlumination, false);
+    // En principio no utilizo mapa de iluminacion
+    gl.uniform1i(shaderProgramSimple.useIluminationUniform, false);
     // En principio no utilizo luces puntuales(Solo adentro de la bahia de carga)
     gl.uniform1i(shaderProgramSimple.usePunctualLights, false);
-
-    // Asigno los valores para la autoiluminacion
-    gl.uniform1f(shaderProgramSimple.autoIluminationIntensity, 0.9);
-    gl.uniform3f(shaderProgramSimple.autoIluminationColorUniform, 1.0, 1.0, 1.0);
 
     // Configuración de la luz
     // Se inicializan las variables asociadas con la iluminación
