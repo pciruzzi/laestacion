@@ -45,10 +45,7 @@
     precision mediump float;
 
     varying vec3 vertPos;
-    varying vec2 vTextureCoord;
-    varying vec3 vNormal;
-    varying vec3 vTangente;
-    varying vec3 vBinormal;
+    varying vec3 vTextureCoord;
     varying mat3 toLocalObject;
     varying float vUseLighting;
 
@@ -70,15 +67,10 @@
     uniform float uSecondaryLightIntensity;
 
     void main(void) {
-        vec3 normal = normalize(vNormal);
-        vec3 tangent = normalize(vTangente);
-        vec3 binormal = normalize(vBinormal);
-
         // Normal Map
-        mat3 tbn = mat3(tangent, binormal, normal);
-        vec3 nMap = texture2D(uSamplerNormalMap, vec2(vTextureCoord.s, vTextureCoord.t)).rgb; 
-        vec3 normalMap = (nMap * 2.0 - 1.0);
-        normal = normalize(tbn * normalMap);
+        vec3 nMap         = texture2D(uSamplerNormalMap, vec2(vTextureCoord.s, vTextureCoord.t)).rgb; 
+        vec3 normalMap    = (nMap * 2.0 - 1.0);
+        vec3 normal       = normalize(toLocalObject * normalMap);
 
         // Calculos de la iluminación
         /** Sol: Direccional **/
@@ -129,7 +121,7 @@
     attribute vec3 aVertexTangent;
     attribute vec3 aVertexBinormal;
 
-    attribute vec2 aTextureCoord;
+    attribute vec3 aTextureCoord;
 
     uniform mat4 uViewMatrix;
     uniform mat4 uModelMatrix;
@@ -139,10 +131,8 @@
     uniform bool uUseLighting;
 
     varying vec3 vertPos;
-    varying vec2 vTextureCoord;
+    varying vec3 vTextureCoord;
     varying vec3 vNormal;
-    varying vec3 vTangente;
-    varying vec3 vBinormal;
     varying mat3 toLocalObject;
     varying float vUseLighting;
 
@@ -164,10 +154,6 @@
         vec3 normal   = normalize(uNMatrix * aVertexNormal);
         vec3 tangente = normalize(uNMatrix * aVertexTangent);
         vec3 binormal = normalize(uNMatrix * aVertexBinormal);
-
-        vNormal = normal;
-        vTangente = tangente;
-        vBinormal = binormal;
 
         // Matriz para pasar de coordenadas de vista a coordenadas intrinsecas (coordenadas para hacer el normal mapping)
         toLocalObject = mat3(   tangente.x, binormal.x, normal.x,
@@ -255,13 +241,13 @@
         // Si utiliza reflexion
         if (vTextureCoord[2] == 1.0 || vUseReflection == 1.0) {
             vec4 reflectionTexture = texture2D(uSamplerReflectionMap, vec2(reflectionDir.x, reflectionDir.y));
-            //gl_FragColor = vec4(mix(textureColor, reflectionTexture, 0.3).rgb * vLightWeighting, textureColor.a);
+            gl_FragColor = vec4(mix(textureColor, reflectionTexture, 0.3).rgb * vLightWeighting, textureColor.a);
 
             //gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
 
             // Probando...
-            vec4 reflectionTextureMock = texture2D(uSamplerReflectionMap, vec2(vTextureCoord.s, vTextureCoord.t));
-            gl_FragColor = vec4(reflectionTextureMock.rgb * vLightWeighting, textureColor.a);
+            //vec4 reflectionTextureMock = texture2D(uSamplerReflectionMap, vec2(vTextureCoord.s, vTextureCoord.t));
+            //gl_FragColor = vec4(reflectionTextureMock.rgb * vLightWeighting, textureColor.a);
         }
     }
 </script>

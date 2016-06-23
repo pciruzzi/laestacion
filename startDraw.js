@@ -52,7 +52,8 @@ function drawScene() {
     mat4.invert(aux, cameraMatrix);
     worldCameraPosition = [ aux[12], aux[13], aux[14] ];  // La posicion de la cámara en coordenadas del mundo
 
-    // ################################### CONTEXTO COLORES ###################################
+    // ################################### CONFIGURACION DE SHADERS ###################################
+    // ################################### SHADER SIMPLE ###################################
     gl.useProgram(shaderProgramSimple);
     gl.uniformMatrix4fv(shaderProgramSimple.ViewMatrixUniform, false, cameraMatrix);
     gl.uniformMatrix4fv(shaderProgramSimple.pMatrixUniform, false, pMatrix);
@@ -63,17 +64,77 @@ function drawScene() {
     var sunPosition = vec3.fromValues(500.0*Math.cos(rotacionSol), 0.0, 500.0*Math.sin(rotacionSol)); 
     gl.uniform3fv(shaderProgramSimple.lightingPrincipalDirectionUniform, sunPosition);
     gl.uniform1f(shaderProgramSimple.lightPrincipalIntensity, 2.0);                           //Intensidad 
-    gl.uniform3f(shaderProgramSimple.ambientColorUniform, 0.2, 0.2, 0.2);                     //Ambiente
+    gl.uniform3f(shaderProgramSimple.ambientColorUniform, 0.3, 0.3, 0.3);                     //Ambiente
     gl.uniform3f(shaderProgramSimple.diffusePrincipalColorUniform, 1.0, 1.0, 1.0);            //Difusa
     gl.uniform3f(shaderProgramSimple.specularPrincipalColorUniform, 0.1, 0.1, 0.1);           //Especular
 
     // Tierra
     var earthPosition = [0.0, -300.0, 0.0];
     gl.uniform3fv(shaderProgramSimple.lightingSecondaryDirectionUniform, [0,1,0]);
-    gl.uniform1f(shaderProgramSimple.lightSecondaryIntensity, 0.5);                           //Intensidad 
+    gl.uniform1f(shaderProgramSimple.lightSecondaryIntensity, 0.8);                           //Intensidad 
     gl.uniform3f(shaderProgramSimple.diffuseSecondaryColorUniform, 0.0, 0.0, 1.0);            //Difusa
     gl.uniform3f(shaderProgramSimple.specularSecondaryColorUniform, 0.0, 0.0, 1.0);           //Especular 
 
+    // ################################### SHADER TEXTURA ###################################
+    gl.useProgram(shaderProgramTextura);
+    gl.uniformMatrix4fv(shaderProgramTextura.ViewMatrixUniform, false, cameraMatrix);
+    gl.uniformMatrix4fv(shaderProgramTextura.pMatrixUniform, false, pMatrix);
+    gl.uniform3fv(shaderProgramTextura.worldCameraPosition, worldCameraPosition);
+    // En principio no utilizo reflexion
+    gl.uniform1f(shaderProgramTextura.useReflectionUniform, 0.0);
+
+    // Configuración de la luz
+    // Se inicializan las variables asociadas con la iluminación
+    var lighting = true;
+    gl.uniform1i(shaderProgramTextura.useLightingUniform, lighting);
+  
+    // Sol
+    var sunPosition = vec3.fromValues(500.0*Math.cos(rotacionSol), 0.0, 500.0*Math.sin(rotacionSol)); 
+    gl.uniform3fv(shaderProgramTextura.lightingPrincipalDirectionUniform, sunPosition);
+    gl.uniform1f(shaderProgramTextura.lightPrincipalIntensity, 1.5);                           //Intensidad
+    gl.uniform3f(shaderProgramTextura.ambientColorUniform, 0.2, 0.2, 0.2);                     //Ambiente
+    gl.uniform3f(shaderProgramTextura.diffusePrincipalColorUniform, 1.0, 1.0, 1.0);            //Difusa
+    gl.uniform3f(shaderProgramTextura.specularPrincipalColorUniform, 0.1, 0.1, 0.1);           //Especular
+
+    // Tierra
+    var earthPosition = [0.0, -300.0, 0.0];
+    gl.uniform3fv(shaderProgramTextura.lightingSecondaryDirectionUniform, [0,1,0]);
+    gl.uniform1f(shaderProgramTextura.lightSecondaryIntensity, 0.2);                           //Intensidad
+    gl.uniform3f(shaderProgramTextura.diffuseSecondaryColorUniform, 0.0, 0.0, 1.0);            //Difusa
+    gl.uniform3f(shaderProgramTextura.specularSecondaryColorUniform, 0.0, 0.0, 1.0);           //Especular
+
+    // ################################### SHADER NORMAL ###################################
+    /*gl.useProgram(shaderProgramNormal);
+    gl.uniformMatrix4fv(shaderProgramNormal.ViewMatrixUniform, false, cameraMatrix);
+    gl.uniformMatrix4fv(shaderProgramNormal.pMatrixUniform, false, pMatrix);
+    gl.uniform3fv(shaderProgramNormal.worldCameraPosition, worldCameraPosition);
+    // En principio no utilizo reflexion
+    gl.uniform1f(shaderProgramNormal.useReflectionUniform, 0.0);
+
+    // Configuración de la luz
+    // Se inicializan las variables asociadas con la iluminación
+    var lighting = true;
+    gl.uniform1i(shaderProgramNormal.useLightingUniform, lighting);
+  
+    // Sol
+    var sunPosition = vec3.fromValues(500.0*Math.cos(rotacionSol), 0.0, 500.0*Math.sin(rotacionSol)); 
+    gl.uniform3fv(shaderProgramNormal.lightingPrincipalDirectionUniform, sunPosition);
+    gl.uniform1f(shaderProgramNormal.lightPrincipalIntensity, 1.5);                           //Intensidad
+    gl.uniform3f(shaderProgramNormal.ambientColorUniform, 0.2, 0.2, 0.2);                     //Ambiente
+    gl.uniform3f(shaderProgramNormal.diffusePrincipalColorUniform, 1.0, 1.0, 1.0);            //Difusa
+    gl.uniform3f(shaderProgramNormal.specularPrincipalColorUniform, 0.1, 0.1, 0.1);           //Especular
+
+    // Tierra
+    var earthPosition = [0.0, -300.0, 0.0];
+    gl.uniform3fv(shaderProgramNormal.lightingSecondaryDirectionUniform, [0,1,0]);
+    gl.uniform1f(shaderProgramNormal.lightSecondaryIntensity, 0.2);                           //Intensidad
+    gl.uniform3f(shaderProgramNormal.diffuseSecondaryColorUniform, 0.0, 0.0, 1.0);            //Difusa
+    gl.uniform3f(shaderProgramNormal.specularSecondaryColorUniform, 0.0, 0.0, 1.0);           //Especular*/
+
+    // ################################### DIBUJADO DE LA ESCENA ###################################
+    // ################################### SIMPLE ###################################
+    gl.useProgram(shaderProgramSimple);
+    
     // Dibujamos la escena        
     var model_matrix_escena = mat4.create();
     mat4.identity(model_matrix_escena);
@@ -204,33 +265,8 @@ function drawScene() {
 
     modeloNave.draw(position_matrix_nave);
 
-    // ################################### CONTEXTO TEXTURAS ###################################
+    // ################################### TEXTURA ###################################
     gl.useProgram(shaderProgramTextura);
-    gl.uniformMatrix4fv(shaderProgramTextura.ViewMatrixUniform, false, cameraMatrix);
-    gl.uniformMatrix4fv(shaderProgramTextura.pMatrixUniform, false, pMatrix);
-    gl.uniform3fv(shaderProgramTextura.worldCameraPosition, worldCameraPosition);
-    // En principio no utilizo reflexion
-    gl.uniform1f(shaderProgramTextura.useReflectionUniform, 0.0);
-
-    // Configuración de la luz
-    // Se inicializan las variables asociadas con la iluminación
-    var lighting = true;
-    gl.uniform1i(shaderProgramTextura.useLightingUniform, lighting);
-  
-    // Sol
-    var sunPosition = vec3.fromValues(500.0*Math.cos(rotacionSol), 0.0, 500.0*Math.sin(rotacionSol)); 
-    gl.uniform3fv(shaderProgramTextura.lightingPrincipalDirectionUniform, sunPosition);
-    gl.uniform1f(shaderProgramTextura.lightPrincipalIntensity, 2.0);                           //Intensidad 
-    gl.uniform3f(shaderProgramTextura.ambientColorUniform, 0.2, 0.2, 0.2);                     //Ambiente
-    gl.uniform3f(shaderProgramTextura.diffusePrincipalColorUniform, 1.0, 1.0, 1.0);            //Difusa
-    gl.uniform3f(shaderProgramTextura.specularPrincipalColorUniform, 0.1, 0.1, 0.1);           //Especular
-
-    // Tierra
-    var earthPosition = [0.0, -300.0, 0.0];
-    gl.uniform3fv(shaderProgramTextura.lightingSecondaryDirectionUniform, [0,1,0]);
-    gl.uniform1f(shaderProgramTextura.lightSecondaryIntensity, 0.5);                           //Intensidad 
-    gl.uniform3f(shaderProgramTextura.diffuseSecondaryColorUniform, 0.0, 0.0, 1.0);            //Difusa
-    gl.uniform3f(shaderProgramTextura.specularSecondaryColorUniform, 0.0, 0.0, 1.0);           //Especular 
 
     // Matriz de modelado del sol
     var model_matrix_sol = mat4.create();

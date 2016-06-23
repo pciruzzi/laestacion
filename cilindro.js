@@ -173,7 +173,7 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
             if (useReflection) {
                 gl.activeTexture(gl.TEXTURE1);
                 gl.bindTexture(gl.TEXTURE_2D, this.reflectionTexture);
-                gl.uniform1i(shaderProgram.samplerUniformReflectionMap, 1);
+                gl.uniform1i(shaderProgram.samplerUniformReflection, 1);
             }
         } else {
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
