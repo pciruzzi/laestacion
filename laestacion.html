@@ -217,6 +217,12 @@
     uniform vec3 uPrincipalSpecularColor;
     uniform float uPrincipalLightIntensity;
 
+    // Tierra
+    uniform vec3 uSecondaryLightDirection;
+    uniform vec3 uSecondaryDiffuseColor;
+    uniform vec3 uSecondarySpecularColor;
+    uniform float uSecondaryLightIntensity;
+
     varying vec3 vertPos;
 
     varying vec3 normalInterp;
@@ -236,11 +242,24 @@
         float rv = max(dot(r, viewDir), 0.0); 
         float specularPrincipalLightWeighting = pow(rv,15.0);                               // Especular: [(2*(N*L)*N - L) * V] ^ alpha
 
+        /** Tierra: Direccional **/
+        lightDir = uSecondaryLightDirection;
+        lightDirNormalized = normalize(lightDir);
+        lightReflectDir = reflect(-lightDirNormalized, normal);
+        viewDir = normalize(-vertPos);  
+        float diffuseSecondaryLightWeighting = max(dot(lightDirNormalized,normal), 0.0);    // Difusa: (N*L)
+        r = 2.0 * diffuseSecondaryLightWeighting * normal - lightDirNormalized;
+        rv = max(dot(r, viewDir), 0.0); 
+        float specularSecondaryLightWeighting = pow(rv,7.0);                                // Especular: [(2*(N*L)*N - L) * V] ^ alpha
+
         vec3 vPrincipalLightWeighting = uPrincipalLightIntensity * (uAmbientColor +
                                                                     uPrincipalDiffuseColor * diffusePrincipalLightWeighting + 
                                                                     uPrincipalSpecularColor * specularPrincipalLightWeighting);
 
-        vec3 vLightWeighting = vPrincipalLightWeighting;
+        vec3 vSecondaryLightWeighting = uSecondaryLightIntensity * (uSecondaryDiffuseColor*diffuseSecondaryLightWeighting + 
+                                                                    uSecondarySpecularColor *specularSecondaryLightWeighting);  
+
+        vec3 vLightWeighting = vPrincipalLightWeighting + vSecondaryLightWeighting;
 
 
         gl_FragColor = vec4(vTextureCoord.rgb * vLightWeighting, 1.0);

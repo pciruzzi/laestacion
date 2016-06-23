@@ -110,6 +110,12 @@ function initShaderSimple() {
     shaderProgram.specularPrincipalColorUniform = gl.getUniformLocation(shaderProgram, "uPrincipalSpecularColor");
     shaderProgram.lightPrincipalIntensity = gl.getUniformLocation(shaderProgram, "uPrincipalLightIntensity");
 
+    // Tierra
+    shaderProgram.lightingSecondaryDirectionUniform = gl.getUniformLocation(shaderProgram, "uSecondaryLightDirection");
+    shaderProgram.diffuseSecondaryColorUniform = gl.getUniformLocation(shaderProgram, "uSecondaryDiffuseColor");
+    shaderProgram.specularSecondaryColorUniform = gl.getUniformLocation(shaderProgram, "uSecondarySpecularColor");
+    shaderProgram.lightSecondaryIntensity = gl.getUniformLocation(shaderProgram, "uSecondaryLightIntensity");
+
     return shaderProgram;
 }
 
