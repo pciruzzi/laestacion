@@ -54,11 +54,13 @@ function initShaders() {
         return;
     }
 
-/*    shaderProgramNormal = initShaderNormal();
-    if (! shaderProgramNormal) {
-        console.log("No se pudo inicializar el shaderNormal");
-        return;
-    }*/
+    //TODO: ACA DESCOMENTAR PARA EL NORMAL MAP
+    //POR AHORA TIRA UN ERROR CON UN BUFFER O ALGO ASI
+    //shaderProgramNormal = initShaderNormal();
+    //if (! shaderProgramNormal) {
+    //    console.log("No se pudo inicializar el shaderNormal");
+    //    return;
+    //}
 }
 
 function initShaderSimple() {
@@ -227,12 +229,24 @@ function initShaderNormal() {
     shaderProgram.ViewMatrixUniform = gl.getUniformLocation(shaderProgram, "uViewMatrix");
     shaderProgram.ModelMatrixUniform = gl.getUniformLocation(shaderProgram, "uModelMatrix");
     shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
+    shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
     shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
     shaderProgram.samplerNormalMapUniform = gl.getUniformLocation(shaderProgram, "uSamplerNormalMap");
-    shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
+
+    //Iluminacion
     shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
-    shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightPosition");
-    shaderProgram.directionalColorUniform = gl.getUniformLocation(shaderProgram, "uDirectionalColor");
+
+    // Sol
+    shaderProgram.lightingPrincipalDirectionUniform = gl.getUniformLocation(shaderProgram, "uPrincipalLightDirection");
+    shaderProgram.diffusePrincipalColorUniform = gl.getUniformLocation(shaderProgram, "uPrincipalDiffuseColor");
+    shaderProgram.specularPrincipalColorUniform = gl.getUniformLocation(shaderProgram, "uPrincipalSpecularColor");
+    shaderProgram.lightPrincipalIntensity = gl.getUniformLocation(shaderProgram, "uPrincipalLightIntensity");
+
+    // Tierra
+    shaderProgram.lightingSecondaryDirectionUniform = gl.getUniformLocation(shaderProgram, "uSecondaryLightDirection");
+    shaderProgram.diffuseSecondaryColorUniform = gl.getUniformLocation(shaderProgram, "uSecondaryDiffuseColor");
+    shaderProgram.specularSecondaryColorUniform = gl.getUniformLocation(shaderProgram, "uSecondarySpecularColor");
+    shaderProgram.lightSecondaryIntensity = gl.getUniformLocation(shaderProgram, "uSecondaryLightIntensity");
 
     return shaderProgram;
 }
