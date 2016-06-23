@@ -128,17 +128,78 @@
 
     varying vec3 vTextureCoord;
     varying vec3 vLightWeighting;
+
     varying vec3 reflectionDir;
     varying float vUseReflection;
+    varying float vUseLighting;
+
+    varying vec3 vertPos;
+    varying vec3 normalInterp;
 
     uniform sampler2D uSampler;
     uniform sampler2D uSamplerReflectionMap;
 
+    uniform vec3 uAmbientColor;
+
+    // Sol
+    uniform vec3 uPrincipalLightDirection;
+    uniform vec3 uPrincipalDiffuseColor;
+    uniform vec3 uPrincipalSpecularColor;
+    uniform float uPrincipalLightIntensity;
+
+    // Tierra
+    uniform vec3 uSecondaryLightDirection;
+    uniform vec3 uSecondaryDiffuseColor;
+    uniform vec3 uSecondarySpecularColor;
+    uniform float uSecondaryLightIntensity;
+
     void main(void) {
+        vec3 normal = normalize(normalInterp);
+
+        // Calculos de la iluminación
+        /** Sol: Direccional **/
+        vec3 lightDir = uPrincipalLightDirection;
+        vec3 lightDirNormalized = normalize(lightDir);
+        vec3 lightReflectDir = reflect(-lightDirNormalized, normal);
+        vec3 viewDir = normalize(-vertPos); //AGREGAMOS POS CAMARA ?
+        float diffusePrincipalLightWeighting = max(dot(lightDirNormalized,normal), 0.0);    // Difusa: (N*L)
+        vec3 r = 2.0 * diffusePrincipalLightWeighting * normal - lightDirNormalized;
+        float rv = max(dot(r, viewDir), 0.0); 
+        float specularPrincipalLightWeighting = pow(rv,15.0);                               // Especular: [(2*(N*L)*N - L) * V] ^ alpha
+
+        /** Tierra: Direccional **/
+        lightDir = uSecondaryLightDirection;
+        lightDirNormalized = normalize(lightDir);
+        lightReflectDir = reflect(-lightDirNormalized, normal);
+        viewDir = normalize(-vertPos);  
+        float diffuseSecondaryLightWeighting = max(dot(lightDirNormalized,normal), 0.0);    // Difusa: (N*L)
+        r = 2.0 * diffuseSecondaryLightWeighting * normal - lightDirNormalized;
+        rv = max(dot(r, viewDir), 0.0); 
+        float specularSecondaryLightWeighting = pow(rv,7.0);                                // Especular: [(2*(N*L)*N - L) * V] ^ alpha
+
+        // Use Directional Lights ?
+        if (vUseLighting == 0.0) {
+            diffusePrincipalLightWeighting = 0.0;
+            specularPrincipalLightWeighting = 0.0;
+            diffuseSecondaryLightWeighting = 0.0;
+            specularSecondaryLightWeighting = 0.0;
+        }
+
+        vec3 vPrincipalLightWeighting = uPrincipalLightIntensity * (uAmbientColor +
+                                                                    uPrincipalDiffuseColor * diffusePrincipalLightWeighting + 
+                                                                    uPrincipalSpecularColor * specularPrincipalLightWeighting);
+
+        vec3 vSecondaryLightWeighting = uSecondaryLightIntensity * (uSecondaryDiffuseColor*diffuseSecondaryLightWeighting + 
+                                                                    uSecondarySpecularColor *specularSecondaryLightWeighting);  
+
+        vec3 vLightWeighting = vPrincipalLightWeighting + vSecondaryLightWeighting;
+
+
         vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
         gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
+        
         // Si utiliza reflexion
-        if (vTextureCoord[2] == 1.0 || vUseReflection == 1.0) {
+        if (vUseReflection == 1.0) {
             vec4 reflectionTexture = texture2D(uSamplerReflectionMap, vec2(reflectionDir.x, reflectionDir.y));
             //gl_FragColor = vec4(mix(textureColor, reflectionTexture, 0.3).rgb * vLightWeighting, textureColor.a);
 
@@ -160,19 +221,16 @@
     uniform mat4 uModelMatrix;
     uniform mat4 uPMatrix;
     uniform mat3 uNMatrix;
-
     uniform vec3 worldCameraPosition;
-
-    uniform vec3 uAmbientColor;
-    uniform vec3 uLightPosition;
-    uniform vec3 uDirectionalColor;
     uniform float uUseReflection;
     uniform bool uUseLighting;
 
+    varying vec3 vertPos;
+    varying vec3 normalInterp;
     varying vec3 vTextureCoord;
-    varying vec3 vLightWeighting;
     varying vec3 reflectionDir;
     varying float vUseReflection;
+    varying float vUseLighting;
 
     void main(void) {
         // Transformamos al vértice al espacio de la cámara
@@ -181,28 +239,30 @@
         // Transformamos al vértice al espacio de la proyección
         gl_Position = uPMatrix * pos_camera_view;
 
+        vertPos = vec3(pos_camera_view) / pos_camera_view.w;
+
         // Coordenada de textura sin modifiaciones
         vTextureCoord = aTextureCoord;
 
-        // Indica si usa reflection
+        normalInterp = normalize(uNMatrix * aVertexNormal);
+
+        // Indica si usa reflection.
         vUseReflection = uUseReflection;
 
-        // Calculos de la iluminación
-        vec3 light_dir =  uLightPosition - vec3( pos_camera_view );
-        normalize(light_dir);
-        if (!uUseLighting) {
-            vLightWeighting = vec3(1.0, 1.0, 1.0);
-        } else {
-            vec3 transformedNormal = normalize(uNMatrix * aVertexNormal);
-            float directionalLightWeighting = max(dot(transformedNormal, light_dir), 0.0);
-            vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting * 0.1;
-        }
+        //Para saber si ilumino o no.
+        vUseLighting = (uUseLighting) ? 1.0 : 0.0;
 
-        vec3 worldPos  = vec3( uModelMatrix * vec4(aVertexPosition,1.0) );
-        vec3 worldNorm = vec3( uModelMatrix * vec4(aVertexNormal,  0.0) ); 
-        vec3 worldView = normalize( worldCameraPosition - worldPos ); 
-        reflectionDir  = reflect( -worldView, worldNorm );
-        //reflectionDir.y -= 0.15;
+        // Si utiliza reflexion
+        if (vTextureCoord[2] == 1.0 || vUseReflection == 1.0) {
+            vec3 view = normalize(vertPos);
+            reflectionDir = reflect(view, normalInterp);
+            reflectionDir = vec3(uViewMatrix * vec4(reflectionDir, 0.0));
+            //vec3 worldPos  = vec3( uModelMatrix * vec4(aVertexPosition,1.0) );
+            //vec3 worldNorm = vec3( uModelMatrix * vec4(aVertexNormal,  0.0) ); 
+            //vec3 worldView = normalize( worldCameraPosition - worldPos ); 
+            //reflectionDir  = reflect( -worldView, worldNorm );
+            //reflectionDir.y -= 0.15;
+        }
     }
 </script>
 
