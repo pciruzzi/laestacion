@@ -61,6 +61,6 @@ function Turbina(useIlumination) {
         var model_matrix_turbina = mat4.create();
         mat4.identity(model_matrix_turbina);
         mat4.multiply(model_matrix_turbina, model_matrix_turbina, modelMatrix);
-        this.turbina.draw(model_matrix_turbina, shaderProgramSimple, false, this.useIlumination, 2.0);
+        this.turbina.draw(model_matrix_turbina, shaderProgramSimple, false, this.useIlumination, 1.0);
     }
 }

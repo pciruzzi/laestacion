@@ -256,7 +256,7 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
             gl.uniform1f(shaderProgram.iluminationIntensityUniform, iluminationIntensity);
             gl.activeTexture(gl.TEXTURE2);
             gl.bindTexture(gl.TEXTURE_2D, this.iluminationTexture);
-            gl.uniform1i(shaderProgram.samplerUniformNormal, 2);
+            gl.uniform1i(shaderProgram.samplerUniformIlumination, 2);
         }
 
         gl.uniformMatrix4fv(shaderProgram.ModelMatrixUniform, false, modelMatrix);
