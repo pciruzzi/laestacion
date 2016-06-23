@@ -41,15 +41,22 @@
 <script type="text/javascript" src="utils.js"></script>
 <script type="text/javascript" src="vertice.js"></script>
 
-<script id="shaderNormal-fs" type="x-shader/x-fragment">
+<script id="shader-fs" type="x-shader/x-fragment">
     precision mediump float;
 
+    varying vec4 vTextureCoord;
     varying vec3 vertPos;
-    varying vec3 vTextureCoord;
     varying mat3 toLocalObject;
-    varying float vUseLighting;
+    varying vec3 normalInterp;
+    varying vec3 reflectionDir;
+
+    varying float vUseReflection;
+    uniform bool uUseLighting;
+    uniform bool uUseColor;
+    uniform bool uUseNormal;
 
     uniform sampler2D uSampler;
+    uniform sampler2D uSamplerReflectionMap;
     uniform sampler2D uSamplerNormalMap;
 
     uniform vec3 uAmbientColor;
@@ -67,135 +74,15 @@
     uniform float uSecondaryLightIntensity;
 
     void main(void) {
-        // Normal Map
-        vec3 nMap         = texture2D(uSamplerNormalMap, vec2(vTextureCoord.s, vTextureCoord.t)).rgb; 
-        vec3 normalMap    = (nMap * 2.0 - 1.0);
-        vec3 normal       = normalize(toLocalObject * normalMap);
-
-        // Calculos de la iluminación
-        /** Sol: Direccional **/
-        vec3 lightDir = uPrincipalLightDirection;
-        vec3 lightDirNormalized = normalize(lightDir);
-        vec3 lightReflectDir = reflect(-lightDirNormalized, normal);
-        vec3 viewDir = normalize(-vertPos); //AGREGAMOS POS CAMARA ?
-        float diffusePrincipalLightWeighting = max(dot(lightDirNormalized,normal), 0.0);    // Difusa: (N*L)
-        vec3 r = 2.0 * diffusePrincipalLightWeighting * normal - lightDirNormalized;
-        float rv = max(dot(r, viewDir), 0.0); 
-        float specularPrincipalLightWeighting = pow(rv,15.0);                               // Especular: [(2*(N*L)*N - L) * V] ^ alpha
-
-        /** Tierra: Direccional **/
-        lightDir = uSecondaryLightDirection;
-        lightDirNormalized = normalize(lightDir);
-        lightReflectDir = reflect(-lightDirNormalized, normal);
-        viewDir = normalize(-vertPos);  
-        float diffuseSecondaryLightWeighting = max(dot(lightDirNormalized,normal), 0.0);    // Difusa: (N*L)
-        r = 2.0 * diffuseSecondaryLightWeighting * normal - lightDirNormalized;
-        rv = max(dot(r, viewDir), 0.0); 
-        float specularSecondaryLightWeighting = pow(rv,7.0);                                // Especular: [(2*(N*L)*N - L) * V] ^ alpha
-
-        // Use Directional Lights ?
-        if (vUseLighting == 0.0) {
-            diffusePrincipalLightWeighting = 0.0;
-            specularPrincipalLightWeighting = 0.0;
-            diffuseSecondaryLightWeighting = 0.0;
-            specularSecondaryLightWeighting = 0.0;
-        }
-
-        vec3 vPrincipalLightWeighting = uPrincipalLightIntensity * (uAmbientColor +
-                                                                    uPrincipalDiffuseColor * diffusePrincipalLightWeighting + 
-                                                                    uPrincipalSpecularColor * specularPrincipalLightWeighting);
-
-        vec3 vSecondaryLightWeighting = uSecondaryLightIntensity * (uSecondaryDiffuseColor*diffuseSecondaryLightWeighting + 
-                                                                    uSecondarySpecularColor *specularSecondaryLightWeighting);  
-
-        vec3 vLightWeighting = vPrincipalLightWeighting + vSecondaryLightWeighting;
-
-        vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-        gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
-    }
-</script>
-
-<script id="shaderNormal-vs" type="x-shader/x-vertex">
-    attribute vec3 aVertexPosition;
-    attribute vec3 aVertexNormal;
-    attribute vec3 aVertexTangent;
-    attribute vec3 aVertexBinormal;
-
-    attribute vec3 aTextureCoord;
-
-    uniform mat4 uViewMatrix;
-    uniform mat4 uModelMatrix;
-    uniform mat4 uPMatrix;
-    uniform mat3 uNMatrix;
-
-    uniform bool uUseLighting;
-
-    varying vec3 vertPos;
-    varying vec3 vTextureCoord;
-    varying vec3 vNormal;
-    varying mat3 toLocalObject;
-    varying float vUseLighting;
-
-    void main(void) {
-        // Transformamos al vértice al espacio de la cámara
-        vec4 pos_camera_view = uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
-
-        // Transformamos al vértice al espacio de la proyección
-        gl_Position = uPMatrix * pos_camera_view;
-
-        vertPos = vec3(pos_camera_view) / pos_camera_view.w;
-
-        // Coordenada de textura sin modifiaciones
-        vTextureCoord = aTextureCoord;
-
-        //Para saber si ilumino o no.
-        vUseLighting = (uUseLighting) ? 1.0 : 0.0;
-
-        vec3 normal   = normalize(uNMatrix * aVertexNormal);
-        vec3 tangente = normalize(uNMatrix * aVertexTangent);
-        vec3 binormal = normalize(uNMatrix * aVertexBinormal);
-
-        // Matriz para pasar de coordenadas de vista a coordenadas intrinsecas (coordenadas para hacer el normal mapping)
-        toLocalObject = mat3(   tangente.x, binormal.x, normal.x,
-                                tangente.y, binormal.y, normal.y,
-                                tangente.z, binormal.z, normal.z ) ;
-
-    }
-</script>
-
-<script id="shaderTextura-fs" type="x-shader/x-fragment">
-    precision mediump float;
-
-    varying vec3 vTextureCoord;
-    varying vec3 vLightWeighting;
-
-    varying vec3 reflectionDir;
-    varying float vUseReflection;
-    varying float vUseLighting;
-
-    varying vec3 vertPos;
-    varying vec3 normalInterp;
-
-    uniform sampler2D uSampler;
-    uniform sampler2D uSamplerReflectionMap;
-
-    uniform vec3 uAmbientColor;
-
-    // Sol
-    uniform vec3 uPrincipalLightDirection;
-    uniform vec3 uPrincipalDiffuseColor;
-    uniform vec3 uPrincipalSpecularColor;
-    uniform float uPrincipalLightIntensity;
-
-    // Tierra
-    uniform vec3 uSecondaryLightDirection;
-    uniform vec3 uSecondaryDiffuseColor;
-    uniform vec3 uSecondarySpecularColor;
-    uniform float uSecondaryLightIntensity;
-
-    void main(void) {
         vec3 normal = normalize(normalInterp);
 
+        // Normal Map
+        if (uUseNormal) {
+            vec3 nMap         = texture2D(uSamplerNormalMap, vec2(vTextureCoord.s, vTextureCoord.t)).rgb; 
+            vec3 normalMap    = (nMap * 2.0 - 1.0);
+            normal            = normalize(toLocalObject * normalMap);
+        }
+
         // Calculos de la iluminación
         /** Sol: Direccional **/
         vec3 lightDir = uPrincipalLightDirection;
@@ -218,7 +105,7 @@
         float specularSecondaryLightWeighting = pow(rv,7.0);                                // Especular: [(2*(N*L)*N - L) * V] ^ alpha
 
         // Use Directional Lights ?
-        if (vUseLighting == 0.0) {
+        if (! uUseLighting) {
             diffusePrincipalLightWeighting = 0.0;
             specularPrincipalLightWeighting = 0.0;
             diffuseSecondaryLightWeighting = 0.0;
@@ -235,7 +122,12 @@
         vec3 vLightWeighting = vPrincipalLightWeighting + vSecondaryLightWeighting;
 
 
-        vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+        vec4 textureColor;
+        if (uUseColor) {
+            textureColor = vec4(vTextureCoord.rgb, 1.0);
+        } else {
+            textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+        }
         gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
         
         // Si utiliza reflexion
@@ -252,48 +144,60 @@
     }
 </script>
 
-<script id="shaderTextura-vs" type="x-shader/x-vertex">
+<script id="shader-vs" type="x-shader/x-vertex">
     attribute vec3 aVertexPosition;
     attribute vec3 aVertexNormal;
-    attribute vec3 aTextureCoord;
+    attribute vec3 aVertexTangent;
+    attribute vec3 aVertexBinormal;
+    attribute vec4 aTextureCoord;
 
     uniform mat4 uViewMatrix;
     uniform mat4 uModelMatrix;
-    uniform mat4 uPMatrix;
-    uniform mat3 uNMatrix;
-    uniform vec3 worldCameraPosition;
-    uniform float uUseReflection;
-    uniform bool uUseLighting;
+    uniform mat4 uProyMatrix;
+    uniform mat3 uNormalMatrix;
 
+    uniform float uUseReflection;
+    uniform vec3 worldCameraPosition;
+
+    varying vec4 vTextureCoord;
     varying vec3 vertPos;
+    varying mat3 toLocalObject;
     varying vec3 normalInterp;
-    varying vec3 vTextureCoord;
     varying vec3 reflectionDir;
+
     varying float vUseReflection;
-    varying float vUseLighting;
 
     void main(void) {
         // Transformamos al vértice al espacio de la cámara
         vec4 pos_camera_view = uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
 
         // Transformamos al vértice al espacio de la proyección
-        gl_Position = uPMatrix * pos_camera_view;
+        gl_Position = uProyMatrix * pos_camera_view;
 
         vertPos = vec3(pos_camera_view) / pos_camera_view.w;
 
         // Coordenada de textura sin modifiaciones
         vTextureCoord = aTextureCoord;
 
-        normalInterp = normalize(uNMatrix * aVertexNormal);
+        // 
+        normalInterp = normalize(uNormalMatrix * aVertexNormal);
+
+
+        //Para normalMap
+        vec3 normal   = normalize(uNormalMatrix * aVertexNormal);
+        vec3 tangente = normalize(uNormalMatrix * aVertexTangent);
+        vec3 binormal = normalize(uNormalMatrix * aVertexBinormal);
+
+        // Matriz para pasar de coordenadas de vista a coordenadas intrinsecas (coordenadas para hacer el normal mapping)
+        toLocalObject = mat3(   tangente.x, binormal.x, normal.x,
+                                tangente.y, binormal.y, normal.y,
+                                tangente.z, binormal.z, normal.z ) ;
+
 
         // Indica si usa reflection.
         vUseReflection = uUseReflection;
-
-        //Para saber si ilumino o no.
-        vUseLighting = (uUseLighting) ? 1.0 : 0.0;
-
         // Si utiliza reflexion
-        if (vTextureCoord[2] == 1.0 || vUseReflection == 1.0) {
+        if (vTextureCoord[2] == 1.0 || uUseReflection == 1.0) {
             vec3 view = normalize(vertPos);
             reflectionDir = reflect(view, normalInterp);
             reflectionDir = vec3(uViewMatrix * vec4(reflectionDir, 0.0));
@@ -303,97 +207,6 @@
             //reflectionDir  = reflect( -worldView, worldNorm );
             //reflectionDir.y -= 0.15;
         }
-    }
-</script>
-
-<script id="shader-fs" type="x-shader/x-fragment">
-    precision mediump float;
-
-    uniform vec3 uAmbientColor;
-
-    // Sol
-    uniform vec3 uPrincipalLightDirection;
-    uniform vec3 uPrincipalDiffuseColor;
-    uniform vec3 uPrincipalSpecularColor;
-    uniform float uPrincipalLightIntensity;
-
-    // Tierra
-    uniform vec3 uSecondaryLightDirection;
-    uniform vec3 uSecondaryDiffuseColor;
-    uniform vec3 uSecondarySpecularColor;
-    uniform float uSecondaryLightIntensity;
-
-    varying vec3 vertPos;
-
-    varying vec3 normalInterp;
-    varying vec4 vTextureCoord;
-
-    void main(void) {
-        vec3 normal = normalize(normalInterp);
-
-        // Calculos de la iluminación
-        /** Sol: Direccional **/
-        vec3 lightDir = uPrincipalLightDirection;
-        vec3 lightDirNormalized = normalize(lightDir);
-        vec3 lightReflectDir = reflect(-lightDirNormalized, normal);
-        vec3 viewDir = normalize(-vertPos); //AGREGAMOS POS CAMARA ?
-        float diffusePrincipalLightWeighting = max(dot(lightDirNormalized,normal), 0.0);    // Difusa: (N*L)
-        vec3 r = 2.0 * diffusePrincipalLightWeighting * normal - lightDirNormalized;
-        float rv = max(dot(r, viewDir), 0.0); 
-        float specularPrincipalLightWeighting = pow(rv,15.0);                               // Especular: [(2*(N*L)*N - L) * V] ^ alpha
-
-        /** Tierra: Direccional **/
-        lightDir = uSecondaryLightDirection;
-        lightDirNormalized = normalize(lightDir);
-        lightReflectDir = reflect(-lightDirNormalized, normal);
-        viewDir = normalize(-vertPos);  
-        float diffuseSecondaryLightWeighting = max(dot(lightDirNormalized,normal), 0.0);    // Difusa: (N*L)
-        r = 2.0 * diffuseSecondaryLightWeighting * normal - lightDirNormalized;
-        rv = max(dot(r, viewDir), 0.0); 
-        float specularSecondaryLightWeighting = pow(rv,7.0);                                // Especular: [(2*(N*L)*N - L) * V] ^ alpha
-
-        vec3 vPrincipalLightWeighting = uPrincipalLightIntensity * (uAmbientColor +
-                                                                    uPrincipalDiffuseColor * diffusePrincipalLightWeighting + 
-                                                                    uPrincipalSpecularColor * specularPrincipalLightWeighting);
-
-        vec3 vSecondaryLightWeighting = uSecondaryLightIntensity * (uSecondaryDiffuseColor*diffuseSecondaryLightWeighting + 
-                                                                    uSecondarySpecularColor *specularSecondaryLightWeighting);  
-
-        vec3 vLightWeighting = vPrincipalLightWeighting + vSecondaryLightWeighting;
-
-
-        gl_FragColor = vec4(vTextureCoord.rgb * vLightWeighting, 1.0);
-    }
-</script>
-
-<script id="shader-vs" type="x-shader/x-vertex">
-    attribute vec3 aVertexPosition;
-    attribute vec3 aVertexNormal;
-    attribute vec4 aTextureCoord;
-
-    uniform mat4 uViewMatrix;
-    uniform mat4 uModelMatrix;
-    uniform mat4 uPMatrix;
-    uniform mat3 uNMatrix;
-
-    varying vec3 vertPos;
-
-    varying vec3 normalInterp;
-    varying vec4 vTextureCoord;
-
-    void main(void) {
-        // Transformamos al vértice al espacio de la cámara
-        vec4 pos_camera_view = uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
-
-        // Transformamos al vértice al espacio de la proyección
-        gl_Position = uPMatrix * pos_camera_view;
-
-        vertPos = vec3(pos_camera_view) / pos_camera_view.w;
-
-        // Coordenada de textura sin modifiaciones
-        vTextureCoord = aTextureCoord;
-
-        normalInterp = normalize(uNMatrix * aVertexNormal);
     }
 </script>
 
@@ -469,8 +282,6 @@
 
     // Variables de los shaders
     var shaderProgramSimple;
-    var shaderProgramTextura;
-    var shaderProgramNormal;
 </script>
 
 </head>

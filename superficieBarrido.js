@@ -16,6 +16,8 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
 
     this.webgl_position_buffer = null;
     this.webgl_normal_buffer = null;
+    this.webgl_tangent_buffer = null;
+    this.webgl_binormal_buffer = null;
     this.webgl_texture_coord_buffer = null;
     this.webgl_color_buffer = null;
     this.webgl_index_buffer = null;
@@ -36,6 +38,7 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
 
     this.calcularTangentes = function(){
         this.tangent_buffer = [];
+        this.binormal_buffer = [];
         var caminoTangentBuffer = getTangentBuffer(this.camino);
         for (var i = 0; i < 3*this.filas-2; i+=3) {
             var tgx = caminoTangentBuffer[i];
@@ -43,6 +46,10 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
             var tgz = caminoTangentBuffer[i+2];
             for (var j = 0; j < this.columnas; j++) {
                 this.tangent_buffer.push(tgx, tgy, tgz);
+                var tg = [tgx, tgy, tgz];
+                var normal = [];
+                //TODO: Calcular bien
+                this.binormal_buffer.push(1,1,1);
             }
         }
     }
@@ -111,7 +118,6 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
                 var u = 0;
                 var v = 0;
                 var c = 0; // Number of image to use
-                // Asi tengo 2 veces la textura en u y 2 en v (La repito 4 veces)
                 if (this.esTexturada) {
                     u = cantidadU - cantidadU*(j / (3*this.columnas - 2 - 1));
                     v = cantidadV - cantidadV*(i / (this.filas - 1));
@@ -133,6 +139,18 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal_buffer), gl.STATIC_DRAW);
         this.webgl_normal_buffer.itemSize = 3;
         this.webgl_normal_buffer.numItems = this.normal_buffer.length / 3;
+
+        this.webgl_binormal_buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_binormal_buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.binormal_buffer), gl.STATIC_DRAW);
+        this.webgl_binormal_buffer.itemSize = 3;
+        this.webgl_binormal_buffer.numItems = this.binormal_buffer.length / 3;
+
+        this.webgl_tangent_buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_tangent_buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.tangent_buffer), gl.STATIC_DRAW);
+        this.webgl_tangent_buffer.itemSize = 3;
+        this.webgl_tangent_buffer.numItems = this.tangent_buffer.length / 3;
 
         this.webgl_position_buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
@@ -171,7 +189,14 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
         gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, this.webgl_normal_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_binormal_buffer);
+        gl.vertexAttribPointer(shaderProgram.vertexBinormalAttribute, this.webgl_binormal_buffer.itemSize, gl.FLOAT, false, 0, 0);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_tangent_buffer);
+        gl.vertexAttribPointer(shaderProgram.vertexTangentAttribute, this.webgl_tangent_buffer.itemSize, gl.FLOAT, false, 0, 0);
+
         if (this.esTexturada) {
+            gl.uniform1i(shaderProgram.useColorUniform, false);
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
             gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
@@ -180,6 +205,7 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
             gl.uniform1i(shaderProgram.samplerUniform, 0);
             gl.bindTexture(gl.TEXTURE_2D, this.texture);
         } else {
+            gl.uniform1i(shaderProgram.useColorUniform, true);
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
             gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_color_buffer.itemSize, gl.FLOAT, false, 0, 0);
         }

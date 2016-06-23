@@ -205,12 +205,26 @@ function CuerpoCentralNave() {
         // Creación e Inicialización de los buffers a nivel de OpenGL
         var position_buffer = getPositionBuffer(this.vertex_buffer);
         var normal_buffer = getNormalBuffer(this.vertex_buffer);
+        var tangent_buffer = getTangentBuffer(this.vertex_buffer);
+        var binormal_buffer = getBinormalBuffer(this.vertex_buffer);
 
         this.webgl_normal_buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normal_buffer), gl.STATIC_DRAW);
         this.webgl_normal_buffer.itemSize = 3;
         this.webgl_normal_buffer.numItems = normal_buffer.length / 3;
+
+        this.webgl_binormal_buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_binormal_buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(binormal_buffer), gl.STATIC_DRAW);
+        this.webgl_binormal_buffer.itemSize = 3;
+        this.webgl_binormal_buffer.numItems = binormal_buffer.length / 3;
+
+        this.webgl_tangent_buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_tangent_buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(tangent_buffer), gl.STATIC_DRAW);
+        this.webgl_tangent_buffer.itemSize = 3;
+        this.webgl_tangent_buffer.numItems = tangent_buffer.length / 3;
 
         this.webgl_position_buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
@@ -239,6 +253,12 @@ function CuerpoCentralNave() {
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
         gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, this.webgl_normal_buffer.itemSize, gl.FLOAT, false, 0, 0);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_binormal_buffer);
+        gl.vertexAttribPointer(shaderProgram.vertexBinormalAttribute, this.webgl_binormal_buffer.itemSize, gl.FLOAT, false, 0, 0);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_tangent_buffer);
+        gl.vertexAttribPointer(shaderProgram.vertexTangentAttribute, this.webgl_tangent_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
         gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_color_buffer.itemSize, gl.FLOAT, false, 0, 0);

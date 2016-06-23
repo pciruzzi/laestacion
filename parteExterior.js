@@ -406,32 +406,31 @@ function ParteExterior() {
         mat4.multiply(model_matrix_casco, model_matrix_casco, modelMatrix);
 
         //Llamo a cada uno de los elementos para que se dibujen con la nueva matriz
-        gl.useProgram(shaderProgramTextura);
         var model_matrix_externa = mat4.create();
         mat4.identity(model_matrix_externa);
         mat4.scale(model_matrix_externa, model_matrix_casco, [0.5, 0.5, 0.5]);
-        //this.externa.draw(model_matrix_externa, shaderProgramTextura);
-        this.techoExterna.draw(model_matrix_externa, shaderProgramTextura);
-        this.pisoExterna.draw(model_matrix_externa, shaderProgramTextura);
-        this.ventanalExterna1.draw(model_matrix_externa, shaderProgramTextura);
-        this.ventanalExterna2.draw(model_matrix_externa, shaderProgramTextura);
+        //this.externa.draw(model_matrix_externa, shaderProgramSimple);
+        this.techoExterna.draw(model_matrix_externa, shaderProgramSimple);
+        this.pisoExterna.draw(model_matrix_externa, shaderProgramSimple);
+        this.ventanalExterna1.draw(model_matrix_externa, shaderProgramSimple);
+        this.ventanalExterna2.draw(model_matrix_externa, shaderProgramSimple);
 
-        gl.uniform1i(shaderProgramTextura.useLightingUniform, false);
+        gl.uniform1i(shaderProgramSimple.useLightingUniform, false);
         var model_matrix_interna = mat4.create();
         mat4.identity(model_matrix_interna);
         mat4.scale(model_matrix_interna, model_matrix_casco, [0.5, 0.5, 0.5]);
         //this.interna.draw(model_matrix_interna, shaderProgramSimple);
-        this.techoInterna.draw(model_matrix_interna, shaderProgramTextura);
-        this.pisoInterna.draw(model_matrix_interna, shaderProgramTextura);
-        this.paredInterna1.draw(model_matrix_interna, shaderProgramTextura);
-        this.paredInterna2.draw(model_matrix_interna, shaderProgramTextura);
-        gl.uniform1i(shaderProgramTextura.useLightingUniform, true);
+        this.techoInterna.draw(model_matrix_interna, shaderProgramSimple);
+        this.pisoInterna.draw(model_matrix_interna, shaderProgramSimple);
+        this.paredInterna1.draw(model_matrix_interna, shaderProgramSimple);
+        this.paredInterna2.draw(model_matrix_interna, shaderProgramSimple);
+        gl.uniform1i(shaderProgramSimple.useLightingUniform, true);
 
         var model_matrix_tapa1 = mat4.create();
         mat4.identity(model_matrix_tapa1);
         mat4.translate(model_matrix_tapa1, model_matrix_casco, [8, 0, 0]);
         mat4.scale(model_matrix_tapa1, model_matrix_tapa1, [0.5, 0.5, 0.5]);
-        this.tapa1.draw(model_matrix_tapa1, shaderProgramTextura);
+        this.tapa1.draw(model_matrix_tapa1, shaderProgramSimple);
 
         var model_matrix_tapa2 = mat4.create();
         mat4.identity(model_matrix_tapa2);
@@ -439,7 +438,7 @@ function ParteExterior() {
         mat4.translate(model_matrix_tapa2, model_matrix_tapa2, [8, 0, 0]);
         mat4.scale(model_matrix_tapa2, model_matrix_tapa2, [0.5, 0.5, 0.5]);
         mat4.rotate(model_matrix_tapa2, model_matrix_tapa2, Math.PI, [0,0,1]);
-        this.tapa2.draw(model_matrix_tapa2, shaderProgramTextura);
+        this.tapa2.draw(model_matrix_tapa2, shaderProgramSimple);
 
         var model_matrix_escotilla1 = mat4.create();
         mat4.identity(model_matrix_escotilla1);
@@ -447,7 +446,7 @@ function ParteExterior() {
         mat4.translate(model_matrix_escotilla1, model_matrix_escotilla1, [0,10,0]);
         mat4.scale(model_matrix_escotilla1, model_matrix_escotilla1, [1.4,1,1.4]);
         mat4.rotate(model_matrix_escotilla1, model_matrix_escotilla1, Math.PI/2, [1,0,0]);
-        this.escotilla1.draw(model_matrix_escotilla1, shaderProgramTextura);
+        this.escotilla1.draw(model_matrix_escotilla1, shaderProgramSimple);
 
         var model_matrix_escotilla2 = mat4.create();
         mat4.identity(model_matrix_escotilla2);
@@ -455,7 +454,7 @@ function ParteExterior() {
         mat4.translate(model_matrix_escotilla2, model_matrix_escotilla2, [0,10,0]);
         mat4.scale(model_matrix_escotilla2, model_matrix_escotilla2, [1.4,1,1.4]);
         mat4.rotate(model_matrix_escotilla2, model_matrix_escotilla2, Math.PI/2, [1,0,0]);
-        this.escotilla1.draw(model_matrix_escotilla2, shaderProgramTextura);
+        this.escotilla1.draw(model_matrix_escotilla2, shaderProgramSimple);
 
         var model_matrix_escotilla3 = mat4.create();
         mat4.identity(model_matrix_escotilla3);
@@ -463,9 +462,8 @@ function ParteExterior() {
         mat4.translate(model_matrix_escotilla3, model_matrix_escotilla3, [0,10,0]);
         mat4.scale(model_matrix_escotilla3, model_matrix_escotilla3, [1.4,1,1.4]);
         mat4.rotate(model_matrix_escotilla3, model_matrix_escotilla3, Math.PI/2, [1,0,0]);
-        this.escotilla1.draw(model_matrix_escotilla3, shaderProgramTextura);
+        this.escotilla1.draw(model_matrix_escotilla3, shaderProgramSimple);
 
-        gl.useProgram(shaderProgramSimple);
         var model_matrix_manguera = mat4.create();
         mat4.identity(model_matrix_manguera);
         mat4.rotate(model_matrix_manguera, model_matrix_casco, Math.PI*3/4, [0,0,1]);

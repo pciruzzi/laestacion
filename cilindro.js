@@ -10,6 +10,8 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
 
     this.webgl_position_buffer = null;
     this.webgl_normal_buffer = null;
+    this.webgl_tangent_buffer = null;
+    this.webgl_binormal_buffer = null;
     this.webgl_texture_coord_buffer = null;
     this.webgl_color_buffer = null;
     this.webgl_index_buffer = null;
@@ -116,12 +118,26 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
         // Creación e Inicialización de los buffers a nivel de OpenGL
         var position_buffer = getPositionBuffer(this.vertex_buffer);
         var normal_buffer = getNormalBuffer(this.vertex_buffer);
+        var tangent_buffer = getTangentBuffer(this.vertex_buffer);
+        var binormal_buffer = getBinormalBuffer(this.vertex_buffer);
 
         this.webgl_normal_buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normal_buffer), gl.STATIC_DRAW);
         this.webgl_normal_buffer.itemSize = 3;
         this.webgl_normal_buffer.numItems = normal_buffer.length / 3;
+
+        this.webgl_binormal_buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_binormal_buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(binormal_buffer), gl.STATIC_DRAW);
+        this.webgl_binormal_buffer.itemSize = 3;
+        this.webgl_binormal_buffer.numItems = binormal_buffer.length / 3;
+
+        this.webgl_tangent_buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_tangent_buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(tangent_buffer), gl.STATIC_DRAW);
+        this.webgl_tangent_buffer.itemSize = 3;
+        this.webgl_tangent_buffer.numItems = tangent_buffer.length / 3;
 
         this.webgl_position_buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
@@ -162,7 +178,14 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
         gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, this.webgl_normal_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_binormal_buffer);
+        gl.vertexAttribPointer(shaderProgram.vertexBinormalAttribute, this.webgl_binormal_buffer.itemSize, gl.FLOAT, false, 0, 0);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_tangent_buffer);
+        gl.vertexAttribPointer(shaderProgram.vertexTangentAttribute, this.webgl_tangent_buffer.itemSize, gl.FLOAT, false, 0, 0);
+
         if (this.esTexturada) {
+            gl.uniform1i(shaderProgram.useColorUniform, false);
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
             gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
@@ -171,11 +194,13 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
             gl.uniform1i(shaderProgram.samplerUniform, 0);
             //gl.bindTexture(gl.TEXTURE_2D, this.texture);
             if (useReflection) {
+                gl.uniform1f(shaderProgram.useReflectionUniform, 1.0);
                 gl.activeTexture(gl.TEXTURE1);
                 gl.bindTexture(gl.TEXTURE_2D, this.reflectionTexture);
                 gl.uniform1i(shaderProgram.samplerUniformReflection, 1);
             }
         } else {
+            gl.uniform1i(shaderProgram.useColorUniform, true);
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
             gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_color_buffer.itemSize, gl.FLOAT, false, 0, 0);
         }
@@ -190,5 +215,6 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
         //gl.drawElements(gl.LINE_LOOP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
         gl.drawElements(gl.TRIANGLE_STRIP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+        gl.uniform1f(shaderProgram.useReflectionUniform, 0.0);
     }
 }

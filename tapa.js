@@ -116,6 +116,7 @@ function Tapa(externo, interno, color, esTexturada) { // -> externo e interno so
         gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, this.webgl_normal_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
         if (this.esTexturada) {
+            gl.uniform1i(shaderProgram.useColorUniform, false);
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
             gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
@@ -124,6 +125,7 @@ function Tapa(externo, interno, color, esTexturada) { // -> externo e interno so
             gl.uniform1i(shaderProgram.samplerUniform, 0);
             gl.bindTexture(gl.TEXTURE_2D, this.texture);
         } else {
+            gl.uniform1i(shaderProgram.useColorUniform, true);
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
             gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_color_buffer.itemSize, gl.FLOAT, false, 0, 0);
         }
