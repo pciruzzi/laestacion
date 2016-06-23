@@ -25,6 +25,7 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
     this.webgl_index_buffer = null;
 
     this.texture = null;
+    this.normalTexture = null;
     var weakThis = this;
 
     this.initTexture = function(texture_file){
@@ -36,6 +37,17 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
             handleLoadedTexture(weakThis.texture);
         }
         this.texture.image.src = texture_file;
+    }
+
+    this.initNormalTexture = function(texture_file){
+        var aux_texture = gl.createTexture();
+        this.normalTexture = aux_texture;
+        this.normalTexture.image = new Image();
+
+        this.normalTexture.image.onload = function () {
+            handleLoadedTexture(weakThis.normalTexture);
+        }
+        this.normalTexture.image.src = texture_file;
     }
 
     this.initBuffers = function(){
@@ -70,8 +82,8 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
                 var texture = [0,0];
                 // Asi tengo 4 veces la textura en u y 2 en v (La repito 8 veces)
                 if (this.esTexturada) {
-                    var u = 4.0 - 4*(i / (3*this.filas - 2 - 1));
-                    var v = 2.0 - 2*(j / (this.columnas - 1));
+                    var u = 5.0 - 5*(i / (3*this.filas - 2 - 1));
+                    var v = 3.0 - 3*(j / (this.columnas - 1));
                     texture = [u,v];
                 }
 
@@ -137,7 +149,7 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
         }
     }
 
-    this.draw = function(modelMatrix, shaderProgram){
+    this.draw = function(modelMatrix, shaderProgram, conNormalMap){
         // Se configuran los buffers que alimentarán el pipeline
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
@@ -160,6 +172,12 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
             gl.bindTexture(gl.TEXTURE_2D, this.texture);
             gl.uniform1i(shaderProgram.samplerUniform, 0);
             //gl.bindTexture(gl.TEXTURE_2D, this.texture);
+            if (conNormalMap) {
+                gl.uniform1f(shaderProgram.useNormalUniform, true);
+                gl.activeTexture(gl.TEXTURE1);
+                gl.bindTexture(gl.TEXTURE_2D, this.normalTexture);
+                gl.uniform1i(shaderProgram.samplerUniformNormal, 1);
+            }
         } else {
             gl.uniform1i(shaderProgram.useColorUniform, true);
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
@@ -176,5 +194,6 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
         //gl.drawElements(gl.LINE_LOOP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
         gl.drawElements(gl.TRIANGLE_STRIP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+        gl.uniform1f(shaderProgram.useNormalUniform, false);
     }
 }

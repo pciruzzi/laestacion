@@ -23,6 +23,7 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
     this.webgl_index_buffer = null;
 
     this.texture = null;
+    this.normalTexture = null;
     var weakThis = this;
 
     this.initTexture = function(texture_file){
@@ -36,7 +37,18 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
         this.texture.image.src = texture_file;
     }
 
-    this.calcularTangentes = function(){
+    this.initNormalTexture = function(texture_file){
+        var aux_texture = gl.createTexture();
+        this.normalTexture = aux_texture;
+        this.normalTexture.image = new Image();
+
+        this.normalTexture.image.onload = function () {
+            handleLoadedTexture(weakThis.normalTexture);
+        }
+        this.normalTexture.image.src = texture_file;
+    }
+
+    this.calcularTangentesYBinormales = function(){
         this.tangent_buffer = [];
         this.binormal_buffer = [];
         var caminoTangentBuffer = getTangentBuffer(this.camino);
@@ -46,10 +58,21 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
             var tgz = caminoTangentBuffer[i+2];
             for (var j = 0; j < this.columnas; j++) {
                 this.tangent_buffer.push(tgx, tgy, tgz);
-                var tg = [tgx, tgy, tgz];
-                var normal = [];
-                //TODO: Calcular bien
-                this.binormal_buffer.push(1,1,1);
+                var tangente = [tgx, tgy, tgz];
+
+                var nx = this.normal_buffer[i/3*this.filas + j];
+                var ny = this.normal_buffer[i/3*this.filas + j + 1];
+                var nz = this.normal_buffer[i/3*this.filas + j + 2];
+                var normal = [nx, ny, nz];
+
+                var binormal = [];
+                vec3.cross(binormal, normal, tangente);
+                vec3.normalize(binormal, binormal);
+
+                var bnx = binormal[0];
+                var bny = binormal[1];
+                var bnz = binormal[2];
+                this.binormal_buffer.push(bnx, bny, bnz);
             }
         }
     }
@@ -130,7 +153,7 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
             }
         }
 
-        this.calcularTangentes();
+        this.calcularTangentesYBinormales();
         this.index_buffer = grid(this.filas, this.columnas);
 
         // Creación e Inicialización de los buffers a nivel de OpenGL
@@ -181,7 +204,7 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
         }
     }
 
-    this.draw = function(modelMatrix, shaderProgram){
+    this.draw = function(modelMatrix, shaderProgram, conNormalMap){
         // Se configuran los buffers que alimentarán el pipeline
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
@@ -204,6 +227,12 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
             gl.bindTexture(gl.TEXTURE_2D, this.texture);
             gl.uniform1i(shaderProgram.samplerUniform, 0);
             gl.bindTexture(gl.TEXTURE_2D, this.texture);
+            if (conNormalMap) {
+                gl.uniform1f(shaderProgram.useNormalUniform, true);
+                gl.activeTexture(gl.TEXTURE1);
+                gl.bindTexture(gl.TEXTURE_2D, this.normalTexture);
+                gl.uniform1i(shaderProgram.samplerUniformNormal, 1);
+            }
         } else {
             gl.uniform1i(shaderProgram.useColorUniform, true);
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
@@ -220,5 +249,6 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
         //gl.drawElements(gl.LINE_LOOP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
         gl.drawElements(gl.TRIANGLE_STRIP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+        gl.uniform1f(shaderProgram.useNormalUniform, false);
     }
 }

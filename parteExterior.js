@@ -286,6 +286,7 @@ function ParteExterior() {
         this.pisoExterna = new SuperficieBarrido(this.formaPisoExterna, this.caminoEstacion.getVertexBuffer(), null, true);
         this.pisoExterna.initBuffers(2,20);
         this.pisoExterna.initTexture("images/shiphull512.jpg");
+        this.pisoExterna.initNormalTexture("images/shiphull_normalmap512.jpg");
 
         this.ventanalExterna1 = new SuperficieBarrido(this.formaVentanalExterna1, this.caminoEstacion.getVertexBuffer(), null, true);
         this.ventanalExterna1.initBuffers(1,4,true);
@@ -294,6 +295,7 @@ function ParteExterior() {
         this.techoExterna = new SuperficieBarrido(this.formaTechoExterna, this.caminoEstacion.getVertexBuffer(), null, true);
         this.techoExterna.initBuffers(2,20);
         this.techoExterna.initTexture("images/shiphull512.jpg");
+        this.techoExterna.initNormalTexture("images/shiphull_normalmap512.jpg");
 
         this.ventanalExterna2 = new SuperficieBarrido(this.formaVentanalExterna2, this.caminoEstacion.getVertexBuffer(), null, true);
         this.ventanalExterna2.initBuffers(1,4);
@@ -410,8 +412,8 @@ function ParteExterior() {
         mat4.identity(model_matrix_externa);
         mat4.scale(model_matrix_externa, model_matrix_casco, [0.5, 0.5, 0.5]);
         //this.externa.draw(model_matrix_externa, shaderProgramSimple);
-        this.techoExterna.draw(model_matrix_externa, shaderProgramSimple);
-        this.pisoExterna.draw(model_matrix_externa, shaderProgramSimple);
+        this.techoExterna.draw(model_matrix_externa, shaderProgramSimple, false);
+        this.pisoExterna.draw(model_matrix_externa, shaderProgramSimple, false);
         this.ventanalExterna1.draw(model_matrix_externa, shaderProgramSimple);
         this.ventanalExterna2.draw(model_matrix_externa, shaderProgramSimple);
 
