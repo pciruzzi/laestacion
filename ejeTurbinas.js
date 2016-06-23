@@ -46,9 +46,6 @@ function EjeTurbinas() {
         mat4.scale(model_matrix_cilindro, model_matrix_cilindro, [3.0, 3.0, 14.0]);
         this.cilindro.draw(model_matrix_cilindro, shaderProgramSimple);
 
-        //gl.uniform1i(shaderProgramSimple.useLightingUniform, false);
-        gl.uniform1i(shaderProgramSimple.useIluminationUniform, true);
-
         var model_matrix_turbina1 = mat4.create();
         mat4.identity(model_matrix_turbina1);
         mat4.translate(model_matrix_turbina1, model_matrix_eje, [-9.5, 7.5, -2.1]);
@@ -72,9 +69,6 @@ function EjeTurbinas() {
         mat4.translate(model_matrix_turbina4, model_matrix_eje, [9.5, -7.5, -2.1]);
         mat4.scale(model_matrix_turbina4, model_matrix_turbina4, [0.5, 0.5, 1]);
         this.turbina4.draw(model_matrix_turbina4);
-
-        //gl.uniform1i(shaderProgramSimple.useLightingUniform, true);
-        gl.uniform1i(shaderProgramSimple.useIluminationUniform, false);
 
         var model_matrix_union1y2 = mat4.create();
         mat4.identity(model_matrix_union1y2);

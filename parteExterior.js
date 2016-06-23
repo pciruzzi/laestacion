@@ -428,6 +428,7 @@ function ParteExterior() {
         var model_matrix_interna = mat4.create();
         mat4.identity(model_matrix_interna);
         mat4.scale(model_matrix_interna, model_matrix_casco, [0.5, 0.5, 0.5]);
+        
         this.techoInterna.draw(model_matrix_interna, shaderProgramSimple, false, true, 1.0);
         gl.uniform1i(shaderProgramSimple.useIluminationUniform, false);
 
