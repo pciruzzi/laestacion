@@ -59,16 +59,14 @@ function drawScene() {
 
     // Configuración de la luz
     // Se inicializan las variables asociadas con la iluminación
-    var lighting = true;
-    gl.uniform1i(shaderProgramSimple.useLightingUniform, lighting);
-    var lightPosition = vec3.fromValues(500.0*Math.cos(rotacionSol), 0.0, 500.0*Math.sin(rotacionSol)); 
-    //vec3.transformMat4(lightPosition, lightPosition, cameraMatrix);
-    gl.uniform3fv(shaderProgramSimple.lightingDirectionUniform, lightPosition);
-
-    // Configuramos la iluminación
-    gl.uniform3f(shaderProgramSimple.ambientColorUniform, 0.3, 0.3, 0.3);
-    gl.uniform3f(shaderProgramSimple.directionalColorUniform, 0.05, 0.05, 0.05);
-
+    //Sol
+    var sunPosition = vec3.fromValues(500.0*Math.cos(rotacionSol), 0.0, 500.0*Math.sin(rotacionSol)); 
+    //vec3.transformMat4(sunPosition, sunPosition, cameraMatrix);
+    gl.uniform3fv(shaderProgramSimple.lightingPrincipalDirectionUniform, sunPosition);
+    gl.uniform1f(shaderProgramSimple.lightPrincipalIntensity, 2.0);                           //Intensidad 
+    gl.uniform3f(shaderProgramSimple.ambientColorUniform, 0.2, 0.2, 0.2);                     //Ambiente
+    gl.uniform3f(shaderProgramSimple.diffusePrincipalColorUniform, 1.0, 1.0, 1.0);            //Difusa
+    gl.uniform3f(shaderProgramSimple.specularPrincipalColorUniform, 0.1, 0.1, 0.1);           //Especular
 
     // Dibujamos la escena        
     var model_matrix_escena = mat4.create();

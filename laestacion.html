@@ -209,13 +209,40 @@
 <script id="shader-fs" type="x-shader/x-fragment">
     precision mediump float;
 
-    varying vec4 vTextureCoord;
-    varying vec3 vLightWeighting;
+    uniform vec3 uAmbientColor;
 
-    //uniform sampler2D uSampler;
+    // Sol
+    uniform vec3 uPrincipalLightDirection;
+    uniform vec3 uPrincipalDiffuseColor;
+    uniform vec3 uPrincipalSpecularColor;
+    uniform float uPrincipalLightIntensity;
+
+    varying vec3 vertPos;
+
+    varying vec3 normalInterp;
+    varying vec4 vTextureCoord;
 
     void main(void) {
-        //vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+        vec3 normal = normalize(normalInterp);
+
+        // Calculos de la iluminación
+        /** Sol: Direccional **/
+        vec3 lightDir = uPrincipalLightDirection;
+        vec3 lightDirNormalized = normalize(lightDir);
+        vec3 lightReflectDir = reflect(-lightDirNormalized, normal);
+        vec3 viewDir = normalize(-vertPos); //AGREGAMOS POS CAMARA ?
+        float diffusePrincipalLightWeighting = max(dot(lightDirNormalized,normal), 0.0);    // Difusa: (N*L)
+        vec3 r = 2.0 * diffusePrincipalLightWeighting * normal - lightDirNormalized;
+        float rv = max(dot(r, viewDir), 0.0); 
+        float specularPrincipalLightWeighting = pow(rv,15.0);                               // Especular: [(2*(N*L)*N - L) * V] ^ alpha
+
+        vec3 vPrincipalLightWeighting = uPrincipalLightIntensity * (uAmbientColor +
+                                                                    uPrincipalDiffuseColor * diffusePrincipalLightWeighting + 
+                                                                    uPrincipalSpecularColor * specularPrincipalLightWeighting);
+
+        vec3 vLightWeighting = vPrincipalLightWeighting;
+
+
         gl_FragColor = vec4(vTextureCoord.rgb * vLightWeighting, 1.0);
     }
 </script>
@@ -230,15 +257,10 @@
     uniform mat4 uPMatrix;
     uniform mat3 uNMatrix;
 
-    uniform vec3 uAmbientColor;
+    varying vec3 vertPos;
 
-    uniform vec3 uLightPosition;
-    uniform vec3 uDirectionalColor;
-
-    uniform bool uUseLighting;
-
+    varying vec3 normalInterp;
     varying vec4 vTextureCoord;
-    varying vec3 vLightWeighting;
 
     void main(void) {
         // Transformamos al vértice al espacio de la cámara
@@ -247,19 +269,12 @@
         // Transformamos al vértice al espacio de la proyección
         gl_Position = uPMatrix * pos_camera_view;
 
+        vertPos = vec3(pos_camera_view) / pos_camera_view.w;
+
         // Coordenada de textura sin modifiaciones
         vTextureCoord = aTextureCoord;
 
-        // Calculos de la iluminación
-        vec3 light_dir =  uLightPosition - vec3( pos_camera_view );
-        normalize(light_dir);
-        if (!uUseLighting) {
-            vLightWeighting = vec3(1.0, 1.0, 1.0);
-        } else {
-            vec3 transformedNormal = normalize(uNMatrix * aVertexNormal);
-            float directionalLightWeighting = max(dot(transformedNormal, light_dir), 0.0);
-            vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting * 0.1;
-        }
+        normalInterp = normalize(uNMatrix * aVertexNormal);
     }
 </script>
 
