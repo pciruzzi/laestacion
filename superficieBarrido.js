@@ -72,9 +72,9 @@ function SuperficieBarrido(forma, camino, color, esTexturada) { // -> forma y ca
                 this.tangent_buffer.push(tgx, tgy, tgz);
                 var tangente = [tgx, tgy, tgz];
 
-                var nx = this.normal_buffer[i/3*this.filas + j];
-                var ny = this.normal_buffer[i/3*this.filas + j + 1];
-                var nz = this.normal_buffer[i/3*this.filas + j + 2];
+                var nx = this.normal_buffer[i*this.columnas + j*3];
+                var ny = this.normal_buffer[i*this.columnas + j*3 + 1];
+                var nz = this.normal_buffer[i*this.columnas + j*3 + 2];
                 var normal = [nx, ny, nz];
 
                 var binormal = [];

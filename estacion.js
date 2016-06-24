@@ -12,6 +12,7 @@ function Estacion() {
     this.create = function() {
         this.parteCentral = new ParteCentral();
         this.parteCentral.create();
+
         this.parteExterior = new ParteExterior();
         this.parteExterior.create();
 
