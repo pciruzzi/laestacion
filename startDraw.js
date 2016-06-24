@@ -70,7 +70,7 @@ function drawScene() {
     // Sol
     var sunPosition = vec3.fromValues(500.0*Math.cos(rotacionSol), 0.0, 500.0*Math.sin(rotacionSol)); 
     gl.uniform3fv(shaderProgramSimple.lightingPrincipalDirectionUniform, sunPosition);
-    gl.uniform1f(shaderProgramSimple.lightPrincipalIntensity, 1.5);                         //Intensidad 
+    gl.uniform1f(shaderProgramSimple.lightPrincipalIntensity, 1.2);                         //Intensidad
     gl.uniform3f(shaderProgramSimple.ambientColorUniform, 0.3, 0.3, 0.3);                   //Ambiente
     gl.uniform3f(shaderProgramSimple.diffusePrincipalColorUniform, 1.0, 1.0, 1.0);          //Difusa
     gl.uniform3f(shaderProgramSimple.specularPrincipalColorUniform, 0.1, 0.1, 0.1);         //Especular
@@ -78,8 +78,8 @@ function drawScene() {
     // Tierra
     var earthPosition = [0.0, -300.0, 0.0];
     gl.uniform3fv(shaderProgramSimple.lightingSecondaryDirectionUniform, earthPosition);
-    gl.uniform1f(shaderProgramSimple.lightSecondaryIntensity, 0.4);                          //Intensidad 
-    gl.uniform3f(shaderProgramSimple.diffuseSecondaryColorUniform, 0.0, 0.0, 0.7);           //Difusa
+    gl.uniform1f(shaderProgramSimple.lightSecondaryIntensity, 0.2);                          //Intensidad
+    gl.uniform3f(shaderProgramSimple.diffuseSecondaryColorUniform, 46/255, 46/255, 254/255); //Difusa
     gl.uniform3f(shaderProgramSimple.specularSecondaryColorUniform, 0.0, 0.0, 1.0);          //Especular
 
     //Luces Puntuales

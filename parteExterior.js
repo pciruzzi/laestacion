@@ -41,7 +41,7 @@ function ParteExterior() {
     this.manguera = null;
     this.caminoManguera = [];
     this.formaManguera = null;
-    this.colorManguera1 = getColor("red");
+    this.colorManguera1 = getColor("opaque yellow");
     this.colorManguera = [];
 
     this.createCaminoEstacion = function() {
