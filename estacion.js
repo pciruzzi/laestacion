@@ -19,22 +19,22 @@ function Estacion() {
         this.cilindro1 = new Cilindro(4, 30, this.colorCilindros, true);
         this.cilindro1.initBuffers();
         this.cilindro1.initTexture("images/brown.jpg");
-        this.cilindro1.initReflectionTexture("images/refMap.jpg");
+        this.cilindro1.initReflectionTexture("images/refMap2.jpg");
 
         this.cilindro2 = new Cilindro(4, 30, this.colorCilindros, true);
         this.cilindro2.initBuffers();
         this.cilindro2.initTexture("images/brown.jpg");
-        this.cilindro2.initReflectionTexture("images/refMap.jpg");
+        this.cilindro2.initReflectionTexture("images/refMap2.jpg");
 
         this.cilindro3 = new Cilindro(4, 30, this.colorCilindros, true);
         this.cilindro3.initBuffers();
         this.cilindro3.initTexture("images/brown.jpg");
-        this.cilindro3.initReflectionTexture("images/refMap.jpg");
+        this.cilindro3.initReflectionTexture("images/refMap2.jpg");
 
         this.cilindro4 = new Cilindro(4, 30, this.colorCilindros, true);
         this.cilindro4.initBuffers();
         this.cilindro4.initTexture("images/brown.jpg");
-        this.cilindro4.initReflectionTexture("images/refMap.jpg");
+        this.cilindro4.initReflectionTexture("images/refMap2.jpg");
     }
 
     this.draw = function(modelMatrix) {

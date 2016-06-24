@@ -95,7 +95,6 @@ function initShaderSimple() {
     shaderProgram.ModelMatrixUniform = gl.getUniformLocation(shaderProgram, "uModelMatrix");
     shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNormalMatrix");
     shaderProgram.useReflectionUniform = gl.getUniformLocation(shaderProgram, "uUseReflection");
-    shaderProgram.worldCameraPosition = gl.getUniformLocation(shaderProgram, "worldCameraPosition");
 
     // Con esto accedo a las uniforms del shader de fragmentos
     // Iluminacion

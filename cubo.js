@@ -26,6 +26,7 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
 
     this.texture = null;
     this.normalTexture = null;
+    this.reflectionTexture = null;
     var weakThis = this;
 
     this.initTexture = function(texture_file){
@@ -48,6 +49,17 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
             handleLoadedTexture(weakThis.normalTexture);
         }
         this.normalTexture.image.src = texture_file;
+    }
+
+    this.initReflectionTexture = function(texture_file){
+        var aux_texture = gl.createTexture();
+        this.reflectionTexture = aux_texture;
+        this.reflectionTexture.image = new Image();
+
+        this.reflectionTexture.image.onload = function () {
+            handleLoadedTexture(weakThis.reflectionTexture);
+        }
+        this.reflectionTexture.image.src = texture_file;
     }
 
     // Se generan los Vertices para el cubo con alto, ancho y profundo pasados por parametro.
@@ -242,7 +254,7 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
         }
     }
 
-    this.draw = function(modelMatrix, shaderProgram, conNormalMap){
+    this.draw = function(modelMatrix, shaderProgram, conNormalMap, useReflection){
         // Se configuran los buffers que alimentarán el pipeline
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
@@ -271,6 +283,12 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
                 gl.bindTexture(gl.TEXTURE_2D, this.normalTexture);
                 gl.uniform1i(shaderProgram.samplerUniformNormal, 1);
             }
+            if (useReflection) {
+                gl.uniform1f(shaderProgram.useReflectionUniform, 1.0);
+                gl.activeTexture(gl.TEXTURE3);
+                gl.bindTexture(gl.TEXTURE_2D, this.reflectionTexture);
+                gl.uniform1i(shaderProgram.samplerUniformReflection, 3);
+            }
         } else {
             gl.uniform1i(shaderProgram.useColorUniform, true);
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
@@ -288,5 +306,6 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
         //gl.drawElements(gl.LINE_LOOP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
         gl.drawElements(gl.TRIANGLE_STRIP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
         gl.uniform1f(shaderProgram.useNormalUniform, false);
+        gl.uniform1f(shaderProgram.useReflectionUniform, 0.0);
     }
 }

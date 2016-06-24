@@ -48,15 +48,10 @@ function drawScene() {
         mat4.multiply(cameraMatrix, camaraAux, cameraMatrix);
     }
 
-    var aux = mat4.create();
-    mat4.invert(aux, cameraMatrix);
-    worldCameraPosition = [ aux[12], aux[13], aux[14] ];  // La posicion de la cámara en coordenadas del mundo
-
-    // ################################### CONFIGURACION DE SHADERS ###################################
+    // ################################### CONFIGURACION DEL SHADER ###################################
     gl.useProgram(shaderProgramSimple);
     gl.uniformMatrix4fv(shaderProgramSimple.ViewMatrixUniform, false, cameraMatrix);
     gl.uniformMatrix4fv(shaderProgramSimple.pMatrixUniform, false, pMatrix);
-    gl.uniform3fv(shaderProgramSimple.worldCameraPosition, worldCameraPosition);
     // En principio no utilizo reflexion
     gl.uniform1f(shaderProgramSimple.useReflectionUniform, 0.0);
     // En principio utilizo texturas
@@ -108,7 +103,6 @@ function drawScene() {
     var model_matrix_estacion = mat4.create();
     mat4.identity(model_matrix_estacion);
     mat4.scale(model_matrix_estacion, model_matrix_escena, [7.0, 7.0, 7.0]);
-    //mat4.rotate(model_matrix_estacion, model_matrix_estacion, angle, [0,1,0]);
     estacion.draw(model_matrix_estacion);
 
     //Movimiento de las antenas
@@ -228,14 +222,13 @@ function drawScene() {
 
     modeloNave.draw(position_matrix_nave);
 
-
     // Matriz de modelado de la tierra
     var model_matrix_tierra = mat4.create();
     mat4.identity(model_matrix_tierra);
     mat4.translate(model_matrix_tierra, model_matrix_escena, [0.0, 0.0, -300.0]);
     mat4.rotate(model_matrix_tierra, model_matrix_tierra, Math.PI/2, [1,0,0]);
     mat4.scale(model_matrix_tierra, model_matrix_tierra, [200.0, 200.0, 200.0]);
-    tierra.draw(model_matrix_tierra, shaderProgramSimple);
+    tierra.draw(model_matrix_tierra, shaderProgramSimple, false, null, true);
 
     // Hago que el "universo" no se ilumine
     gl.uniform1i(shaderProgramSimple.useLightingUniform, !lighting);
@@ -302,6 +295,8 @@ function start() {
     tierra = new Esfera(30, 30, getColor("light blue"), true);
     tierra.initBuffers(false);
     tierra.initTexture("images/earth_2.jpg");
+    //tierra.initTexture("images/gray.jpg");
+    //tierra.initReflectionTexture("images/refMap2.jpg");
 
     universo = new Esfera(30, 30, getColor("black"), true);
     universo.initBuffers(true);

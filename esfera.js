@@ -17,6 +17,7 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
 
     this.texture = null;
     this.iluminationTexture = null;
+    this.reflectionTexture = null;
     var weakThis = this;
 
     this.initTexture = function(texture_file) { 
@@ -38,6 +39,17 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
             handleLoadedTexture(weakThis.iluminationTexture);
         }
         this.iluminationTexture.image.src = texture_file;
+    }
+
+    this.initReflectionTexture = function(texture_file){
+        var aux_texture = gl.createTexture();
+        this.reflectionTexture = aux_texture;
+        this.reflectionTexture.image = new Image();
+
+        this.reflectionTexture.image.onload = function () {
+            handleLoadedTexture(weakThis.reflectionTexture);
+        }
+        this.reflectionTexture.image.src = texture_file;
     }
 
 
@@ -142,7 +154,7 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
         }
     }
 
-    this.draw = function(modelMatrix, shaderProgram, useIlumination, iluminationIntensity){
+    this.draw = function(modelMatrix, shaderProgram, useIlumination, iluminationIntensity, useReflection){
 
         // Se configuran los buffers que alimentarán el pipeline
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
@@ -166,6 +178,12 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
             gl.bindTexture(gl.TEXTURE_2D, this.texture);
             gl.uniform1i(shaderProgram.samplerUniform, 0);
             gl.bindTexture(gl.TEXTURE_2D, this.texture);
+            if (useReflection) {
+                gl.uniform1f(shaderProgram.useReflectionUniform, 1.0);
+                gl.activeTexture(gl.TEXTURE3);
+                gl.bindTexture(gl.TEXTURE_2D, this.reflectionTexture);
+                gl.uniform1i(shaderProgram.samplerUniformReflection, 3);
+            }
         } else {
             gl.uniform1i(shaderProgram.useColorUniform, true);
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
@@ -190,5 +208,6 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
         //gl.drawElements(gl.LINE_LOOP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
         gl.drawElements(gl.TRIANGLE_STRIP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+        gl.uniform1f(shaderProgram.useReflectionUniform, 0.0);
     }
 }

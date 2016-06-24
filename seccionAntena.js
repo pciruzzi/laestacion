@@ -26,21 +26,25 @@ function SeccionAntena() {
         this.panelUno.initBuffers(false, 5, 3);
         this.panelUno.initTexture("images/opaque_blue.jpg");
         this.panelUno.initNormalTexture("images/panelsolar-normalMap.jpg");
+        this.panelUno.initReflectionTexture("images/refMap.jpg");
 
         this.panelDos = new Cubo(alto, ancho, profundo, colorAntenas, true);
         this.panelDos.initBuffers(false, 5, 3);
         this.panelDos.initTexture("images/opaque_blue.jpg");
         this.panelDos.initNormalTexture("images/panelsolar-normalMap.jpg");
+        this.panelDos.initReflectionTexture("images/refMap.jpg");
 
         this.panelTres = new Cubo(alto, ancho, profundo, colorAntenas, true);
         this.panelTres.initBuffers(false, 5, 3);
         this.panelTres.initTexture("images/opaque_blue.jpg");
         this.panelTres.initNormalTexture("images/panelsolar-normalMap.jpg");
+        this.panelTres.initReflectionTexture("images/refMap.jpg");
 
         this.panelCuatro = new Cubo(alto, ancho, profundo, colorAntenas, true);
         this.panelCuatro.initBuffers(false, 5, 3);
         this.panelCuatro.initTexture("images/opaque_blue.jpg");
         this.panelCuatro.initNormalTexture("images/panelsolar-normalMap.jpg");
+        this.panelCuatro.initReflectionTexture("images/refMap.jpg");
 
         this.cilindroVerticalUno = new Cilindro(latitude_bands, longitude_bands, colorCilindros, esTexturada);
         this.cilindroVerticalUno.initBuffers();
@@ -60,28 +64,28 @@ function SeccionAntena() {
         mat4.multiply(matrix_panelUno, matrix_panelUno, modelMatrix);
         mat4.translate(matrix_panelUno, matrix_panelUno, [-0.02, 0, 0.6]);
         mat4.rotate(matrix_panelUno,matrix_panelUno,rotationAngle,[1,0,0]);
-        this.panelUno.draw(matrix_panelUno, shaderProgram, true);
+        this.panelUno.draw(matrix_panelUno, shaderProgram, true, true);
 
         var matrix_panelDos = mat4.create();
         mat4.identity(matrix_panelDos);
         mat4.multiply(matrix_panelDos, matrix_panelDos, modelMatrix);
         mat4.translate(matrix_panelDos, matrix_panelDos, [3.98, 0, 0.6]);
         mat4.rotate(matrix_panelDos,matrix_panelDos,rotationAngle,[1,0,0]);
-        this.panelDos.draw(matrix_panelDos, shaderProgram, true);
+        this.panelDos.draw(matrix_panelDos, shaderProgram, true, true);
 
         var matrix_panelTres = mat4.create();
         mat4.identity(matrix_panelTres);
         mat4.multiply(matrix_panelTres, matrix_panelTres, modelMatrix);
         mat4.translate(matrix_panelTres, matrix_panelTres, [-0.02, 0, -0.6]);
         mat4.rotate(matrix_panelTres,matrix_panelTres,rotationAngle,[1,0,0]);
-        this.panelTres.draw(matrix_panelTres, shaderProgram, true);
+        this.panelTres.draw(matrix_panelTres, shaderProgram, true, true);
 
         var matrix_panelCuatro = mat4.create();
         mat4.identity(matrix_panelCuatro);
         mat4.multiply(matrix_panelCuatro, matrix_panelCuatro, modelMatrix);
         mat4.translate(matrix_panelCuatro, matrix_panelCuatro, [3.98, 0, -0.6]);
         mat4.rotate(matrix_panelCuatro,matrix_panelCuatro,rotationAngle,[1,0,0]);
-        this.panelCuatro.draw(matrix_panelCuatro, shaderProgram, true);
+        this.panelCuatro.draw(matrix_panelCuatro, shaderProgram, true, true);
 
         var matrix_cilindroVerticalUno = mat4.create();
         mat4.identity(matrix_cilindroVerticalUno);

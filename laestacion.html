@@ -49,7 +49,7 @@
     varying vec3 vNormal;
     varying vec3 vTangent;
     varying vec3 vBinormal;
-    varying vec3 reflectionDir;
+    varying vec2 reflectionDir;
 
     varying float vUseReflection;
     uniform bool uUseColor;
@@ -230,8 +230,9 @@
         
         // Si utiliza reflexion
         if (vTextureCoord[2] == 1.0 || vUseReflection == 1.0) {
-            vec4 reflectionTexture = texture2D(uSamplerReflectionMap, vec2(reflectionDir.x, reflectionDir.y));
-            gl_FragColor = vec4(mix(textureColor, reflectionTexture, 0.3).rgb * vLightWeighting, textureColor.a);
+            vec4 reflectionTexture = texture2D(uSamplerReflectionMap, reflectionDir);
+            //gl_FragColor = vec4(reflectionTexture, 1.0);
+            gl_FragColor = vec4(mix(textureColor, reflectionTexture, 0.2).rgb * vLightWeighting, textureColor.a);
 
             //gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
 
@@ -254,16 +255,14 @@
     uniform mat4 uProyMatrix;
     uniform mat3 uNormalMatrix;
 
-    uniform float uUseReflection;
-    uniform vec3 worldCameraPosition;
-
     varying vec4 vTextureCoord;
     varying vec3 vPosition;
     varying vec3 vNormal;
     varying vec3 vTangent;
     varying vec3 vBinormal;
-    varying vec3 reflectionDir;
+    varying vec2 reflectionDir;
 
+    uniform float uUseReflection;
     varying float vUseReflection;
 
     void main(void) {
@@ -289,13 +288,9 @@
         // Si utiliza reflexion
         if (vTextureCoord[2] == 1.0 || uUseReflection == 1.0) {
             vec3 view = normalize(vPosition);
-            reflectionDir = reflect(view, vNormal);
-            reflectionDir = vec3(uViewMatrix * vec4(reflectionDir, 0.0));
-            //vec3 worldPos  = vec3( uModelMatrix * vec4(aVertexPosition,1.0) );
-            //vec3 worldNorm = vec3( uModelMatrix * vec4(aVertexNormal,  0.0) ); 
-            //vec3 worldView = normalize( worldCameraPosition - worldPos ); 
-            //reflectionDir  = reflect( -worldView, worldNorm );
-            //reflectionDir.y -= 0.15;
+            vec3 reflection = reflect(view, vNormal);
+            float m = 2.0 * sqrt( pow(reflection.x, 2.0) + pow(reflection.y, 2.0) + pow(reflection.z + 1.0, 2.0)); 
+            reflectionDir = reflection.xy / m + 0.5;//vec3(uViewMatrix * vec4(reflectionDir, 0.0));
         }
     }
 </script>
