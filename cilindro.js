@@ -62,9 +62,38 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
                 texture = [u,v];
             }
 
-            var VerticeActual = new Vertice(position, this.color, normal, tangent, texture);
-            this.vertex_buffer.push(VerticeActual);
+            var verticeActual = new Vertice(position, this.color, normal, tangent, texture);
+            this.vertex_buffer.push(verticeActual);
         }
+    }
+
+    this.repetirUno = function(altura) {
+        for (longNumber=0; longNumber < this.longitudeBands; longNumber++) {
+                var theta = longNumber * 2 * Math.PI / (this.longitudeBands - 1);
+                var sinTheta = Math.sin(theta);
+                var cosTheta = Math.cos(theta);
+
+                var x = cosTheta;
+                var y = sinTheta;
+                var z = altura;
+
+                var position = [x,y,z];
+                var zNormal;
+                if (altura == 0) zNormal = 1;
+                else zNormal = -1;
+                var normal = [0,0,zNormal];
+                var tangent = [x,y,0];
+                var texture = [0,0];
+
+                if (this.esTexturada) {
+                    var u = 1.0 - (longNumber / (this.longitudeBands - 1));
+                    var v = 1.0 - altura;
+                    texture = [u,v];
+                }
+
+                var verticeActual = new Vertice(position, this.color, normal, tangent, texture);
+                this.vertex_buffer.push(verticeActual);
+            }
     }
 
     // Se generan los Vertices para el cilindro, calculando los datos para un cilindro de radio 1 y altura 1.
@@ -82,7 +111,8 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
         for (latNumber=0; latNumber < this.latitudeBands; latNumber++) {
             var altura = latNumber / (this.latitudeBands - 1);
             if (latNumber == 0) {
-                this.hacerTapa(altura)
+                this.hacerTapa(altura);
+                this.repetirUno(altura);
             }
             for (longNumber=0; longNumber < this.longitudeBands; longNumber++) {
                 var theta = longNumber * 2 * Math.PI / (this.longitudeBands - 1);
@@ -104,16 +134,17 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
                     texture = [u,v];
                 }
 
-                var VerticeActual = new Vertice(position, this.color, normal, tangent, texture);
-                this.vertex_buffer.push(VerticeActual);
+                var verticeActual = new Vertice(position, this.color, normal, tangent, texture);
+                this.vertex_buffer.push(verticeActual);
             }
             if (latNumber == this.latitudeBands - 1) {
-                this.hacerTapa(altura)
+                this.repetirUno(altura);
+                this.hacerTapa(altura);
             }
         }
 
         // Buffer de indices de los triangulos
-        this.index_buffer = grid(this.latitudeBands + 2, this.longitudeBands); //Agrego 2 por las tapas -> y 2 por la repetición de primer y último "gajo de altura" con normal distinta?
+        this.index_buffer = grid(this.latitudeBands + 2 + 2, this.longitudeBands); //Agrego 2 por las tapas y 2 por la repetición de primer y último "gajo de altura" con normal distinta
 
         // Creación e Inicialización de los buffers a nivel de OpenGL
         var position_buffer = getPositionBuffer(this.vertex_buffer);
