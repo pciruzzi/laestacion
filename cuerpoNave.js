@@ -8,6 +8,7 @@ function CuerpoNave() {
     this.create = function() {
         this.cuerpo = new CuerpoCentralNave();
         this.cuerpo.initBuffers();
+        this.cuerpo.initReflectionTexture("images/refMap2.jpg");
 
         this.pata1 = new Pata();
         this.pata1.create();
@@ -23,6 +24,7 @@ function CuerpoNave() {
         mat4.identity(model_matrix_cuerpo);
         mat4.multiply(model_matrix_cuerpo, model_matrix_cuerpo, modelMatrix);
 
+        gl.uniform1i(shaderProgramSimple.useColorUniform, true);
         var model_matrix_cuerpo_central = mat4.create();
         mat4.identity(model_matrix_cuerpo_central);
         mat4.rotate(model_matrix_cuerpo_central, model_matrix_cuerpo, Math.PI/2, [0,1,0]);
