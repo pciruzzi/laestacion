@@ -99,7 +99,7 @@ function ParteCentral() {
         mat4.identity(model_matrix_estructura);
         mat4.translate(model_matrix_estructura, model_matrix_centro, [0, 0, -2.9]);
         mat4.scale(model_matrix_estructura, model_matrix_estructura, [0.25, 0.25, 0.25]);
-        this.centro.draw(model_matrix_estructura, shaderProgramSimple, false);
+        this.centro.draw(model_matrix_estructura, shaderProgramSimple, true);
 
         // Matriz de modelado de la antena inf
         var model_matrix_antenaInf = mat4.create();

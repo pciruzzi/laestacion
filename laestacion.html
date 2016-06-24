@@ -45,9 +45,10 @@
     precision mediump float;
 
     varying vec4 vTextureCoord;
-    varying vec3 vertPos;
-    varying mat3 toLocalObject;
-    varying vec3 normalInterp;
+    varying vec3 vPosition;
+    varying vec3 vNormal;
+    varying vec3 vTangent;
+    varying vec3 vBinormal;
     varying vec3 reflectionDir;
 
     varying float vUseReflection;
@@ -88,10 +89,15 @@
     uniform vec3 uPunctual4LightPosition;
 
     void main(void) {
-        vec3 normal = normalize(normalInterp);
+        vec3 normal = normalize(vNormal);
 
         // Normal Map
         if (uUseNormal) {
+            vec3 tangente = normalize(vTangent);
+            vec3 binormal = normalize(vBinormal);
+
+            // Matriz para pasar de coordenadas de vista a coordenadas intrinsecas (coordenadas para hacer el normal mapping)
+            mat3 toLocalObject = mat3(tangente, binormal, normal);
             vec3 nMap         = texture2D(uSamplerNormalMap, vec2(vTextureCoord.s, vTextureCoord.t)).rgb; 
             vec3 normalMap    = (nMap * 2.0 - 1.0);
             normal            = normalize(toLocalObject * normalMap);
@@ -101,8 +107,7 @@
         /** Sol: Direccional **/
         vec3 lightDir = uPrincipalLightDirection;
         vec3 lightDirNormalized = normalize(lightDir);
-        vec3 lightReflectDir = reflect(-lightDirNormalized, normal);
-        vec3 viewDir = normalize(-vertPos); //AGREGAMOS POS CAMARA ?
+        vec3 viewDir = normalize(-vPosition);
         float diffusePrincipalLightWeighting = max(dot(lightDirNormalized,normal), 0.0);    // Difusa: (N*L)
         vec3 r = 2.0 * diffusePrincipalLightWeighting * normal - lightDirNormalized;
         float rv = max(dot(r, viewDir), 0.0); 
@@ -110,9 +115,8 @@
 
         /** Tierra: Direccional **/
         lightDir = uSecondaryLightDirection;
-        lightDirNormalized = normalize(lightDir);
-        lightReflectDir = reflect(-lightDirNormalized, normal);
-        viewDir = normalize(-vertPos);  
+        lightDirNormalized = normalize(-lightDir);
+        viewDir = normalize(-vPosition);
         float diffuseSecondaryLightWeighting = max(dot(lightDirNormalized,normal), 0.0);    // Difusa: (N*L)
         r = 2.0 * diffuseSecondaryLightWeighting * normal - lightDirNormalized;
         rv = max(dot(r, viewDir), 0.0); 
@@ -120,10 +124,9 @@
 
         /** Techo Bahia de Carga: Puntuales **/
         /** Puntual 1 **/
-        lightDir = uPunctual1LightPosition - vertPos;
+        lightDir = uPunctual1LightPosition - vPosition;
         lightDirNormalized = normalize(lightDir);
-        lightReflectDir = reflect(-lightDirNormalized, normal);
-        viewDir = normalize(-vertPos);  
+        viewDir = normalize(-vPosition);  
         float diffusePunctualLightWeighting = max(dot(lightDirNormalized,normal), 0.0); // Difusa: (N*L)
         r = 2.0 * diffusePunctualLightWeighting * normal - lightDirNormalized;
         rv = max(dot(r, viewDir), 0.0); 
@@ -138,10 +141,9 @@
         }
 
         /** Puntual 2 **/
-        lightDir = uPunctual2LightPosition - vertPos;
+        lightDir = uPunctual2LightPosition - vPosition;
         lightDirNormalized = normalize(lightDir);
-        lightReflectDir = reflect(-lightDirNormalized, normal);
-        viewDir = normalize(-vertPos);
+        viewDir = normalize(-vPosition);
         diffusePunctualLightWeighting = max(dot(lightDirNormalized,normal), 0.0);   // Difusa: (N*L)
         r = 2.0 * diffusePunctualLightWeighting * normal - lightDirNormalized;  // Especular: [(2*(N*L)*N - L) * V] ^ alpha
         rv = max(dot(r, viewDir), 0.0); 
@@ -156,10 +158,9 @@
         }
 
         /** Puntual 3 **/
-        lightDir = uPunctual3LightPosition - vertPos;
+        lightDir = uPunctual3LightPosition - vPosition;
         lightDirNormalized = normalize(lightDir);
-        lightReflectDir = reflect(-lightDirNormalized, normal);
-        viewDir = normalize(-vertPos);  
+        viewDir = normalize(-vPosition);  
         diffusePunctualLightWeighting = max(dot(lightDirNormalized,normal), 0.0);   // Difusa: (N*L)
         r = 2.0 * diffusePunctualLightWeighting * normal - lightDirNormalized;      // Especular: [(2*(N*L)*N - L) * V] ^ alpha
         rv = max(dot(r, viewDir), 0.0); 
@@ -174,10 +175,9 @@
         }
 
         /** Puntual 4 **/
-        lightDir = uPunctual4LightPosition - vertPos;
+        lightDir = uPunctual4LightPosition - vPosition;
         lightDirNormalized = normalize(lightDir);
-        lightReflectDir = reflect(-lightDirNormalized, normal);
-        viewDir = normalize(-vertPos);
+        viewDir = normalize(-vPosition);
         diffusePunctualLightWeighting = max(dot(lightDirNormalized,normal), 0.0);   // Difusa: (N*L)        
         r = 2.0 * diffusePunctualLightWeighting * normal - lightDirNormalized;              
         rv = max(dot(r, viewDir), 0.0); 
@@ -258,9 +258,10 @@
     uniform vec3 worldCameraPosition;
 
     varying vec4 vTextureCoord;
-    varying vec3 vertPos;
-    varying mat3 toLocalObject;
-    varying vec3 normalInterp;
+    varying vec3 vPosition;
+    varying vec3 vNormal;
+    varying vec3 vTangent;
+    varying vec3 vBinormal;
     varying vec3 reflectionDir;
 
     varying float vUseReflection;
@@ -272,32 +273,23 @@
         // Transformamos al vértice al espacio de la proyección
         gl_Position = uProyMatrix * pos_camera_view;
 
-        vertPos = vec3(pos_camera_view) / pos_camera_view.w;
+        vPosition = vec3(pos_camera_view) / pos_camera_view.w;
 
-        // Coordenada de textura sin modifiaciones
+        // Coordenada de textura sin modificaciones
         vTextureCoord = aTextureCoord;
 
-        // 
-        normalInterp = normalize(uNormalMatrix * aVertexNormal);
-
-
-        //Para normalMap
-        vec3 normal   = normalize(uNormalMatrix * aVertexNormal);
-        vec3 tangente = normalize(uNormalMatrix * aVertexTangent);
-        vec3 binormal = normalize(uNormalMatrix * aVertexBinormal);
-
-        // Matriz para pasar de coordenadas de vista a coordenadas intrinsecas (coordenadas para hacer el normal mapping)
-        toLocalObject = mat3(   tangente.x, binormal.x, normal.x,
-                                tangente.y, binormal.y, normal.y,
-                                tangente.z, binormal.z, normal.z ) ;
+        // Para normalMap
+        vNormal = normalize(uNormalMatrix * aVertexNormal);
+        vTangent = normalize(uNormalMatrix * aVertexTangent);
+        vBinormal = normalize(uNormalMatrix * aVertexBinormal);
 
 
         // Indica si usa reflection.
         vUseReflection = uUseReflection;
         // Si utiliza reflexion
         if (vTextureCoord[2] == 1.0 || uUseReflection == 1.0) {
-            vec3 view = normalize(vertPos);
-            reflectionDir = reflect(view, normalInterp);
+            vec3 view = normalize(vPosition);
+            reflectionDir = reflect(view, vNormal);
             reflectionDir = vec3(uViewMatrix * vec4(reflectionDir, 0.0));
             //vec3 worldPos  = vec3( uModelMatrix * vec4(aVertexPosition,1.0) );
             //vec3 worldNorm = vec3( uModelMatrix * vec4(aVertexNormal,  0.0) ); 

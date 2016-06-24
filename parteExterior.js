@@ -414,8 +414,8 @@ function ParteExterior() {
         var model_matrix_externa = mat4.create();
         mat4.identity(model_matrix_externa);
         mat4.scale(model_matrix_externa, model_matrix_casco, [0.5, 0.5, 0.5]);
-        this.techoExterna.draw(model_matrix_externa, shaderProgramSimple, false);
-        this.pisoExterna.draw(model_matrix_externa, shaderProgramSimple, false);
+        this.techoExterna.draw(model_matrix_externa, shaderProgramSimple, true);
+        this.pisoExterna.draw(model_matrix_externa, shaderProgramSimple, true);
 
         //Se desactiva las luces direccional del Sol y la Tierra y se activa la autoiluminacion.
         gl.uniform1i(shaderProgramSimple.useLightingUniform, false);

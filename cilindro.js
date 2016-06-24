@@ -195,9 +195,9 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
             //gl.bindTexture(gl.TEXTURE_2D, this.texture);
             if (useReflection) {
                 gl.uniform1f(shaderProgram.useReflectionUniform, 1.0);
-                gl.activeTexture(gl.TEXTURE1);
+                gl.activeTexture(gl.TEXTURE3);
                 gl.bindTexture(gl.TEXTURE_2D, this.reflectionTexture);
-                gl.uniform1i(shaderProgram.samplerUniformReflection, 1);
+                gl.uniform1i(shaderProgram.samplerUniformReflection, 3);
             }
         } else {
             gl.uniform1i(shaderProgram.useColorUniform, true);
