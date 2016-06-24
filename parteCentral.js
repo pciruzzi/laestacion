@@ -78,7 +78,7 @@ function ParteCentral() {
     this.create = function() {
         this.createPerfilCentro();
         this.centro = new SuperficieRevolucion(this.perfilCentro, [0,0,1], 37, this.colorCentro, true);
-        this.centro.initBuffers();
+        this.centro.initBuffers(5.0, 3.0);
         this.centro.initTexture("images/shiphull512.jpg");
         this.centro.initNormalTexture("images/shiphull_normalmap512.jpg");
 

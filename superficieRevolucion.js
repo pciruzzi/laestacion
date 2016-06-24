@@ -62,7 +62,7 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
         this.iluminationTexture.image.src = texture_file;
     }
 
-    this.initBuffers = function(){
+    this.initBuffers = function(cantU, cantV){
         this.vertex_buffer = [];
         this.position_buffer = [];
         this.color_buffer = [];
@@ -94,8 +94,8 @@ function SuperficieRevolucion(perfil, eje, n, color, esTexturada) { // -> perfil
                 var texture = [0,0];
                 // Asi tengo 4 veces la textura en u y 2 en v (La repito 8 veces)
                 if (this.esTexturada) {
-                    var u = 5.0 - 5*(i / (3*this.filas - 2 - 1));
-                    var v = 3.0 - 3*(j / (this.columnas - 1));
+                    var u = cantU - cantU*(i / (3*this.filas - 2 - 1));
+                    var v = cantV - cantV*(j / (this.columnas - 1));
                     texture = [u,v];
                 }
 

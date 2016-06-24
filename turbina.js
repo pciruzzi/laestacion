@@ -51,9 +51,10 @@ function Turbina(useIlumination) {
             this.perfil = this.perfil.concat(tramosPerfil[i].getVertexBuffer());
         }
 
-        this.turbina = new SuperficieRevolucion(this.perfil, [0,0,1], 37, this.color, false);
-        this.turbina.initBuffers();
-        this.turbina.initIluminationTexture("images/white.jpg");
+        this.turbina = new SuperficieRevolucion(this.perfil, [0,0,1], 37, this.color, true);
+        this.turbina.initBuffers(1.0, 1.0);
+        this.turbina.initTexture("images/turbina.jpg");
+        this.turbina.initIluminationTexture("images/turbina-ilumMap.jpg");
     }
 
     this.draw = function(modelMatrix) {
@@ -61,6 +62,6 @@ function Turbina(useIlumination) {
         var model_matrix_turbina = mat4.create();
         mat4.identity(model_matrix_turbina);
         mat4.multiply(model_matrix_turbina, model_matrix_turbina, modelMatrix);
-        this.turbina.draw(model_matrix_turbina, shaderProgramSimple, false, this.useIlumination, 1.0);
+        this.turbina.draw(model_matrix_turbina, shaderProgramSimple, false, this.useIlumination, 1.5);
     }
 }
