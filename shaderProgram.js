@@ -120,8 +120,8 @@ function initShaderSimple() {
     // Posiciones de las Luces Puntuales
     shaderProgram.lightingPunctual1PositionUniform = gl.getUniformLocation(shaderProgram, "uPunctual1LightPosition");
     shaderProgram.lightingPunctual2PositionUniform = gl.getUniformLocation(shaderProgram, "uPunctual2LightPosition");
-    shaderProgram.lightingPunctual3PositionUniform = gl.getUniformLocation(shaderProgram, "uPunctual3LightPosition");
-    shaderProgram.lightingPunctual4PositionUniform = gl.getUniformLocation(shaderProgram, "uPunctual4LightPosition");
+    //shaderProgram.lightingPunctual3PositionUniform = gl.getUniformLocation(shaderProgram, "uPunctual3LightPosition");
+    //shaderProgram.lightingPunctual4PositionUniform = gl.getUniformLocation(shaderProgram, "uPunctual4LightPosition");
 
     // Booleanos
     shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
