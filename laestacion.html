@@ -82,16 +82,26 @@
     uniform float uPunctualLightRadio;
     uniform float uPunctualLightIntensity;
     uniform vec3 uPunctualDiffuseColor;
-    uniform vec3 uPunctualSpecularColor;
 
-    varying vec3 diff1;
-    varying float dist1;
-    varying vec3 diff2;
-    varying float dist2;
-    /*varying vec3 diff3;
-    varying float dist3;
-    varying vec3 diff4;
-    varying float dist4;*/
+    //Valores para luz puntual 1
+    varying vec3 diff10;
+    varying float dist10;
+    varying vec3 diff11;
+
+	//Valores para luz puntual 2
+    varying vec3 diff20;
+    varying float dist20;
+    varying vec3 diff21;
+
+    //Valores para luz puntual 3
+    varying vec3 diff30;
+    varying float dist30;
+    varying vec3 diff31;
+
+    //Valores para luz puntual 4
+    varying vec3 diff40;
+    varying float dist40;
+    varying vec3 diff41;
 
     void main(void) {
         vec3 normal = normalize(vNormal);
@@ -127,31 +137,73 @@
         rv = max(dot(r, viewDir), 0.0); 
         float specularSecondaryLightWeighting = pow(rv,7.0);                                // Especular: [(2*(N*L)*N - L) * V] ^ alpha
 
-        /** Techo Bahia de Carga: Puntuales **/
-        /** Puntual 1 **/
-        lightDir = diff1;
-        lightDirNormalized = normalize(lightDir);
-        float diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist1;
-        vec3 vP1LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
+        vec3 vP1LightWeighting;
+        vec3 vP2LightWeighting;
+        vec3 vP3LightWeighting;
+        vec3 vP4LightWeighting;
 
-        /** Puntual 2 **/
-        lightDir = diff2;
-        lightDirNormalized = normalize(lightDir);
-        diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist2;
-        vec3 vP2LightWeighting = uPunctualLightIntensity * (vec3(1.0,0.0,0.0)*diffusePunctualLightWeighting);
+        // Use Punctual Lights ?
+		if (uUsePunctualLights) {
+		    /** Techo Bahia de Carga: Puntuales **/
+		    /** Puntual 1 **/
+		    lightDir = diff10;
+		    lightDirNormalized = normalize(lightDir);
+		    float diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist10;
+		    vec3 vP10LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
 
-        /** Puntual 3 **/
-        /*lightDir = diff3;
-        lightDirNormalized = normalize(lightDir);
-        diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist3;
-        vec3 vP3LightWeighting = uPunctualLightIntensity * (vec3(1.0,1.0,0.0)*diffusePunctualLightWeighting);*/
+		    lightDir = diff11;
+		    lightDirNormalized = normalize(lightDir);
+		    diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist10;
+		    vec3 vP11LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
 
-        /** Puntual 4 **/
-        /*lightDir = diff4;
-        lightDirNormalized = normalize(lightDir);
-        diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist4;
-        vec3 vP4LightWeighting = uPunctualLightIntensity * (vec3(1.0,0.0,1.0)*diffusePunctualLightWeighting);*/
+			vP1LightWeighting = vP10LightWeighting + vP11LightWeighting;	        
 
+		    /** Puntual 2 **/
+		    lightDir = diff20;
+		    lightDirNormalized = normalize(lightDir);
+		    diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist20;
+		    vec3 vP20LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
+
+		    lightDir = diff21;
+		    lightDirNormalized = normalize(lightDir);
+		    diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist20;
+		    vec3 vP21LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
+
+		    vP2LightWeighting = vP20LightWeighting + vP21LightWeighting;
+
+		    /** Puntual 3 **/
+		    lightDir = diff30;
+		    lightDirNormalized = normalize(lightDir);
+		    diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist30;
+		    vec3 vP30LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
+
+		    lightDir = diff31;
+		    lightDirNormalized = normalize(lightDir);
+		    diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist30;
+		    vec3 vP31LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
+
+		    vP3LightWeighting = vP30LightWeighting + vP31LightWeighting;
+
+		    /** Puntual 4 **/
+		    lightDir = diff40;
+		    lightDirNormalized = normalize(lightDir);
+		    diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist40;
+		    vec3 vP40LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
+
+		    lightDir = diff41;
+		    lightDirNormalized = normalize(lightDir);
+		    diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist40;
+		    vec3 vP41LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
+
+		    vP4LightWeighting = vP40LightWeighting + vP41LightWeighting;
+        
+        } else {
+	    	vP1LightWeighting = 0.0 * uPunctualDiffuseColor;
+            vP2LightWeighting = 0.0 * uPunctualDiffuseColor;
+            vP3LightWeighting = 0.0 * uPunctualDiffuseColor;
+            vP4LightWeighting = 0.0 * uPunctualDiffuseColor;
+        } 
+     
         // Use Directional Lights ?
         if (! uUseLighting) {
             diffusePrincipalLightWeighting = 0.0;
@@ -160,21 +212,14 @@
             specularSecondaryLightWeighting = 0.0;
         }
 
-        // Use Punctual Lights ?
-        if (!uUsePunctualLights) {
-            vP1LightWeighting = 0.0 * uPunctualDiffuseColor;
-            vP2LightWeighting = 0.0 * uPunctualDiffuseColor;
-            //vP3LightWeighting = 0.0 * uPunctualDiffuseColor;
-            //vP4LightWeighting = 0.0 * uPunctualDiffuseColor;
-        }
-
         vec3 vPrincipalLightWeighting = uPrincipalLightIntensity * (uAmbientColor +
                                                                     uPrincipalDiffuseColor * diffusePrincipalLightWeighting + 
                                                                     uPrincipalSpecularColor * specularPrincipalLightWeighting);
+
         vec3 vSecondaryLightWeighting = uSecondaryLightIntensity * (uSecondaryDiffuseColor*diffuseSecondaryLightWeighting + 
                                                                     uSecondarySpecularColor *specularSecondaryLightWeighting);  
                                                                     
-        vec3 vLightWeighting = vPrincipalLightWeighting + vSecondaryLightWeighting + vP1LightWeighting + vP2LightWeighting;// + vP3LightWeighting + vP4LightWeighting;
+        vec3 vLightWeighting = vPrincipalLightWeighting + vSecondaryLightWeighting + vP1LightWeighting + vP2LightWeighting + vP3LightWeighting + vP4LightWeighting;
 
         // Auto Iluminación: No le interesan el resto de las luces
         if (uUseIlumination) {
@@ -196,14 +241,7 @@
             float m = 2.0 * sqrt( pow(reflection.x, 2.0) + pow(reflection.y, 2.0) + pow(reflection.z + 1.0, 2.0)); 
             vec2 reflectionDir = reflection.xy / m + 0.5;
             vec4 reflectionTexture = texture2D(uSamplerReflectionMap, reflectionDir);
-            //gl_FragColor = vec4(reflectionTexture, 1.0);
             gl_FragColor = vec4(mix(textureColor, reflectionTexture, 0.2).rgb * vLightWeighting, textureColor.a);
-
-            //gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
-
-            // Probando...
-            //vec4 reflectionTextureMock = texture2D(uSamplerReflectionMap, vec2(vTextureCoord.s, vTextureCoord.t));
-            //gl_FragColor = vec4(reflectionTextureMock.rgb * vLightWeighting, textureColor.a);
         }
     }
 </script>
@@ -230,16 +268,26 @@
     varying vec3 vNormal;
     varying vec3 vTangent;
     varying vec3 vBinormal;
-    //varying vec2 reflectionDir;
 
-    varying vec3 diff1;
-    varying float dist1;
-    varying vec3 diff2;
-    varying float dist2;
-    /*varying vec3 diff3;
-    varying float dist3;
-    varying vec3 diff4;
-    varying float dist4;*/
+    //Valores para luz puntual 1
+    varying vec3 diff10;
+    varying float dist10;
+    varying vec3 diff11;
+
+	//Valores para luz puntual 2
+    varying vec3 diff20;
+    varying float dist20;
+    varying vec3 diff21;
+
+    //Valores para luz puntual 3
+    varying vec3 diff30;
+    varying float dist30;
+    varying vec3 diff31;
+
+    //Valores para luz puntual 4
+    varying vec3 diff40;
+    varying float dist40;
+    varying vec3 diff41;
 
     uniform float uUseReflection;
     varying float vUseReflection;
@@ -261,23 +309,26 @@
         vTangent = normalize(uNormalMatrix * aVertexTangent);
         vBinormal = normalize(uNormalMatrix * aVertexBinormal);
 
-
         vec4 vmPosition = uModelMatrix * vec4(aVertexPosition, 1.0);
-        diff1 = uPunctual1LightPosition - vmPosition.xyz;
-        dist1 = distance(uPunctual1LightPosition, vmPosition.xyz);
-        diff2 = uPunctual2LightPosition - vmPosition.xyz;
-        dist2 = distance(uPunctual2LightPosition, vmPosition.xyz);
-        /*diff3 = uPunctual3LightPosition - vmPosition.xyz;
-        dist3 = distance(uPunctual3LightPosition, vmPosition.xyz);
-        diff4 = uPunctual4LightPosition - vmPosition.xyz;
-        dist4 = distance(uPunctual4LightPosition, vmPosition.xyz);*/
+
+        diff10 = vmPosition.xyz - uPunctual1LightPosition;
+        dist10 = distance(uPunctual1LightPosition, vmPosition.xyz);
+        diff11 = uPunctual1LightPosition - vmPosition.xyz;
+
+        diff20 = vmPosition.xyz - uPunctual2LightPosition;
+        dist20 = distance(uPunctual2LightPosition, vmPosition.xyz);
+        diff21 = uPunctual2LightPosition - vmPosition.xyz;
+
+        diff30 = vmPosition.xyz - uPunctual3LightPosition;
+        dist30 = distance(uPunctual3LightPosition, vmPosition.xyz);
+        diff31 = uPunctual3LightPosition - vmPosition.xyz;
+
+        diff40 = vmPosition.xyz - uPunctual4LightPosition;
+        dist40 = distance(uPunctual4LightPosition, vmPosition.xyz);
+        diff41 = uPunctual4LightPosition - vmPosition.xyz;
 
         // Indica si usa reflection.
         vUseReflection = uUseReflection;
-        // Si utiliza reflexion
-        /*if (vTextureCoord[3] == 2.0 || uUseReflection == 1.0) {
-            //vec3(uViewMatrix * vec4(reflectionDir, 0.0));
-        }*/
     }
 </script>
 

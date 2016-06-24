@@ -83,14 +83,14 @@ function drawScene() {
     gl.uniform3f(shaderProgramSimple.specularSecondaryColorUniform, 0.0, 0.0, 1.0);          //Especular
 
     //Luces Puntuales
-    gl.uniform1f(shaderProgramSimple.punctualLightRadio, 70.0);
-    gl.uniform1f(shaderProgramSimple.lightPunctualIntensity, 20.0);                            //Intensidad 
-    gl.uniform3f(shaderProgramSimple.diffusePunctualColorUniform, 0.0, 1.0, 0.0);             //Difusa
+    gl.uniform1f(shaderProgramSimple.punctualLightRadio, 100.0);
+    gl.uniform1f(shaderProgramSimple.lightPunctualIntensity, 6.0);                            //Intensidad 
+    gl.uniform3f(shaderProgramSimple.diffusePunctualColorUniform, 1.0, 1.0, 1.0);             //Difusa
     gl.uniform3f(shaderProgramSimple.specularPunctualColorUniform, 1.0, 1.0, 1.0);            //Especular 
-    gl.uniform3fv(shaderProgramSimple.lightingPunctual1PositionUniform, [-54, -1,  13]);      //Punctual 1
-    gl.uniform3fv(shaderProgramSimple.lightingPunctual2PositionUniform, [54, -1,  13]);      //Punctual 2
-    //gl.uniform3fv(shaderProgramSimple.lightingPunctual3PositionUniform, [ 57, -1,   0]);      //Punctual 3
-    //gl.uniform3fv(shaderProgramSimple.lightingPunctual4PositionUniform, [ 13, -1, -54]);      //Punctual 4
+    gl.uniform3fv(shaderProgramSimple.lightingPunctual1PositionUniform, [-54, -0.1,  13]);    //Punctual 1
+    gl.uniform3fv(shaderProgramSimple.lightingPunctual2PositionUniform, [ 0, -0.1,  57]);    //Punctual 2
+    gl.uniform3fv(shaderProgramSimple.lightingPunctual3PositionUniform, [ 57, -0.1,   0]);    //Punctual 3
+    gl.uniform3fv(shaderProgramSimple.lightingPunctual4PositionUniform, [ 13, -0.1, -54]);    //Punctual 4
 
     // ################################### DIBUJADO DE LA ESCENA ###################################
     // Dibujamos la escena        
