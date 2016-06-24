@@ -101,7 +101,6 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
         var tangenteDerecha = [0.0,0.0,-1.0];
         var textureDerecha = [0,0];
 
-
         //Cara Izquierda
         var normalIzquierda = [1.0,0.0,0.0];
         var tangenteIzquierda = [0.0,0.0,1.0];

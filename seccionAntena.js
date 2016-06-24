@@ -60,28 +60,28 @@ function SeccionAntena() {
         mat4.multiply(matrix_panelUno, matrix_panelUno, modelMatrix);
         mat4.translate(matrix_panelUno, matrix_panelUno, [-0.02, 0, 0.6]);
         mat4.rotate(matrix_panelUno,matrix_panelUno,rotationAngle,[1,0,0]);
-        this.panelUno.draw(matrix_panelUno, shaderProgram, false);
+        this.panelUno.draw(matrix_panelUno, shaderProgram, true);
 
         var matrix_panelDos = mat4.create();
         mat4.identity(matrix_panelDos);
         mat4.multiply(matrix_panelDos, matrix_panelDos, modelMatrix);
         mat4.translate(matrix_panelDos, matrix_panelDos, [3.98, 0, 0.6]);
         mat4.rotate(matrix_panelDos,matrix_panelDos,rotationAngle,[1,0,0]);
-        this.panelDos.draw(matrix_panelDos, shaderProgram, false);
+        this.panelDos.draw(matrix_panelDos, shaderProgram, true);
 
         var matrix_panelTres = mat4.create();
         mat4.identity(matrix_panelTres);
         mat4.multiply(matrix_panelTres, matrix_panelTres, modelMatrix);
         mat4.translate(matrix_panelTres, matrix_panelTres, [-0.02, 0, -0.6]);
         mat4.rotate(matrix_panelTres,matrix_panelTres,rotationAngle,[1,0,0]);
-        this.panelTres.draw(matrix_panelTres, shaderProgram, false);
+        this.panelTres.draw(matrix_panelTres, shaderProgram, true);
 
         var matrix_panelCuatro = mat4.create();
         mat4.identity(matrix_panelCuatro);
         mat4.multiply(matrix_panelCuatro, matrix_panelCuatro, modelMatrix);
         mat4.translate(matrix_panelCuatro, matrix_panelCuatro, [3.98, 0, -0.6]);
         mat4.rotate(matrix_panelCuatro,matrix_panelCuatro,rotationAngle,[1,0,0]);
-        this.panelCuatro.draw(matrix_panelCuatro, shaderProgram, false);
+        this.panelCuatro.draw(matrix_panelCuatro, shaderProgram, true);
 
         var matrix_cilindroVerticalUno = mat4.create();
         mat4.identity(matrix_cilindroVerticalUno);

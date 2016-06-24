@@ -126,7 +126,7 @@
         /** Puntual 1 **/
         lightDir = uPunctual1LightPosition - vPosition;
         lightDirNormalized = normalize(lightDir);
-        viewDir = normalize(-vPosition);  
+        viewDir = normalize(-vPosition);
         float diffusePunctualLightWeighting = max(dot(lightDirNormalized,normal), 0.0); // Difusa: (N*L)
         r = 2.0 * diffusePunctualLightWeighting * normal - lightDirNormalized;
         rv = max(dot(r, viewDir), 0.0); 
@@ -160,7 +160,7 @@
         /** Puntual 3 **/
         lightDir = uPunctual3LightPosition - vPosition;
         lightDirNormalized = normalize(lightDir);
-        viewDir = normalize(-vPosition);  
+        viewDir = normalize(-vPosition);
         diffusePunctualLightWeighting = max(dot(lightDirNormalized,normal), 0.0);   // Difusa: (N*L)
         r = 2.0 * diffusePunctualLightWeighting * normal - lightDirNormalized;      // Especular: [(2*(N*L)*N - L) * V] ^ alpha
         rv = max(dot(r, viewDir), 0.0); 
