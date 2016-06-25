@@ -52,6 +52,7 @@ function drawScene() {
     gl.useProgram(shaderProgramSimple);
     gl.uniformMatrix4fv(shaderProgramSimple.ViewMatrixUniform, false, cameraMatrix);
     gl.uniformMatrix4fv(shaderProgramSimple.pMatrixUniform, false, pMatrix);
+    gl.uniform3fv(shaderProgramSimple.cameraPositionUniform, eye_point);
     // En principio no utilizo reflexion
     gl.uniform1f(shaderProgramSimple.useReflectionUniform, 0.0);
     // En principio utilizo texturas
@@ -68,27 +69,26 @@ function drawScene() {
     var lighting = true;
     gl.uniform1i(shaderProgramSimple.useLightingUniform, lighting);
     // Sol
-    var sunPosition = vec3.fromValues(500.0*Math.cos(rotacionSol), 0.0, 500.0*Math.sin(rotacionSol)); 
+    var sunPosition = vec3.fromValues(500.0*Math.cos(rotacionSol), 300.0, 500.0*Math.sin(rotacionSol)); 
     gl.uniform3fv(shaderProgramSimple.lightingPrincipalDirectionUniform, sunPosition);
     gl.uniform1f(shaderProgramSimple.lightPrincipalIntensity, 1.2);                         //Intensidad
     gl.uniform3f(shaderProgramSimple.ambientColorUniform, 0.3, 0.3, 0.3);                   //Ambiente
     gl.uniform3f(shaderProgramSimple.diffusePrincipalColorUniform, 1.0, 1.0, 1.0);          //Difusa
-    gl.uniform3f(shaderProgramSimple.specularPrincipalColorUniform, 0.1, 0.1, 0.1);         //Especular
+    gl.uniform3f(shaderProgramSimple.specularPrincipalColorUniform, 1.0, 1.0, 1.0);         //Especular
 
     // Tierra
-    var earthPosition = [0.0, -300.0, 0.0];
+    var earthPosition = [0.0, 300.0, 0.0];
     gl.uniform3fv(shaderProgramSimple.lightingSecondaryDirectionUniform, earthPosition);
     gl.uniform1f(shaderProgramSimple.lightSecondaryIntensity, 0.2);                          //Intensidad
     gl.uniform3f(shaderProgramSimple.diffuseSecondaryColorUniform, 46/255, 46/255, 254/255); //Difusa
-    gl.uniform3f(shaderProgramSimple.specularSecondaryColorUniform, 0.0, 0.0, 1.0);          //Especular
+    gl.uniform3f(shaderProgramSimple.specularSecondaryColorUniform, 1.0, 1.0, 1.0);          //Especular
 
     //Luces Puntuales
-    gl.uniform1f(shaderProgramSimple.punctualLightRadio, 100.0);
     gl.uniform1f(shaderProgramSimple.lightPunctualIntensity, 6.0);                            //Intensidad 
     gl.uniform3f(shaderProgramSimple.diffusePunctualColorUniform, 1.0, 1.0, 1.0);             //Difusa
     gl.uniform3f(shaderProgramSimple.specularPunctualColorUniform, 1.0, 1.0, 1.0);            //Especular 
     gl.uniform3fv(shaderProgramSimple.lightingPunctual1PositionUniform, [-54, -0.1,  13]);    //Punctual 1
-    gl.uniform3fv(shaderProgramSimple.lightingPunctual2PositionUniform, [ 0, -0.1,  57]);    //Punctual 2
+    gl.uniform3fv(shaderProgramSimple.lightingPunctual2PositionUniform, [ 0, -0.1,  57]);     //Punctual 2
     gl.uniform3fv(shaderProgramSimple.lightingPunctual3PositionUniform, [ 57, -0.1,   0]);    //Punctual 3
     gl.uniform3fv(shaderProgramSimple.lightingPunctual4PositionUniform, [ 13, -0.1, -54]);    //Punctual 4
 
@@ -220,7 +220,9 @@ function drawScene() {
         desplegarPatas = false;
     }
 
+    gl.uniform1i(shaderProgramSimple.usePunctualLights, true);
     modeloNave.draw(position_matrix_nave);
+    gl.uniform1i(shaderProgramSimple.usePunctualLights, false);
 
     // Matriz de modelado de la tierra
     var model_matrix_tierra = mat4.create();

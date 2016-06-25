@@ -114,7 +114,6 @@ function initShaderSimple() {
     shaderProgram.lightSecondaryIntensity = gl.getUniformLocation(shaderProgram, "uSecondaryLightIntensity");
 
     // Luces Puntuales
-    shaderProgram.punctualLightRadio = gl.getUniformLocation(shaderProgram, "uPunctualLightRadio");
     shaderProgram.usePunctualLights = gl.getUniformLocation(shaderProgram, "uUsePunctualLights");
     shaderProgram.diffusePunctualColorUniform = gl.getUniformLocation(shaderProgram, "uPunctualDiffuseColor");
     shaderProgram.specularPunctualColorUniform = gl.getUniformLocation(shaderProgram, "uPunctualSpecularColor");
@@ -137,6 +136,9 @@ function initShaderSimple() {
     shaderProgram.samplerUniformReflection = gl.getUniformLocation(shaderProgram, "uSamplerReflectionMap");
     shaderProgram.samplerUniformNormal = gl.getUniformLocation(shaderProgram, "uSamplerNormalMap");
     shaderProgram.samplerUniformIlumination = gl.getUniformLocation(shaderProgram, "uSamplerIluminationMap");
+
+    // Camara
+    shaderProgram.cameraPositionUniform = gl.getUniformLocation(shaderProgram, "uCameraPosition");
 
     return shaderProgram;
 }
