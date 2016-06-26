@@ -59,6 +59,8 @@
     uniform float uIluminationIntensity;
 
     uniform vec3 uCameraPosition;
+    varying vec3 light_dir_normalized;
+    varying vec3 view_dir_normalized;
 
     uniform sampler2D uSampler;
     uniform sampler2D uSamplerReflectionMap;
@@ -90,7 +92,7 @@
     varying float dist10;
     varying vec3 diff11;
 
-	//Valores para luz puntual 2
+    //Valores para luz puntual 2
     varying vec3 diff20;
     varying float dist20;
     varying vec3 diff21;
@@ -121,6 +123,7 @@
         }
 
         // Calculos de la iluminación
+        vec3 halfVector = normalize(light_dir_normalized + view_dir_normalized);
         // Sol
         vec3 lightDir = uPrincipalLightDirection;
         vec3 lightDirNormalized = normalize(lightDir);
@@ -128,7 +131,8 @@
         vec3 viewDir = normalize(-uCameraPosition + vmPosition);
         vec3 r = 2.0 * diffusePrincipalLightWeighting * normal - lightDirNormalized;
         float rv = max(dot(r, viewDir), 0.0); 
-        float specularPrincipalLightWeighting = pow(rv,64.0);                               // Especular: [(2*(N*L)*N - L) * V] ^ alpha
+        //float specularPrincipalLightWeighting = pow(rv,64.0);                               // Especular: [(2*(N*L)*N - L) * V] ^ alpha
+        float specularPrincipalLightWeighting = pow(max(dot(normal, halfVector),0.0),50.0);
 
         // Tierra
         lightDir = uSecondaryLightDirection;
@@ -145,61 +149,61 @@
         vec3 vP4LightWeighting;
 
         // Use Punctual Lights ?
-		if (uUsePunctualLights) {
-		    // Puntual 1
-		    lightDir = diff10;
-		    lightDirNormalized = normalize(lightDir);
-		    float diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist10;
-		    vec3 vP10LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
+        if (uUsePunctualLights) {
+            // Puntual 1
+            lightDir = diff10;
+            lightDirNormalized = normalize(lightDir);
+            float diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist10;
+            vec3 vP10LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
 
-		    lightDir = diff11;
-		    lightDirNormalized = normalize(lightDir);
-		    diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist10;
-		    vec3 vP11LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
+            lightDir = diff11;
+            lightDirNormalized = normalize(lightDir);
+            diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist10;
+            vec3 vP11LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
 
-			vP1LightWeighting = vP10LightWeighting + vP11LightWeighting;	        
+            vP1LightWeighting = vP10LightWeighting + vP11LightWeighting;
 
-		    // Puntual 2
-		    lightDir = diff20;
-		    lightDirNormalized = normalize(lightDir);
-		    diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist20;
-		    vec3 vP20LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
+            // Puntual 2
+            lightDir = diff20;
+            lightDirNormalized = normalize(lightDir);
+            diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist20;
+            vec3 vP20LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
 
-		    lightDir = diff21;
-		    lightDirNormalized = normalize(lightDir);
-		    diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist20;
-		    vec3 vP21LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
+            lightDir = diff21;
+            lightDirNormalized = normalize(lightDir);
+            diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist20;
+            vec3 vP21LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
 
-		    vP2LightWeighting = vP20LightWeighting + vP21LightWeighting;
+            vP2LightWeighting = vP20LightWeighting + vP21LightWeighting;
 
-		    // Puntual 3
-		    lightDir = diff30;
-		    lightDirNormalized = normalize(lightDir);
-		    diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist30;
-		    vec3 vP30LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
+            // Puntual 3
+            lightDir = diff30;
+            lightDirNormalized = normalize(lightDir);
+            diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist30;
+            vec3 vP30LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
 
-		    lightDir = diff31;
-		    lightDirNormalized = normalize(lightDir);
-		    diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist30;
-		    vec3 vP31LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
+            lightDir = diff31;
+            lightDirNormalized = normalize(lightDir);
+            diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist30;
+            vec3 vP31LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
 
-		    vP3LightWeighting = vP30LightWeighting + vP31LightWeighting;
+            vP3LightWeighting = vP30LightWeighting + vP31LightWeighting;
 
-		    // Puntual 4
-		    lightDir = diff40;
-		    lightDirNormalized = normalize(lightDir);
-		    diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist40;
-		    vec3 vP40LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
+            // Puntual 4
+            lightDir = diff40;
+            lightDirNormalized = normalize(lightDir);
+            diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist40;
+            vec3 vP40LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
 
-		    lightDir = diff41;
-		    lightDirNormalized = normalize(lightDir);
-		    diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist40;
-		    vec3 vP41LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
+            lightDir = diff41;
+            lightDirNormalized = normalize(lightDir);
+            diffusePunctualLightWeighting = max(dot(lightDirNormalized, normal), 0.0)/dist40;
+            vec3 vP41LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
 
-		    vP4LightWeighting = vP40LightWeighting + vP41LightWeighting;
+            vP4LightWeighting = vP40LightWeighting + vP41LightWeighting;
         
         } else {
-	    	vP1LightWeighting = 0.0 * uPunctualDiffuseColor;
+            vP1LightWeighting = 0.0 * uPunctualDiffuseColor;
             vP2LightWeighting = 0.0 * uPunctualDiffuseColor;
             vP3LightWeighting = 0.0 * uPunctualDiffuseColor;
             vP4LightWeighting = 0.0 * uPunctualDiffuseColor;
@@ -264,6 +268,9 @@
     uniform vec3 uPunctual3LightPosition;
     uniform vec3 uPunctual4LightPosition;
 
+    uniform vec3 uEyePoint;
+    uniform vec3 uSunPosition;
+
     varying vec4 vTextureCoord;
     varying vec3 vPosition;
     varying vec3 vmPosition;
@@ -271,12 +278,15 @@
     varying vec3 vTangent;
     varying vec3 vBinormal;
 
+    varying vec3 light_dir_normalized;
+    varying vec3 view_dir_normalized;
+
     //Valores para luz puntual 1
     varying vec3 diff10;
     varying float dist10;
     varying vec3 diff11;
 
-	//Valores para luz puntual 2
+    //Valores para luz puntual 2
     varying vec3 diff20;
     varying float dist20;
     varying vec3 diff21;
@@ -312,6 +322,9 @@
         vBinormal = normalize(uNormalMatrix * aVertexBinormal);
 
         vmPosition = (uModelMatrix * vec4(aVertexPosition, 1.0)).xyz;
+
+        light_dir_normalized = normalize(uSunPosition - vec3(uModelMatrix * vec4(aVertexPosition, 1.0)));
+        view_dir_normalized = normalize(uEyePoint - vec3(uModelMatrix * vec4(aVertexPosition, 1.0)));
 
         diff10 = vmPosition - uPunctual1LightPosition;
         dist10 = distance(uPunctual1LightPosition, vmPosition);

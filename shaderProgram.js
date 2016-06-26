@@ -66,7 +66,7 @@ function initShaderSimple() {
 
     // Chequeamos y reportamos si hubo algún error.
     if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-        alert("Unable to initialize the shader program: " + gl.getProgramInfoLog(shaderProgramSimple));
+        alert("Unable to initialize the shader program: " + gl.getProgramInfoLog(shaderProgram));
         return null;
     }
 
@@ -139,6 +139,9 @@ function initShaderSimple() {
 
     // Camara
     shaderProgram.cameraPositionUniform = gl.getUniformLocation(shaderProgram, "uCameraPosition");
+    shaderProgram.eyePointUniform = gl.getUniformLocation(shaderProgram, "uEyePoint");
+
+    shaderProgram.sunPositionUniform = gl.getUniformLocation(shaderProgram, "uSunPosition");
 
     return shaderProgram;
 }
