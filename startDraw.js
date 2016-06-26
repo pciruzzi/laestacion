@@ -39,10 +39,12 @@ function drawScene() {
     }
 
     if(camaraPersona) {
+        //Con estas 2 líneas permito que se traslade libremente, y que no siga la trayectoria circular de la estacion
         //vec3.set(eye_point, traslacionPersonaX, 1, traslacionPersonaZ);
         //vec3.set(at_point, traslacionPersonaX, 1, traslacionPersonaZ - 1.0);
-        vec3.set(eye_point, avancePersonaCostado*Math.cos(-avancePersona+Math.PI + 0.1), 1, avancePersonaCostado*Math.sin(-avancePersona+Math.PI + 0.1));
-        vec3.set(at_point, avancePersonaCostado*Math.cos(-avancePersona+Math.PI), 1, avancePersonaCostado*Math.sin(-avancePersona+Math.PI));
+        var avance = avancePersona - Math.PI;
+        vec3.set(eye_point, avancePersonaCostado * Math.cos(-avance + 0.1), 1, avancePersonaCostado * Math.sin(-avance + 0.1));
+        vec3.set(at_point, avancePersonaCostado * Math.cos(-avance), 1, avancePersonaCostado * Math.sin(-avance));
 
         mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
         mat4.rotateX(camaraAux, camaraAux, degToRad(rotarCamaraXPersona));
