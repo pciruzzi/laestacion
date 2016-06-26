@@ -57,24 +57,41 @@ onkeydown = function(evento){
     //Se puede apreciar mejor cuando la camara esta en la bahia de carga.
     // Muevo persona para adelante
     if((tecla == "w") || (tecla == "W")){
+        avancePersona += 0.01;
         traslacionPersonaZ = traslacionPersonaZ - Math.cos(-degToRad(rotarCamaraYPersona));   
         traslacionPersonaX = traslacionPersonaX - Math.sin(-degToRad(rotarCamaraYPersona));
     }
     // Muevo persona para atras
     if((tecla == "s") || (tecla == "S")){
+        avancePersona -= 0.01;
         traslacionPersonaZ = traslacionPersonaZ + Math.cos(-degToRad(rotarCamaraYPersona));   
         traslacionPersonaX = traslacionPersonaX + Math.sin(-degToRad(rotarCamaraYPersona));
     }
 
     // Muevo persona para el costado derecho
     if((tecla == "d") || (tecla == "D")){
+        avancePersonaCostado += 0.1;
         traslacionPersonaZ = traslacionPersonaZ + Math.sin(degToRad(rotarCamaraYPersona));   
         traslacionPersonaX = traslacionPersonaX + Math.cos(degToRad(rotarCamaraYPersona));
     }
     // Muevo persona para el costado izquierda
     if((tecla == "a") || (tecla == "A")){
+        avancePersonaCostado -= 0.1;
         traslacionPersonaZ = traslacionPersonaZ - Math.sin(degToRad(rotarCamaraYPersona)); 
         traslacionPersonaX = traslacionPersonaX - Math.cos(degToRad(rotarCamaraYPersona));
+    }
+
+    if (avancePersona > Math.PI*3/2+0.1) {
+        avancePersona = Math.PI*3/2+0.1;
+    }
+    if (avancePersona < 0.1) {
+        avancePersona = 0.1;
+    }
+    if (avancePersonaCostado > 60) {
+        avancePersonaCostado = 60;
+    }
+    if (avancePersonaCostado < 52) {
+        avancePersonaCostado = 52;
     }
 
     //Estas teclas van a servir para el manejo de la nave
