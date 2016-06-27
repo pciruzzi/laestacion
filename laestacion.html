@@ -3,43 +3,47 @@
 <title>TP Gráficos - 1c2016</title>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 
-<script type="text/javascript" src="gl-matrix.js"></script>
-<script type="text/javascript" src="webgl-utils.js"></script>
+<script type="text/javascript" src="src/concrete objects/antena.js"></script>
+<script type="text/javascript" src="src/concrete objects/cuerpoNave.js"></script>
+<script type="text/javascript" src="src/concrete objects/ejeTurbinas.js"></script>
+<script type="text/javascript" src="src/concrete objects/estacion.js"></script>
+<script type="text/javascript" src="src/concrete objects/modeloNave.js"></script>
+<script type="text/javascript" src="src/concrete objects/parteCentral.js"></script>
+<script type="text/javascript" src="src/concrete objects/parteExterior.js"></script>
+<script type="text/javascript" src="src/concrete objects/pata.js"></script>
+<script type="text/javascript" src="src/concrete objects/seccionAntena.js"></script>
+<script type="text/javascript" src="src/concrete objects/turbina.js"></script>
 
-<script type="text/javascript" src="antena.js"></script>
-<script type="text/javascript" src="buffer_vertices.js"></script>
-<script type="text/javascript" src="cilindro.js"></script>
-<script type="text/javascript" src="circunferencia.js"></script>
-<script type="text/javascript" src="circunferenciaXZ.js"></script>
-<script type="text/javascript" src="color.js"></script>
-<script type="text/javascript" src="cubo.js"></script>
-<script type="text/javascript" src="cuerpoCentralNave.js"></script>
-<script type="text/javascript" src="cuerpoNave.js"></script>
-<script type="text/javascript" src="curvaBezier.js"></script>
-<script type="text/javascript" src="curvaBSpline.js"></script>
-<script type="text/javascript" src="ejeTurbinas.js"></script>
-<script type="text/javascript" src="esfera.js"></script>
-<script type="text/javascript" src="estacion.js"></script>
-<script type="text/javascript" src="grid.js"></script>
-<script type="text/javascript" src="keyboardhandle.js"></script>
-<script type="text/javascript" src="modeloNave.js"></script>
-<script type="text/javascript" src="mousehandle.js"></script>
-<script type="text/javascript" src="nave.js"></script>
-<script type="text/javascript" src="paralelepipedo.js"></script>
-<script type="text/javascript" src="parteCentral.js"></script>
-<script type="text/javascript" src="parteExterior.js"></script>
-<script type="text/javascript" src="pata.js"></script>
-<script type="text/javascript" src="productoVectorial.js"></script>
-<script type="text/javascript" src="seccionAntena.js"></script>
+<script type="text/javascript" src="src/curves/circunferencia.js"></script>
+<script type="text/javascript" src="src/curves/circunferenciaXZ.js"></script>
+<script type="text/javascript" src="src/curves/curvaBezier.js"></script>
+<script type="text/javascript" src="src/curves/curvaBSpline.js"></script>
+
+<script type="text/javascript" src="src/drawable objects/cilindro.js"></script>
+<script type="text/javascript" src="src/drawable objects/cubo.js"></script>
+<script type="text/javascript" src="src/drawable objects/cuerpoCentralNave.js"></script>
+<script type="text/javascript" src="src/drawable objects/esfera.js"></script>
+<script type="text/javascript" src="src/drawable objects/superficieBarrido.js"></script>
+<script type="text/javascript" src="src/drawable objects/superficieRevolucion.js"></script>
+<script type="text/javascript" src="src/drawable objects/tapa.js"></script>
+
+<script type="text/javascript" src="src/handlers/keyboardHandler.js"></script>
+<script type="text/javascript" src="src/handlers/mouseHandler.js"></script>
+<script type="text/javascript" src="src/handlers/textureHandler.js"></script>
+
+<script type="text/javascript" src="src/libs/gl-matrix.js"></script>
+<script type="text/javascript" src="src/libs/webgl-utils.js"></script>
+
+<script type="text/javascript" src="src/util/buffer vertices.js"></script>
+<script type="text/javascript" src="src/util/color.js"></script>
+<script type="text/javascript" src="src/util/grid.js"></script>
+<script type="text/javascript" src="src/util/nave.js"></script>
+<script type="text/javascript" src="src/util/productoVectorial.js"></script>
+<script type="text/javascript" src="src/util/utils.js"></script>
+<script type="text/javascript" src="src/util/vertice.js"></script>
+
 <script type="text/javascript" src="shaderProgram.js"></script>
 <script type="text/javascript" src="startDraw.js"></script>
-<script type="text/javascript" src="superficieBarrido.js"></script>
-<script type="text/javascript" src="superficieRevolucion.js"></script>
-<script type="text/javascript" src="tapa.js"></script>
-<script type="text/javascript" src="textureHandler.js"></script>
-<script type="text/javascript" src="turbina.js"></script>
-<script type="text/javascript" src="utils.js"></script>
-<script type="text/javascript" src="vertice.js"></script>
 
 <script id="shader-fs" type="x-shader/x-fragment">
     precision mediump float;
@@ -244,7 +248,7 @@
             textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
         }
         gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
-        
+
         // Si utiliza reflexion
         if (vTextureCoord[3] == 2.0 || vUseReflection == 1.0) {
             vec3 view = normalize(vPosition);

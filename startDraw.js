@@ -80,7 +80,7 @@ function drawScene() {
     gl.uniform1f(shaderProgramSimple.lightPrincipalIntensity, 1.2);                         //Intensidad
     gl.uniform3f(shaderProgramSimple.ambientColorUniform, 0.3, 0.3, 0.3);                   //Ambiente
     gl.uniform3f(shaderProgramSimple.diffusePrincipalColorUniform, 1.0, 1.0, 1.0);          //Difusa
-    gl.uniform3f(shaderProgramSimple.specularPrincipalColorUniform, 1.0, 1.0, 1.0);         //Especular
+    gl.uniform3f(shaderProgramSimple.specularPrincipalColorUniform, 0.4, 0.4, 0.4);         //Especular
 
     // Tierra
     var earthPosition = [0.0, 300.0, 0.0];
