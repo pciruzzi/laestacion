@@ -87,11 +87,11 @@ onkeydown = function(evento){
     if (avancePersona < 0.1) {
         avancePersona = 0.1;
     }
-    if (avancePersonaCostado > 60) {
-        avancePersonaCostado = 60;
+    if (avancePersonaCostado > 62) {
+        avancePersonaCostado = 62;
     }
-    if (avancePersonaCostado < 52) {
-        avancePersonaCostado = 52;
+    if (avancePersonaCostado < 50) {
+        avancePersonaCostado = 50;
     }
 
     //Estas teclas van a servir para el manejo de la nave
