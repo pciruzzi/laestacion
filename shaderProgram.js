@@ -96,6 +96,9 @@ function initShaderSimple() {
     shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNormalMatrix");
     shaderProgram.useReflectionUniform = gl.getUniformLocation(shaderProgram, "uUseReflection");
 
+    shaderProgram.sunPositionUniform = gl.getUniformLocation(shaderProgram, "uSunPosition");
+    shaderProgram.eyePointUniform = gl.getUniformLocation(shaderProgram, "uEyePoint");
+
     // Con esto accedo a las uniforms del shader de fragmentos
     // Iluminacion
     shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
@@ -118,7 +121,7 @@ function initShaderSimple() {
     shaderProgram.diffusePunctualColorUniform = gl.getUniformLocation(shaderProgram, "uPunctualDiffuseColor");
     shaderProgram.specularPunctualColorUniform = gl.getUniformLocation(shaderProgram, "uPunctualSpecularColor");
     shaderProgram.lightPunctualIntensity = gl.getUniformLocation(shaderProgram, "uPunctualLightIntensity");
-    
+
     // Posiciones de las Luces Puntuales
     shaderProgram.lightingPunctual1PositionUniform = gl.getUniformLocation(shaderProgram, "uPunctual1LightPosition");
     shaderProgram.lightingPunctual2PositionUniform = gl.getUniformLocation(shaderProgram, "uPunctual2LightPosition");
@@ -139,9 +142,6 @@ function initShaderSimple() {
 
     // Camara
     shaderProgram.cameraPositionUniform = gl.getUniformLocation(shaderProgram, "uCameraPosition");
-    shaderProgram.eyePointUniform = gl.getUniformLocation(shaderProgram, "uEyePoint");
-
-    shaderProgram.sunPositionUniform = gl.getUniformLocation(shaderProgram, "uSunPosition");
 
     return shaderProgram;
 }

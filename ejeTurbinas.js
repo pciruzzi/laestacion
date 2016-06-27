@@ -18,7 +18,7 @@ function EjeTurbinas() {
         this.turbina3.create();
         this.turbina4 = new Turbina(false);
         this.turbina4.create();
-        
+
         this.cilindro = new Cilindro(4, 20, getColor("opaque yellow"), false);
         this.cilindro.initBuffers();
 

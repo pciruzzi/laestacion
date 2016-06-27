@@ -111,7 +111,7 @@ function drawScene() {
     mat4.scale(model_matrix_estacion, model_matrix_escena, [7.0, 7.0, 7.0]);
     estacion.draw(model_matrix_estacion);
 
-    //Movimiento de las antenas
+    // Movimiento de las antenas
     if (plegarODesplegarAntena) {
         if (traslacionPlegadoAntena == 4.8) {
             desplegarAntena = true;
@@ -172,7 +172,7 @@ function drawScene() {
     var movement_matrix_nave = nave.getMatriz();
     mat4.multiply(position_matrix_nave, position_matrix_nave, movement_matrix_nave);
 
-    //Movimientos del eje de las turbinas y demas
+    // Movimientos del eje de las turbinas y demas
     rotacionEjeNave += (nave.getTeclaUp() && rotacionEjeNave < Math.PI/2) ? 0.01 : 0;
     rotacionEjeNave += (nave.getTeclaDown() && rotacionEjeNave > -Math.PI/2) ? -0.01 : 0;
     cabezeoNave = nave.getAnguloCabezeo();
@@ -197,7 +197,7 @@ function drawScene() {
         }
     }
 
-    //Movimiento de las patas
+    // Movimiento de las patas
     if (plegarODesplegarPatas) {
         if (traslacionPatasNave == 0) {
             desplegarPatas = true;
@@ -303,6 +303,7 @@ function start() {
     tierra = new Esfera(30, 30, getColor("light blue"), true);
     tierra.initBuffers(false);
     tierra.initTexture("images/earth_2.jpg");
+    // Para testear reflexion en una esfera más fácilmente
     //tierra.initTexture("images/gray.jpg");
     //tierra.initReflectionTexture("images/refMap2.jpg");
 
@@ -313,15 +314,16 @@ function start() {
     astronauta = new Cubo(1.5, 3.0, 0.1, null, true);
     astronauta.initBuffers(true);
     astronauta.initTexture("images/astronauta256.png");
-    
+
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LEQUAL);
-    // Se configura el viewport dentro de área ¨canvas¨. en este caso se utiliza toda el área disponible
+    // Se configura el viewport dentro de área "canvas". En este caso se utiliza toda el área disponible
     gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
     // Se habilita el color de borrado para la pantalla (Color Buffer) y otros buffers
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    // Para que los PNG se vean con la transparencia
+
+    // Para que los PNG se vean con la transparencia -> Astronauta
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     gl.enable(gl.BLEND);
 

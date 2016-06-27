@@ -1,11 +1,6 @@
 function CurvaBSpline(P0, P1, P2, P3, cantPasos) {
     this.vertex_buffer = [];
-    //this.index_buffer = [];
-/*
-    this.webgl_position_buffer = null;
-    this.webgl_color_buffer = null;
-    this.webgl_index_buffer = null;
-*/
+
     var B0 = function(u) { return (1-u)*(1-u)*(1-u)/6.0; }
     var B1 = function(u) { return (4 - 6*u*u + 3*u*u*u)/6.0; }
     var B2 = function(u) { return (1 + 3*u + 3*u*u - 3*u*u*u)/6.0;}
@@ -37,10 +32,6 @@ function CurvaBSpline(P0, P1, P2, P3, cantPasos) {
         this.vertex_buffer.push(vertex);
     }
 
-/*    for(var i = 0; i < cantPasos; i++){
-        this.index_buffer.push(i);
-    }
-*/
     this.getVertexBuffer = function(){
         return this.vertex_buffer;
     }

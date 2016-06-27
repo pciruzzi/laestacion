@@ -6,7 +6,7 @@ function Tapa(externo, interno, color, esTexturada) { // -> externo e interno so
 
     this.externo = externo;
     this.interno = interno;
-    
+
     this.vertex_buffer = null;
     this.position_buffer = null;
     this.tangent_buffer = null;
@@ -97,8 +97,6 @@ function Tapa(externo, interno, color, esTexturada) { // -> externo e interno so
             this.webgl_texture_coord_buffer.itemSize = 2;
             this.webgl_texture_coord_buffer.numItems = texture_coord_buffer.length / 2;
         } else {
-            //var color_buffer = getColorBuffer(this.vertex_buffer);
-
             this.webgl_color_buffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.color_buffer), gl.STATIC_DRAW);
@@ -108,7 +106,6 @@ function Tapa(externo, interno, color, esTexturada) { // -> externo e interno so
     }
 
     this.draw = function(modelMatrix, shaderProgram){
-        // Se configuran los buffers que alimentarán el pipeline
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
@@ -123,7 +120,6 @@ function Tapa(externo, interno, color, esTexturada) { // -> externo e interno so
             gl.activeTexture(gl.TEXTURE0);
             gl.bindTexture(gl.TEXTURE_2D, this.texture);
             gl.uniform1i(shaderProgram.samplerUniform, 0);
-            gl.bindTexture(gl.TEXTURE_2D, this.texture);
         } else {
             gl.uniform1i(shaderProgram.useColorUniform, true);
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
@@ -136,7 +132,7 @@ function Tapa(externo, interno, color, esTexturada) { // -> externo e interno so
         mat3.invert(normalMatrix, normalMatrix);
         mat3.transpose(normalMatrix, normalMatrix);
         gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
-        
+
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
         //gl.drawElements(gl.LINE_LOOP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
         gl.drawElements(gl.TRIANGLE_STRIP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);

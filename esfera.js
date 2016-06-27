@@ -54,11 +54,7 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
 
 
     // Se generan los vertices para la esfera, calculando los datos para una esfera de radio 1.
-    // Y también la información de las normales y coordenadas de textura para cada vertice de la esfera.
-    // La esfera se renderizara utilizando triangle_strip, para ello se arma un buffer de índices 
-    // de todos los vértices de la esfera.
     this.initBuffers = function(normalesParaAdentro){
-
         this.vertex_buffer = [];
 
         var latNumber;
@@ -96,7 +92,6 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
                 this.vertex_buffer.push(verticeActual);
             }
         }
-        // Buffer de indices de los triangulos
         this.index_buffer = grid(this.latitudeBands, this.longitudeBands);
 
         // Creación e Inicialización de los buffers a nivel de OpenGL
@@ -155,8 +150,6 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
     }
 
     this.draw = function(modelMatrix, shaderProgram, useIlumination, iluminationIntensity, useReflection){
-
-        // Se configuran los buffers que alimentarán el pipeline
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
@@ -204,7 +197,7 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
         mat3.invert(normalMatrix, normalMatrix);
         mat3.transpose(normalMatrix, normalMatrix);
         gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
-        
+
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
         //gl.drawElements(gl.LINE_LOOP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
         gl.drawElements(gl.TRIANGLE_STRIP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);

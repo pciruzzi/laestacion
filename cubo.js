@@ -1,4 +1,3 @@
-// La textura es para aplicarle a un solo lado del cubo!
 function Cubo(alto, ancho, profundo, color, esTexturada) {
     this.alto = alto;
     this.ancho = ancho;
@@ -63,16 +62,12 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
     }
 
     // Se generan los Vertices para el cubo con alto, ancho y profundo pasados por parametro.
-    // El cubo se renderizara utilizando triangle_strip, para ello se arma un buffer de índices a todos los vértices del cubo.
     this.initBuffers = function(simpleCara, cantidadAlto, cantidadAncho){
-
         this.vertex_buffer = [];
-        //Funcion para llenar el vertex_buffer del cubo con los Vertices correspondientes.
         var width   = this.ancho / 2.0;
         var height  = this.alto / 2.0;
         var z       = this.profundo / 2.0;
 
-        //Voy a construir el cubo cara por cara, cada uno con sus 4 Vertices.
         //Cara Delantera
         var normalDelantera = [0.0,0.0,-1.0];
         var tangenteDelantera = [1.0,0.0,0.0];
@@ -195,8 +190,6 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
             this.vertex_buffer.push(new Vertice([0,height,0], this.colorSuperior, normalSuperior, tangenteSuperior, textureSuperior));
         }
 
-
-        // Buffer de indices de los triangulos
         this.index_buffer = grid(6, 8);
 
         // Creación e Inicialización de los buffers a nivel de OpenGL
@@ -301,7 +294,7 @@ function Cubo(alto, ancho, profundo, color, esTexturada) {
         mat3.invert(normalMatrix, normalMatrix);
         mat3.transpose(normalMatrix, normalMatrix);
         gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
-        
+
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
         //gl.drawElements(gl.LINE_LOOP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
         gl.drawElements(gl.TRIANGLE_STRIP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);

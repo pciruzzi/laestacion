@@ -49,7 +49,7 @@ onwheel = function(evento){
     if (aumento < 0) {
         aumento = aumento + (evento.deltaY * 2);
     }
-    // Esto es para evitar que scrollee la pagia cuando gira la rueda
+    // Esto es para evitar que scrollee la pagina cuando gira la rueda
     if (evento.preventDefault) {
     	evento.preventDefault();
     }

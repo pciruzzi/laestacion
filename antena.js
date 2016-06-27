@@ -12,9 +12,8 @@ function Antena() {
     this.cilindroLargoDos = null;
 
     this.initBuffers = function() { 
-        var colorCilindros = [0.2, 0.2, 0.2];//getColor("dark gray");
-        //TODO: Arreglar el color de los cilindros union.
-        var colorCilindrosUnion = [0.2, 0.2, 0.2];//getColor("gray");
+        var colorCilindros = getColor("gray2");
+        var colorCilindrosUnion = getColor("gray2");
         var esTexturada = false;
         var latitude_bands = 4;
         var longitude_bands = 20;
@@ -48,7 +47,6 @@ function Antena() {
 
         this.cilindroLargoDos = new Cilindro(latitude_bands, longitude_bands, colorCilindros, esTexturada);
         this.cilindroLargoDos.initBuffers();
-
     }
 
     this.draw = function(modelMatrix, rotacionPlegado, shaderProgram) {

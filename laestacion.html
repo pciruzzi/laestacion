@@ -50,7 +50,6 @@
     varying vec3 vNormal;
     varying vec3 vTangent;
     varying vec3 vBinormal;
-    //varying vec2 reflectionDir;
 
     varying float vUseReflection;
     uniform bool uUseColor;
@@ -124,7 +123,6 @@
 
         // Calculos de la iluminación
         //vec3 halfVector = normalize(light_dir_normalized + view_dir_normalized);
-
         // Sol
         vec3 dir_luz_norm = normalize(uPrincipalLightDirection - vmPosition);
         vec3 dir_vista_norm = normalize(uCameraPosition - vmPosition);
@@ -210,7 +208,6 @@
             vec3 vP41LightWeighting = uPunctualLightIntensity * (uPunctualDiffuseColor*diffusePunctualLightWeighting);
 
             vP4LightWeighting = vP40LightWeighting + vP41LightWeighting;
-        
         } else {
             vP1LightWeighting = 0.0 * uPunctualDiffuseColor;
             vP2LightWeighting = 0.0 * uPunctualDiffuseColor;
@@ -218,7 +215,6 @@
             vP4LightWeighting = 0.0 * uPunctualDiffuseColor;
         } 
      
-        // Use Directional Lights ?
         if (! uUseLighting) {
             diffusePrincipalLightWeighting = 0.0;
             specularPrincipalLightWeighting = 0.0;
@@ -240,6 +236,7 @@
             vLightWeighting += uIluminationIntensity * texture2D(uSamplerIluminationMap, vec2(vTextureCoord.s, vTextureCoord.t)).rgb;
         }
 
+        // Utilizo color o textura
         vec4 textureColor;
         if (uUseColor) {
             textureColor = vec4(vTextureCoord.rgb, 1.0);
@@ -335,6 +332,7 @@
         light_dir_normalized = normalize(uSunPosition - vmPosition);
         view_dir_normalized = normalize(uEyePoint - vmPosition);
 
+        // Luces puntuales
         diff10 = vmPosition - uPunctual1LightPosition;
         dist10 = distance(uPunctual1LightPosition, vmPosition);
         diff11 = uPunctual1LightPosition - vmPosition;
@@ -357,7 +355,6 @@
 </script>
 
 <script type="text/javascript">
-
     // Variable global para el contexto GL
     var gl;
 
@@ -394,7 +391,7 @@
     var avancePersona       = 0.0;
     var avancePersonaCostado= 56.0;
 
-    // Variables de la Antena
+    // Variables de la antena
     var desplegarAntena         = true;
     var plegarAntena            = false;
     var plegarODesplegarAntena  = false;
@@ -404,7 +401,7 @@
     var rotacionPlegadoAntena   = 0.0;
     var finRotacionAntena       = true;
 
-    // Variables de la Nave
+    // Variables de la nave
     var rotacionEjeNave         = -Math.PI/2;
     var cabezeoNave             = null;
     var viradaNave              = null;

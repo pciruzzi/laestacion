@@ -4,8 +4,9 @@ function CuerpoCentralNave() {
 
     this.color_nave = getColor("light gray");
     this.color_nave.push(2.0);
-    // En el vidrio no utilizo reflexion
+
     this.color_vidrio = getColor("black");
+    // En el vidrio no utilizo reflexion
     this.color_vidrio.push(0.0);
 
     this.webgl_position_buffer = null;
@@ -52,7 +53,6 @@ function CuerpoCentralNave() {
         this.vertex_buffer.push(new Vertice([10, 0, 0], this.color_nave, normalTrasera, [0,0,0], uvReflection));
         this.vertex_buffer.push(new Vertice([10, 0, 0], this.color_nave, normalTrasera, [0,0,0], uvReflection));
         this.vertex_buffer.push(new Vertice([10, 0, 0], this.color_nave, normalTrasera, [0,0,0], uvReflection));
-
 
         //Primero con normales para la derecha
         this.vertex_buffer.push(new Vertice([10, -1, ancho], this.color_nave, normalTrasera, [0,0,0], uvReflection));
@@ -219,7 +219,6 @@ function CuerpoCentralNave() {
 
         this.index_buffer = grid(16,8);
 
-
         // Creación e Inicialización de los buffers a nivel de OpenGL
         var position_buffer = getPositionBuffer(this.vertex_buffer);
         var normal_buffer = getNormalBuffer(this.vertex_buffer);
@@ -265,7 +264,6 @@ function CuerpoCentralNave() {
     }
 
     this.draw = function(modelMatrix, shaderProgram){
-        // Se configuran los buffers que alimentarán el pipeline
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
@@ -292,7 +290,7 @@ function CuerpoCentralNave() {
         mat3.invert(normalMatrix, normalMatrix);
         mat3.transpose(normalMatrix, normalMatrix);
         gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
-        
+
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
         //gl.drawElements(gl.LINE_LOOP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
         gl.drawElements(gl.TRIANGLE_STRIP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);

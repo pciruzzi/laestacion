@@ -19,7 +19,7 @@ function ParteExterior() {
     this.ventanalExterna1 = null;
     this.pisoExterna = null;
     this.ventanalExterna2 = null;
-    this.colorExterna1 = getColor("blue");//getColor("light gray");
+    this.colorExterna1 = getColor("light gray");
     this.colorExterna2 = getColor("black");
     this.colorExterna = [];
 
@@ -62,7 +62,7 @@ function ParteExterior() {
         var tramosForma = [];
         var cantPControl = P.length;
         for (var i = 0; i < cantPControl - 3; i+=3){
-            tramosForma.push(new CurvaBezier(P[i], P[i+1], P[i+2], P[i+3], n));    
+            tramosForma.push(new CurvaBezier(P[i], P[i+1], P[i+2], P[i+3], n));
         }
         for (var i in tramosForma){
             forma = forma.concat(tramosForma[i].getVertexBuffer());
@@ -374,16 +374,12 @@ function ParteExterior() {
         P.push([0.0, 10*paso, -2*radio]);
         P.push([0.0, 10*paso, -2*radio]);
         P.push([0.0, 10*paso, -2*radio]);
-        //P.push([-radio, 11*paso, -radio]);
-        //P.push([0.0, 12*paso, 0.0]);
+
         var tramosForma = [];
         var cantPControl = P.length;
         for (var i = 0; i < cantPControl - 3; i++){
             tramosForma.push(new CurvaBSpline(P[i], P[i+1], P[i+2], P[i+3], n));    
         }
-/*        tramos.push(new curvaBSpline(P[cantPControl - 2], P[cantPControl - 1], P[cantPControl], P[0], n));    
-        tramos.push(new curvaBSpline(P[cantPControl - 1], P[cantPControl], P[0], P[1], n));    
-        tramos.push(new curvaBSpline(P[cantPControl], P[0], P[1], P[2], n));  */
         for (var i in tramosForma){
             this.caminoManguera = this.caminoManguera.concat(tramosForma[i].getVertexBuffer());
         }
@@ -423,7 +419,7 @@ function ParteExterior() {
         this.ventanalExterna1.draw(model_matrix_externa, shaderProgramSimple, false, true, 1.0);
         this.ventanalExterna2.draw(model_matrix_externa, shaderProgramSimple, false, true, 1.0);
 
-		//Se activan las luces puntuales
+        //Se activan las luces puntuales
         gl.uniform1i(shaderProgramSimple.usePunctualLights, true);
         var model_matrix_interna = mat4.create();
         mat4.identity(model_matrix_interna);
@@ -484,7 +480,7 @@ function ParteExterior() {
         mat4.rotate(model_matrix_manguera, model_matrix_manguera, Math.PI/4, [0,1,0]);
         this.manguera.draw(model_matrix_manguera, shaderProgramSimple);
 
-        // Como el astronauta tiene texturas se dibuja en el loop principal
+        // El astronauta se dibuja en el loop principal
         model_matrix_astronauta = mat4.create();
         mat4.identity(model_matrix_astronauta);
         mat4.translate(model_matrix_astronauta, model_matrix_manguera, [0.0, -3.0, -8]);

@@ -98,11 +98,7 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
 
     // Se generan los Vertices para el cilindro, calculando los datos para un cilindro de radio 1 y altura 1.
     // El cilindro es alrededor del eje z. El cilindro tiene base en el plano z = 0.
-    // Y también la información de las normales y coordenadas de textura o color para cada Vertice del cilindro.
-    // El cilindro se renderizara utilizando triangle_strip, para ello se arma un buffer de índices 
-    // a todos los vértices del cilindro.
     this.initBuffers = function(){
-
         this.vertex_buffer = [];
 
         var latNumber;
@@ -143,7 +139,6 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
             }
         }
 
-        // Buffer de indices de los triangulos
         this.index_buffer = grid(this.latitudeBands + 2 + 2, this.longitudeBands); //Agrego 2 por las tapas y 2 por la repetición de primer y último "gajo de altura" con normal distinta
 
         // Creación e Inicialización de los buffers a nivel de OpenGL
@@ -202,7 +197,6 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
     }
 
     this.draw = function(modelMatrix, shaderProgram, useReflection){
-        // Se configuran los buffers que alimentarán el pipeline
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
 
@@ -223,7 +217,6 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
             gl.activeTexture(gl.TEXTURE0);
             gl.bindTexture(gl.TEXTURE_2D, this.texture);
             gl.uniform1i(shaderProgram.samplerUniform, 0);
-            //gl.bindTexture(gl.TEXTURE_2D, this.texture);
             if (useReflection) {
                 gl.uniform1f(shaderProgram.useReflectionUniform, 1.0);
                 gl.activeTexture(gl.TEXTURE3);
@@ -242,7 +235,7 @@ function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
         mat3.invert(normalMatrix, normalMatrix);
         mat3.transpose(normalMatrix, normalMatrix);
         gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
-        
+
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
         //gl.drawElements(gl.LINE_LOOP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
         gl.drawElements(gl.TRIANGLE_STRIP, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);

@@ -1,5 +1,5 @@
 function Nave() {
-    
+
     var posicion = vec3.fromValues(0,0,0);
 
     this.TECLA_ARRIBA = 0;
@@ -43,7 +43,7 @@ function Nave() {
         anguloCabezeoTotal += (estadoTeclas[this.TECLA_ARRIBA]) ? -0.005 : 0;
         anguloCabezeoTotal += (estadoTeclas[this.TECLA_ABAJO])  ?  0.005 : 0;
 
-        
+
         angRolido = 0;
         angRolido = (estadoTeclas[this.TECLA_GIRO_HORARIO])     ? -0.005 : angRolido;
         angRolido = (estadoTeclas[this.TECLA_GIRO_ANTIHORARIO]) ?  0.005 : angRolido;
@@ -103,7 +103,6 @@ function Nave() {
     this.onTeclaUp = function(tecla) {
         var n = parseInt(tecla);
         if (!isNaN(n)) estadoTeclas[n] = false;
-            
     }
 
     this.getMatriz = function(){
