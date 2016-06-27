@@ -28,9 +28,10 @@ function drawScene() {
     }
 
     if(camaraPersecucion) {
-    	vec3.subtract(eye_point,traslacionNave,vec3.scale([],nave.getDireccion(),-15));
-       	at_point = traslacionNave;
-		mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
+        var direcNave = nave.getDireccion();
+        vec3.subtract(eye_point,traslacionNave,vec3.scale([],[direcNave[0], -direcNave[1], direcNave[2]],-15));
+        at_point = traslacionNave;
+        mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
     }
 
     if(camaraPersona) {
