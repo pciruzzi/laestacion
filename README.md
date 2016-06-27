@@ -18,8 +18,8 @@ Para este trabajo práctico se implementaron diferentes comandos que se pueden u
 
 #### Cámara Persona dentro de la Estación Espacial:
 
-- `w` Sirve para que la persona avance por la Estación Espacial.
-- `s` Sirve para que la persona retroceda por la Estación Espacial.
+- `w` Sirve para que la persona avance (Gire en sentido anti-horario) por la Estación Espacial.
+- `s` Sirve para que la persona retroceda (Gire en sentido horario) por la Estación Espacial.
 - `a` Sirve para que la persona se acerque al centro de la Estación Espacial.
 - `d` Sirve para que la persona se aleje del centro de la Estación Espacial.
 
