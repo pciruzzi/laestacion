@@ -16,27 +16,27 @@ Para este trabajo práctico se implementaron diferentes comandos que se pueden u
 - `3` Cámara Persecución de la Nave.
 - `4` Cámara Persona dentro de la Estación Espacial.
 
-#### Camara Persona dentro de la EE:
+#### Cámara Persona dentro de la Estación Espacial:
 
-- `w|W` Sirve para que la persona se mueva hacia adelante.
-- `s|S` Sirve para que la persona se mueva hacia atrás.
-- `a|A` Sirve para que la persona se mueva hacia la izquierda.
-- `d|D` Sirve para que la persona se mueva hacia la derecha.
+- `w` Sirve para que la persona avance por la Estación Espacial.
+- `s` Sirve para que la persona retroceda por la Estación Espacial.
+- `a` Sirve para que la persona se acerque al centro de la Estación Espacial.
+- `d` Sirve para que la persona se aleje del centro de la Estación Espacial.
 
 ### Movimientos de las antenas:
 
-- `p|P` Sirve para plegar/desplegar las antenas de la EE.
+- `p` Sirve para plegar/desplegar las antenas de la Estación Espacial.
 
 ### Movimientos de la nave:
 
 Se hace la aclaración que se utilizó un comando invertido de las teclas.
 
-- `x|X` Sirve para plegar/desplegar las patas de la nave.
-- `m|M` Sirve para acelerar la nave.
-- `n|N` Sirve para desacelerar la nave.
-- `i|I` Sirve para bajar el frente de la nave (Ir hacia abajo).
-- `k|K` Sirve para elevar el frente de la nave (Ir hacia arriba).
-- `j|J` Sirve para elevar el lado izquierdo de la nave (Ir hacia la derecha).
-- `l|L` Sirve para elevar el lado derecho de la nave (Ir hacia la izquierda).
-- `u|U` Sirve para rotar la nave en sentido horario.
-- `o|O` Sirve para rotar la nave en sentido antihorario.
+- `x` Sirve para plegar/desplegar las patas de la nave.
+- `m` Sirve para acelerar la nave.
+- `n` Sirve para desacelerar la nave.
+- `i` Sirve para bajar el frente de la nave (Ir hacia abajo).
+- `k` Sirve para elevar el frente de la nave (Ir hacia arriba).
+- `j` Sirve para elevar el lado izquierdo de la nave (Ir hacia la derecha).
+- `l` Sirve para elevar el lado derecho de la nave (Ir hacia la izquierda).
+- `u` Sirve para rotar la nave en sentido horario.
+- `o` Sirve para rotar la nave en sentido antihorario.
