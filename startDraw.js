@@ -16,22 +16,26 @@ function drawScene() {
     }
 
     if(camaraCabina) {
-        vec3.set(eye_point, traslacionNave[0], traslacionNave[1] + 1.5, traslacionNave[2]);
-        vec3.set(at_point, traslacionNave[0] - 10.0, traslacionNave[1] + 1.5, traslacionNave[2] + 1.0);
+		vec3.add(at_point,traslacionNave,vec3.scale([],nave.getDireccion(),-15));
+		vec3.add(eye_point,traslacionNave,vec3.scale([],nave.getDireccion(),3));
+		vec3.add(eye_point,eye_point,[-3.0,1.5,0.5]);
+		mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
 
-        mat4.lookAt(cameraMatrix, eye_point, at_point, up_point); 
-        mat4.rotateX(camaraAux, camaraAux, -cabezeoNave);
-        mat4.rotateY(camaraAux, camaraAux, Math.PI/11);
-        mat4.rotateY(camaraAux, camaraAux, -viradaNave);
-        mat4.rotateZ(camaraAux, camaraAux, rolidoNave);
-        mat4.multiply(cameraMatrix, camaraAux, cameraMatrix);
+        //mat4.rotateY(camaraAux, camaraAux, Math.PI/11);
+        //mat4.rotateZ(camaraAux, camaraAux, rolidoNave);
+        //mat4.multiply(cameraMatrix, camaraAux, cameraMatrix);
     }
 
     if(camaraPersecucion) {
         var direcNave = nave.getDireccion();
         vec3.subtract(eye_point,traslacionNave,vec3.scale([],[direcNave[0], -direcNave[1], direcNave[2]],-15));
+        vec3.add(eye_point, eye_point, [0.0,1.0,1.5]);
         at_point = traslacionNave;
         mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
+
+        mat4.rotateY(camaraAux, camaraAux, Math.PI/11);
+		mat4.rotateZ(camaraAux, camaraAux, rolidoNave);
+        mat4.multiply(cameraMatrix, camaraAux, cameraMatrix);
     }
 
     if(camaraPersona) {

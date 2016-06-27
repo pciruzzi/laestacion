@@ -57,12 +57,6 @@ function Nave() {
         anguloViradaTotal += (estadoTeclas[this.TECLA_IZQUIERDA]) ? -0.005 : 0;
         anguloViradaTotal += (estadoTeclas[this.TECLA_DERECHA])  ?  0.005 : 0;
 
-        angRolido = (estadoTeclas[this.TECLA_DERECHA])   ? -0.001 : angRolido;
-        angRolido = (estadoTeclas[this.TECLA_IZQUIERDA]) ?  0.001 : angRolido;
-
-        //anguloRolidoTotal += (estadoTeclas[this.TECLA_DERECHA]) ? -0.001 : 0;
-        //anguloRolidoTotal += (estadoTeclas[this.TECLA_IZQUIERDA])  ?  0.001 : 0;
-
         var impulso = 0;
         impulso = (estadoTeclas[this.TECLA_MAS])   ?  0.5 : impulso;
         impulso = (estadoTeclas[this.TECLA_MENOS]) ? -0.5 : impulso;
