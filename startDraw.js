@@ -80,14 +80,14 @@ function drawScene() {
     gl.uniform1f(shaderProgramSimple.lightPrincipalIntensity, 1.2);                         //Intensidad
     gl.uniform3f(shaderProgramSimple.ambientColorUniform, 0.3, 0.3, 0.3);                   //Ambiente
     gl.uniform3f(shaderProgramSimple.diffusePrincipalColorUniform, 1.0, 1.0, 1.0);          //Difusa
-    gl.uniform3f(shaderProgramSimple.specularPrincipalColorUniform, 1.0, 0.0, 0.0);         //Especular
+    gl.uniform3f(shaderProgramSimple.specularPrincipalColorUniform, 1.0, 1.0, 1.0);         //Especular
 
     // Tierra
     var earthPosition = [0.0, 300.0, 0.0];
     gl.uniform3fv(shaderProgramSimple.lightingSecondaryDirectionUniform, earthPosition);
-    gl.uniform1f(shaderProgramSimple.lightSecondaryIntensity, 0.2);                          //Intensidad
+    gl.uniform1f(shaderProgramSimple.lightSecondaryIntensity, 0.4);                          //Intensidad
     gl.uniform3f(shaderProgramSimple.diffuseSecondaryColorUniform, 46/255, 46/255, 254/255); //Difusa
-    gl.uniform3f(shaderProgramSimple.specularSecondaryColorUniform, 1.0, 1.0, 1.0);          //Especular
+    gl.uniform3f(shaderProgramSimple.specularSecondaryColorUniform, 0.0, 0.0, 1.0);          //Especular
 
     //Luces Puntuales
     gl.uniform1f(shaderProgramSimple.lightPunctualIntensity, 6.0);                            //Intensidad 
