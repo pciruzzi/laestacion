@@ -57,6 +57,7 @@ function drawScene() {
     gl.uniformMatrix4fv(shaderProgramSimple.ViewMatrixUniform, false, cameraMatrix);
     gl.uniformMatrix4fv(shaderProgramSimple.pMatrixUniform, false, pMatrix);
     gl.uniform3fv(shaderProgramSimple.cameraPositionUniform, eye_point);
+    gl.uniform3fv(shaderProgramSimple.eyePointUniform, eye_point);
     // En principio no utilizo reflexion
     gl.uniform1f(shaderProgramSimple.useReflectionUniform, 0.0);
     // En principio utilizo texturas
@@ -75,10 +76,11 @@ function drawScene() {
     // Sol
     var sunPosition = vec3.fromValues(500.0*Math.cos(rotacionSol), 300.0, 500.0*Math.sin(rotacionSol)); 
     gl.uniform3fv(shaderProgramSimple.lightingPrincipalDirectionUniform, sunPosition);
+    gl.uniform3fv(shaderProgramSimple.sunPositionUniform, sunPosition);
     gl.uniform1f(shaderProgramSimple.lightPrincipalIntensity, 1.2);                         //Intensidad
     gl.uniform3f(shaderProgramSimple.ambientColorUniform, 0.3, 0.3, 0.3);                   //Ambiente
     gl.uniform3f(shaderProgramSimple.diffusePrincipalColorUniform, 1.0, 1.0, 1.0);          //Difusa
-    gl.uniform3f(shaderProgramSimple.specularPrincipalColorUniform, 1.0, 1.0, 1.0);         //Especular
+    gl.uniform3f(shaderProgramSimple.specularPrincipalColorUniform, 1.0, 0.0, 0.0);         //Especular
 
     // Tierra
     var earthPosition = [0.0, 300.0, 0.0];
