@@ -44,38 +44,38 @@ onkeydown = function(evento){
     }
 
     //Teclas para el pliegue y despligue de la antena
-    if (tecla == "p" || tecla == "P") {
+    if (tecla == "p") {
         plegarODesplegarAntena = true;
     }
 
     //Teclas de pliegue y despliegue de las patas de la nave
-    if (tecla == "x" || tecla == "X") {
+    if (tecla == "x") {
         plegarODesplegarPatas = true;
     }
 
     //Estas solo sirven para mover la persona en la bahia de carga.
     //Se puede apreciar mejor cuando la camara esta en la bahia de carga.
     // Muevo persona para adelante
-    if((tecla == "w") || (tecla == "W")){
+    if (tecla == "w") {
         avancePersona += 0.01;
         traslacionPersonaZ = traslacionPersonaZ - Math.cos(-degToRad(rotarCamaraYPersona));   
         traslacionPersonaX = traslacionPersonaX - Math.sin(-degToRad(rotarCamaraYPersona));
     }
     // Muevo persona para atras
-    if((tecla == "s") || (tecla == "S")){
+    if (tecla == "s") {
         avancePersona -= 0.01;
         traslacionPersonaZ = traslacionPersonaZ + Math.cos(-degToRad(rotarCamaraYPersona));   
         traslacionPersonaX = traslacionPersonaX + Math.sin(-degToRad(rotarCamaraYPersona));
     }
 
     // Muevo persona para el costado derecho
-    if((tecla == "d") || (tecla == "D")){
+    if (tecla == "d") {
         avancePersonaCostado += 0.1;
         traslacionPersonaZ = traslacionPersonaZ + Math.sin(degToRad(rotarCamaraYPersona));   
         traslacionPersonaX = traslacionPersonaX + Math.cos(degToRad(rotarCamaraYPersona));
     }
     // Muevo persona para el costado izquierda
-    if((tecla == "a") || (tecla == "A")){
+    if (tecla == "a") {
         avancePersonaCostado -= 0.1;
         traslacionPersonaZ = traslacionPersonaZ - Math.sin(degToRad(rotarCamaraYPersona)); 
         traslacionPersonaX = traslacionPersonaX - Math.cos(degToRad(rotarCamaraYPersona));

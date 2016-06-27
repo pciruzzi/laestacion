@@ -28,20 +28,12 @@ function drawScene() {
     }
 
     if(camaraPersecucion) {
-        vec3.set(eye_point, traslacionNave[0] + 15.0, traslacionNave[1] + 1.5, traslacionNave[2]);
-        vec3.set(at_point, traslacionNave[0] - 15.0, traslacionNave[1] + 1.5, traslacionNave[2] + 1.0);
-
-        mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
-        mat4.rotateX(camaraAux, camaraAux, -cabezeoNave);
-        mat4.rotateY(camaraAux, camaraAux, -viradaNave);
-        mat4.rotateZ(camaraAux, camaraAux, rolidoNave);
-        mat4.multiply(cameraMatrix, camaraAux, cameraMatrix);
+    	vec3.subtract(eye_point,traslacionNave,vec3.scale([],nave.getDireccion(),-15));
+       	at_point = traslacionNave;
+		mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
     }
 
     if(camaraPersona) {
-        //Con estas 2 líneas permito que se traslade libremente, y que no siga la trayectoria circular de la estacion
-        //vec3.set(eye_point, traslacionPersonaX, 1, traslacionPersonaZ);
-        //vec3.set(at_point, traslacionPersonaX, 1, traslacionPersonaZ - 1.0);
         var avance = avancePersona - Math.PI;
         vec3.set(eye_point, avancePersonaCostado * Math.cos(-avance + 0.1), 1, avancePersonaCostado * Math.sin(-avance + 0.1));
         vec3.set(at_point, avancePersonaCostado * Math.cos(-avance), 1, avancePersonaCostado * Math.sin(-avance));

@@ -23,7 +23,7 @@ function Nave() {
     */
 
     var potenciaMotor = 0.01;
-
+    var direccion = vec3.fromValues(0,0,0);
     var velocidad = 0;
     var angCabezeo = 0; // Z
     var anguloCabezeoTotal = 0;
@@ -43,14 +43,12 @@ function Nave() {
         anguloCabezeoTotal += (estadoTeclas[this.TECLA_ARRIBA]) ? -0.005 : 0;
         anguloCabezeoTotal += (estadoTeclas[this.TECLA_ABAJO])  ?  0.005 : 0;
 
-
         angRolido = 0;
         angRolido = (estadoTeclas[this.TECLA_GIRO_HORARIO])     ? -0.005 : angRolido;
         angRolido = (estadoTeclas[this.TECLA_GIRO_ANTIHORARIO]) ?  0.005 : angRolido;
 
         anguloRolidoTotal += (estadoTeclas[this.TECLA_GIRO_HORARIO]) ? -0.005 : 0;
         anguloRolidoTotal += (estadoTeclas[this.TECLA_GIRO_ANTIHORARIO])  ?  0.005 : 0;
-
 
         angVirada = 0;
         angVirada = (estadoTeclas[this.TECLA_IZQUIERDA]) ? -0.005 : angVirada;
@@ -65,10 +63,9 @@ function Nave() {
         //anguloRolidoTotal += (estadoTeclas[this.TECLA_DERECHA]) ? -0.001 : 0;
         //anguloRolidoTotal += (estadoTeclas[this.TECLA_IZQUIERDA])  ?  0.001 : 0;
 
-
         var impulso = 0;
-        impulso = (estadoTeclas[this.TECLA_MAS])   ?  0.1 : impulso;
-        impulso = (estadoTeclas[this.TECLA_MENOS]) ? -0.1 : impulso;
+        impulso = (estadoTeclas[this.TECLA_MAS])   ?  0.5 : impulso;
+        impulso = (estadoTeclas[this.TECLA_MENOS]) ? -0.5 : impulso;
 
         velocidad += impulso;
         // Para que no sea dificil volver a arrancar...
@@ -83,8 +80,7 @@ function Nave() {
         var ejeY = vec3.fromValues(0,1,0);
         mat4.rotate(rotacion, rotacion, angVirada, ejeY);
 
-
-        var direccion = vec3.fromValues(Math.max(0, velocidad), 0, 0);
+        direccion = vec3.fromValues(Math.max(0, velocidad), 0, 0);
         vec3.transformMat4(direccion, direccion, rotacion);
 
         var inercia = 0.99;
@@ -114,6 +110,12 @@ function Nave() {
 
     this.getVelocidad = function() {
         return velocidad;
+    }
+
+    this.getDireccion = function() {
+        var dir = vec3.create();
+        vec3.normalize(dir,direccion);
+        return dir;
     }
 
     this.getTeclaUp = function() {
