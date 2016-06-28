@@ -74,7 +74,7 @@ function Nave() {
         var ejeY = vec3.fromValues(0,1,0);
         mat4.rotate(rotacion, rotacion, angVirada, ejeY);
 
-        direccion = vec3.fromValues(Math.max(0, velocidad), 0, 0);
+        direccion = vec3.fromValues(Math.max(0,000001, velocidad), 0, 0);
         vec3.transformMat4(direccion, direccion, rotacion);
 
         var inercia = 0.99;
