@@ -121,12 +121,11 @@
             // Matriz para pasar de coordenadas de vista a coordenadas intrinsecas (coordenadas para hacer el normal mapping)
             mat3 toLocalObject = mat3(tangente, binormal, normal);
             vec3 nMap         = texture2D(uSamplerNormalMap, vec2(vTextureCoord.s, vTextureCoord.t)).rgb; 
-            vec3 normalMap    = (nMap * 2.0 - 1.0);
+            vec3 normalMap    = (nMap * 2.0) - 1.0;
             normal            = normalize(toLocalObject * normalMap);
         }
 
         // Calculos de la iluminación
-        //vec3 halfVector = normalize(light_dir_normalized + view_dir_normalized);
         // Sol
         vec3 dir_luz_norm = normalize(uPrincipalLightDirection - vmPosition);
         vec3 dir_vista_norm = normalize(uCameraPosition - vmPosition);
@@ -134,11 +133,10 @@
 
         vec3 lightDir = uPrincipalLightDirection;
         vec3 lightDirNormalized = normalize(lightDir);
-        float diffusePrincipalLightWeighting = max(dot(lightDirNormalized,normal), 0.0);    // Difusa: (N*L)
+        float diffusePrincipalLightWeighting = max(dot(lightDirNormalized,normal), 0.0);
         vec3 viewDir = normalize(-uCameraPosition + vmPosition);
-        vec3 r = 2.0 * diffusePrincipalLightWeighting * normal - lightDirNormalized;
+        vec3 r = (2.0 * diffusePrincipalLightWeighting * normal) - lightDirNormalized;
         float rv = max(dot(r, viewDir), 0.0); 
-        //float specularPrincipalLightWeighting = pow(rv,64.0);                               // Especular: [(2*(N*L)*N - L) * V] ^ alpha
         float specularPrincipalLightWeighting = pow(max(dot(normal, halfVector),0.0),64.0);
 
         // Tierra
@@ -148,11 +146,10 @@
 
         lightDir = uSecondaryLightDirection;
         lightDirNormalized = normalize(lightDir);
-        float diffuseSecondaryLightWeighting = max(dot(lightDirNormalized,normal), 0.0);    // Difusa: (N*L)
+        float diffuseSecondaryLightWeighting = max(dot(lightDirNormalized,normal), 0.0);
         viewDir = normalize(-uCameraPosition + vmPosition);
-        r = 2.0 * diffuseSecondaryLightWeighting * normal - lightDirNormalized;
+        r = (2.0 * diffuseSecondaryLightWeighting * normal) - lightDirNormalized;
         rv = max(dot(r, viewDir), 0.0); 
-        //float specularSecondaryLightWeighting = pow(rv,64.0);                                // Especular: [(2*(N*L)*N - L) * V] ^ alpha
         float specularSecondaryLightWeighting = pow(max(dot(normal, halfVector),0.0),64.0);
 
         vec3 vP1LightWeighting;

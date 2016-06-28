@@ -19,12 +19,13 @@ function drawScene() {
 
     if(camaraCabina) {
         direcNave = nave.getDireccion();
-		vec3.add(at_point,traslacionNave,vec3.scale([],[direcNave[0], -direcNave[1], direcNave[2]],-25));
-		vec3.add(eye_point,traslacionNave,[direcNave[0], -direcNave[1], direcNave[2]]);
+        vec3.add(eye_point,traslacionNave,vec3.scale([],[direcNave[0], -direcNave[1], direcNave[2]],-3.8));
+		vec3.add(at_point,traslacionNave,vec3.scale([],[direcNave[0], -direcNave[1], direcNave[2]],10));
 		mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
 
         mat4.rotateY(camaraAux, camaraAux, Math.PI/11);
-        mat4.rotateZ(camaraAux, camaraAux, rolidoNave);
+        mat4.rotateY(camaraAux, camaraAux, Math.PI);
+        mat4.rotateZ(camaraAux, camaraAux, -rolidoNave);
         mat4.multiply(cameraMatrix, camaraAux, cameraMatrix);
     }
 
