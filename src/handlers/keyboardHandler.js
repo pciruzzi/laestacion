@@ -66,7 +66,6 @@ onkeydown = function(evento){
         traslacionPersonaZ = traslacionPersonaZ + Math.cos(-degToRad(rotarCamaraYPersona));   
         traslacionPersonaX = traslacionPersonaX + Math.sin(-degToRad(rotarCamaraYPersona));
     }
-
     // Muevo persona hacia afuera de la Estación Espacial
     if (tecla == "d") {
         avancePersonaCostado += 0.1;
