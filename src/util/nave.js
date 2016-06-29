@@ -1,5 +1,4 @@
 function Nave() {
-
     var posicion = vec3.fromValues(0,0,0);
 
     this.TECLA_ARRIBA = 0;

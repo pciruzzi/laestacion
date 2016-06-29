@@ -1,5 +1,4 @@
 function Cilindro(latitude_bands, longitude_bands, color, esTexturada){
-
     this.latitudeBands = latitude_bands;
     this.longitudeBands = longitude_bands;
     this.color = color;

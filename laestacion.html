@@ -120,7 +120,7 @@
 
             // Matriz para pasar de coordenadas de vista a coordenadas intrinsecas (coordenadas para hacer el normal mapping)
             mat3 toLocalObject = mat3(tangente, binormal, normal);
-            vec3 nMap         = texture2D(uSamplerNormalMap, vec2(vTextureCoord.s, vTextureCoord.t)).rgb; 
+            vec3 nMap         = texture2D(uSamplerNormalMap, vec2(vTextureCoord.s, vTextureCoord.t)).rgb;
             vec3 normalMap    = (nMap * 2.0) - 1.0;
             normal            = normalize(toLocalObject * normalMap);
         }
@@ -134,9 +134,6 @@
         vec3 lightDir = uPrincipalLightDirection;
         vec3 lightDirNormalized = normalize(lightDir);
         float diffusePrincipalLightWeighting = max(dot(lightDirNormalized,normal), 0.0);
-        vec3 viewDir = normalize(-uCameraPosition + vmPosition);
-        vec3 r = (2.0 * diffusePrincipalLightWeighting * normal) - lightDirNormalized;
-        float rv = max(dot(r, viewDir), 0.0); 
         float specularPrincipalLightWeighting = pow(max(dot(normal, halfVector),0.0),64.0);
 
         // Tierra
@@ -147,9 +144,6 @@
         lightDir = uSecondaryLightDirection;
         lightDirNormalized = normalize(lightDir);
         float diffuseSecondaryLightWeighting = max(dot(lightDirNormalized,normal), 0.0);
-        viewDir = normalize(-uCameraPosition + vmPosition);
-        r = (2.0 * diffuseSecondaryLightWeighting * normal) - lightDirNormalized;
-        rv = max(dot(r, viewDir), 0.0); 
         float specularSecondaryLightWeighting = pow(max(dot(normal, halfVector),0.0),64.0);
 
         vec3 vP1LightWeighting;
@@ -214,7 +208,7 @@
             vP2LightWeighting = 0.0 * uPunctualDiffuseColor;
             vP3LightWeighting = 0.0 * uPunctualDiffuseColor;
             vP4LightWeighting = 0.0 * uPunctualDiffuseColor;
-        } 
+        }
      
         if (! uUseLighting) {
             diffusePrincipalLightWeighting = 0.0;
@@ -224,10 +218,10 @@
         }
 
         vec3 vPrincipalLightWeighting = uPrincipalLightIntensity * (uAmbientColor +
-                                                                    uPrincipalDiffuseColor * diffusePrincipalLightWeighting + 
+                                                                    uPrincipalDiffuseColor * diffusePrincipalLightWeighting +
                                                                     uPrincipalSpecularColor * specularPrincipalLightWeighting);
 
-        vec3 vSecondaryLightWeighting = uSecondaryLightIntensity * (uSecondaryDiffuseColor*diffuseSecondaryLightWeighting + 
+        vec3 vSecondaryLightWeighting = uSecondaryLightIntensity * (uSecondaryDiffuseColor*diffuseSecondaryLightWeighting +
                                                                     uSecondarySpecularColor *specularSecondaryLightWeighting);  
                                                                     
         vec3 vLightWeighting = vPrincipalLightWeighting + vSecondaryLightWeighting + vP1LightWeighting + vP2LightWeighting + vP3LightWeighting + vP4LightWeighting;
@@ -250,7 +244,7 @@
         if (vTextureCoord[3] == 2.0 || vUseReflection == 1.0) {
             vec3 view = normalize(vPosition);
             vec3 reflection = reflect(view, vNormal);
-            float m = 2.0 * sqrt( pow(reflection.x, 2.0) + pow(reflection.y, 2.0) + pow(reflection.z + 1.0, 2.0)); 
+            float m = 2.0 * sqrt( pow(reflection.x, 2.0) + pow(reflection.y, 2.0) + pow(reflection.z + 1.0, 2.0));
             vec2 reflectionDir = reflection.xy / m + 0.5;
             vec4 reflectionTexture = texture2D(uSamplerReflectionMap, reflectionDir);
             gl_FragColor = vec4(mix(textureColor, reflectionTexture, 0.2).rgb * vLightWeighting, textureColor.a);

@@ -19,11 +19,10 @@ function drawScene() {
 
     if(camaraCabina) {
         direcNave = nave.getDireccion();
-        vec3.add(eye_point,traslacionNave,vec3.scale([],[direcNave[0], -direcNave[1], direcNave[2]],-3.8));
-		vec3.add(at_point,traslacionNave,vec3.scale([],[direcNave[0], -direcNave[1], direcNave[2]],10));
-		mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
+        vec3.add(eye_point,traslacionNave,vec3.scale([],[direcNave[0], -direcNave[1], direcNave[2]],-4.2));
+        vec3.add(at_point,traslacionNave,vec3.scale([],[direcNave[0], -direcNave[1], direcNave[2]],10));
+        mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
 
-        mat4.rotateY(camaraAux, camaraAux, Math.PI/11);
         mat4.rotateY(camaraAux, camaraAux, Math.PI);
         mat4.rotateZ(camaraAux, camaraAux, -rolidoNave);
         mat4.multiply(cameraMatrix, camaraAux, cameraMatrix);
@@ -36,8 +35,7 @@ function drawScene() {
         at_point = traslacionNave;
         mat4.lookAt(cameraMatrix, eye_point, at_point, up_point);
 
-        mat4.rotateY(camaraAux, camaraAux, Math.PI/11);
-		mat4.rotateZ(camaraAux, camaraAux, rolidoNave);
+        mat4.rotateZ(camaraAux, camaraAux, rolidoNave);
         mat4.multiply(cameraMatrix, camaraAux, cameraMatrix);
     }
 
@@ -74,7 +72,7 @@ function drawScene() {
     var lighting = true;
     gl.uniform1i(shaderProgramSimple.useLightingUniform, lighting);
     // Sol
-    var sunPosition = vec3.fromValues(500.0*Math.cos(rotacionSol), 300.0, 500.0*Math.sin(rotacionSol)); 
+    var sunPosition = vec3.fromValues(500.0*Math.cos(rotacionSol), 300.0, 500.0*Math.sin(rotacionSol));
     gl.uniform3fv(shaderProgramSimple.lightingPrincipalDirectionUniform, sunPosition);
     gl.uniform3fv(shaderProgramSimple.sunPositionUniform, sunPosition);
     gl.uniform1f(shaderProgramSimple.lightPrincipalIntensity, 1.2);                         //Intensidad
@@ -90,9 +88,9 @@ function drawScene() {
     gl.uniform3f(shaderProgramSimple.specularSecondaryColorUniform, 0.0, 0.0, 1.0);          //Especular
 
     //Luces Puntuales
-    gl.uniform1f(shaderProgramSimple.lightPunctualIntensity, 6.0);                            //Intensidad 
+    gl.uniform1f(shaderProgramSimple.lightPunctualIntensity, 6.0);                            //Intensidad
     gl.uniform3f(shaderProgramSimple.diffusePunctualColorUniform, 1.0, 1.0, 1.0);             //Difusa
-    gl.uniform3f(shaderProgramSimple.specularPunctualColorUniform, 1.0, 1.0, 1.0);            //Especular 
+    gl.uniform3f(shaderProgramSimple.specularPunctualColorUniform, 1.0, 1.0, 1.0);            //Especular
     gl.uniform3fv(shaderProgramSimple.lightingPunctual1PositionUniform, [-54, -0.1,  13]);    //Punctual 1
     gl.uniform3fv(shaderProgramSimple.lightingPunctual2PositionUniform, [ 0, -0.1,  57]);     //Punctual 2
     gl.uniform3fv(shaderProgramSimple.lightingPunctual3PositionUniform, [ 57, -0.1,   0]);    //Punctual 3
@@ -168,7 +166,7 @@ function drawScene() {
     mat4.rotate(position_matrix_nave, position_matrix_nave, -Math.PI*3/4, [0,1,0]);
     mat4.scale(position_matrix_nave, position_matrix_nave, [0.2, 0.2, 0.2]);
     
-    nave.step(); 
+    nave.step();
     var movement_matrix_nave = nave.getMatriz();
     mat4.multiply(position_matrix_nave, position_matrix_nave, movement_matrix_nave);
 

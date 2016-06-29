@@ -20,7 +20,7 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
     this.reflectionTexture = null;
     var weakThis = this;
 
-    this.initTexture = function(texture_file) { 
+    this.initTexture = function(texture_file) {
         this.texture = gl.createTexture();
         this.texture.image = new Image();
 
@@ -51,7 +51,6 @@ function Esfera(latitude_bands, longitude_bands, color, esTexturada){
         }
         this.reflectionTexture.image.src = texture_file;
     }
-
 
     // Se generan los vertices para la esfera, calculando los datos para una esfera de radio 1.
     this.initBuffers = function(normalesParaAdentro){

@@ -54,30 +54,29 @@ onkeydown = function(evento){
     }
 
     //Estas solo sirven para mover la persona en la bahia de carga.
-    //Se puede apreciar mejor cuando la camara esta en la bahia de carga.
-    // Muevo persona para adelante
+    // Muevo persona en sentido anti-horario
     if (tecla == "w") {
         avancePersona += 0.01;
         traslacionPersonaZ = traslacionPersonaZ - Math.cos(-degToRad(rotarCamaraYPersona));   
         traslacionPersonaX = traslacionPersonaX - Math.sin(-degToRad(rotarCamaraYPersona));
     }
-    // Muevo persona para atras
+    // Muevo persona en sentido horario
     if (tecla == "s") {
         avancePersona -= 0.01;
         traslacionPersonaZ = traslacionPersonaZ + Math.cos(-degToRad(rotarCamaraYPersona));   
         traslacionPersonaX = traslacionPersonaX + Math.sin(-degToRad(rotarCamaraYPersona));
     }
 
-    // Muevo persona para el costado derecho
+    // Muevo persona hacia afuera de la Estación Espacial
     if (tecla == "d") {
         avancePersonaCostado += 0.1;
         traslacionPersonaZ = traslacionPersonaZ + Math.sin(degToRad(rotarCamaraYPersona));   
         traslacionPersonaX = traslacionPersonaX + Math.cos(degToRad(rotarCamaraYPersona));
     }
-    // Muevo persona para el costado izquierda
+    // Muevo persona hacia el centro de la Estación Espacial
     if (tecla == "a") {
         avancePersonaCostado -= 0.1;
-        traslacionPersonaZ = traslacionPersonaZ - Math.sin(degToRad(rotarCamaraYPersona)); 
+        traslacionPersonaZ = traslacionPersonaZ - Math.sin(degToRad(rotarCamaraYPersona));
         traslacionPersonaX = traslacionPersonaX - Math.cos(degToRad(rotarCamaraYPersona));
     }
 

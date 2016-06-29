@@ -160,6 +160,7 @@ function ParteExterior() {
         P.push([2.75, 0.0, 1.0]);
         P.push([2.75, 0.0, 1.0]);
         P.push([3.0, 0.0, 1.0]);
+
         this.formaExterna = this.createForma(P);
     }
 
@@ -196,7 +197,7 @@ function ParteExterior() {
         this.formaParedInterna2 = this.createForma(P);
     }
 
-    this.createFormaInterna = function() {  
+    this.createFormaInterna = function() {
         this.createFormaInternaPorPartes();
 
         var n = 9;
@@ -276,6 +277,7 @@ function ParteExterior() {
         P.push([2.0, 0.0, 1.0]);
         P.push([2.0, 0.0, 1.0]);
         P.push([2.0, 0.0, 1.0]);
+
         this.formaInternaParaTapa = this.createForma(P)
     }
 
@@ -378,7 +380,7 @@ function ParteExterior() {
         var tramosForma = [];
         var cantPControl = P.length;
         for (var i = 0; i < cantPControl - 3; i++){
-            tramosForma.push(new CurvaBSpline(P[i], P[i+1], P[i+2], P[i+3], n));    
+            tramosForma.push(new CurvaBSpline(P[i], P[i+1], P[i+2], P[i+3], n));
         }
         for (var i in tramosForma){
             this.caminoManguera = this.caminoManguera.concat(tramosForma[i].getVertexBuffer());
@@ -424,8 +426,9 @@ function ParteExterior() {
         var model_matrix_interna = mat4.create();
         mat4.identity(model_matrix_interna);
         mat4.scale(model_matrix_interna, model_matrix_casco, [0.5, 0.5, 0.5]);
-        
+
         this.techoInterna.draw(model_matrix_interna, shaderProgramSimple, false, true, 1.0);
+        //Se desactiva la autoiluminación
         gl.uniform1i(shaderProgramSimple.useIluminationUniform, false);
 
         this.pisoInterna.draw(model_matrix_interna, shaderProgramSimple);

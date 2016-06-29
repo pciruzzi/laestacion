@@ -58,7 +58,6 @@ function Turbina(useIlumination) {
     }
 
     this.draw = function(modelMatrix) {
-        //Aplico las transformaciones que aplican a la turbina
         var model_matrix_turbina = mat4.create();
         mat4.identity(model_matrix_turbina);
         mat4.multiply(model_matrix_turbina, model_matrix_turbina, modelMatrix);

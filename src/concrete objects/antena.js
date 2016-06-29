@@ -1,5 +1,4 @@
 function Antena() {
-
     this.seccionAntenaUno = null;
     this.seccionAntenaDos = null;
     this.seccionAntenaTres = null;
@@ -11,7 +10,7 @@ function Antena() {
     this.cilindroLargoUno = null;
     this.cilindroLargoDos = null;
 
-    this.initBuffers = function() { 
+    this.initBuffers = function() {
         var colorCilindros = getColor("gray2");
         var colorCilindrosUnion = getColor("gray2");
         var esTexturada = false;
@@ -28,7 +27,7 @@ function Antena() {
         this.seccionAntenaTres.initBuffers();
 
         this.seccionAntenaCuatro = new SeccionAntena();
-        this.seccionAntenaCuatro.initBuffers(); 
+        this.seccionAntenaCuatro.initBuffers();
 
         this.cilindroUnionUno = new Cilindro(latitude_bands, longitude_bands, colorCilindrosUnion, esTexturada);
         this.cilindroUnionUno.initBuffers();

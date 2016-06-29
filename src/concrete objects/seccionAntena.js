@@ -1,5 +1,4 @@
 function SeccionAntena() {
-
     this.panelUno = null;
     this.panelDos = null;
     this.panelTres = null;
@@ -16,7 +15,6 @@ function SeccionAntena() {
         for (var i = 0; i < 6; i++) {
             colorAntenas.push(getColor("opaque blue"));
         }
-        //Cambiar el color entre antenas y cilindros.
         var colorCilindros = getColor("gray2");
         var esTexturada = false;
         var latitude_bands = 64;

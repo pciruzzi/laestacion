@@ -216,7 +216,6 @@ function CuerpoCentralNave() {
         this.vertex_buffer.push(new Vertice([-15.5, -3, 0], this.color_nave, normalDelantera, [0,0,0], uvReflection));
         this.vertex_buffer.push(new Vertice([-15.5, -3, 0], this.color_nave, normalDelantera, [0,0,0], uvReflection));
 
-
         this.index_buffer = grid(16,8);
 
         // Creación e Inicialización de los buffers a nivel de OpenGL

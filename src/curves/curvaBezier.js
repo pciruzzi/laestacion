@@ -6,10 +6,10 @@ function CurvaBezier(P0, P1, P2, P3, cantPasos) {
     var B2 = function(u) { return 3*(1-u)*u*u;}
     var B3 = function(u) { return u*u*u; }
 
-    var B0der = function(u) { return -3*u*u+6*u-3;} 
-    var B1der = function(u) { return 9*u*u-12*u+3; } 
+    var B0der = function(u) { return -3*u*u+6*u-3;}
+    var B1der = function(u) { return 9*u*u-12*u+3;}
     var B2der = function(u) { return -9*u*u+6*u;}
-    var B3der = function(u) { return 3*u*u; }
+    var B3der = function(u) { return 3*u*u;}
 
     for(var u = 0.0; u <= 1.0000000001; u += 1.0/cantPasos) {
         var x = B0(u)*P0[0] + B1(u)*P1[0] + B2(u)*P2[0] + B3(u)*P3[0];
@@ -25,7 +25,6 @@ function CurvaBezier(P0, P1, P2, P3, cantPasos) {
 
         var tangente = [dx,dy,dz];
         var normal = [-dz,0,dx]; // Como las curvas de Bezier solo las utilizamos en un plano, se puede definir así
-
 
         var vertex = new Vertice(posicion, [0,0,0], normal, tangente, [0,0,0]);
         this.vertex_buffer.push(vertex);

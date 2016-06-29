@@ -101,7 +101,6 @@ function ParteCentral() {
         mat4.scale(model_matrix_estructura, model_matrix_estructura, [0.25, 0.25, 0.25]);
         this.centro.draw(model_matrix_estructura, shaderProgramSimple, true);
 
-        // Matriz de modelado de la antena inf
         var model_matrix_antenaInf = mat4.create();
         mat4.identity(model_matrix_antenaInf);
         mat4.rotate(model_matrix_antenaInf, model_matrix_centro, Math.PI, [0,1,0]);
@@ -109,7 +108,6 @@ function ParteCentral() {
         mat4.scale(model_matrix_antenaInf, model_matrix_antenaInf, [0.75, 0.75, 0.75]);
         this.antenaInf.draw(model_matrix_antenaInf, rotacionPlegadoAntena, shaderProgramSimple);
 
-        // Matriz de modelado de la antena sup
         var model_matrix_antenaSup = mat4.create();
         mat4.identity(model_matrix_antenaSup);
         mat4.translate(model_matrix_antenaSup, model_matrix_centro, [0,1.5,5.4]);
