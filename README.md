@@ -7,7 +7,7 @@ Trabajo Práctico de la materia [66.71] Sistemas Gráficos de la Facultad de Ing
 
 ## Demo
 
-Se puede encontrar una demo del Trabajo Práctico en [este link](https://youtu.be/m74vuVWo7XM).
+Se puede encontrar una demo del Trabajo Práctico en [este link](https://www.youtube.com/watch?v=llss52iFhv8).
 
 ## Manual de Uso
 
